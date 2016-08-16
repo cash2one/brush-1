@@ -68,6 +68,7 @@ Brush/slave/bootstrap.py中的setup_bootstrap函数可以在qpython中启动Appi
 ## 脚本撰写
 ### Quikc Start
 
+``` python
     import time
     from appium4droid import webdriver
     
@@ -76,6 +77,7 @@ Brush/slave/bootstrap.py中的setup_bootstrap函数可以在qpython中启动Appi
     time.sleep(1)
     setting = dr.find_element_by_name("设置")
     setting.click()
+```
     
 ### 目前支持的API
 实现了的指令能在appium4droid/webdriver/command_execut.py下看到
