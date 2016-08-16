@@ -74,6 +74,9 @@ class Machinex(Machine):
         #注册率
         sign_rate = random.randint(1, 10000)
         if sign_rate <= 5000:
+            #进入注册页面
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/login_guide_submit_btn")).click()
+            time.sleep(1)
             return self.login_code_platform
         time.sleep(random.randint(5, 10))
         return self.ends
@@ -101,12 +104,16 @@ class Machinex(Machine):
                   "u", "v", "w", "x", "y", "z"]
         self.pwd = choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)
         try:
-            #进入注册页面
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/login_guide_submit_btn")).click()
-            time.sleep(1)
             #选择接码平台获取手机号码
             self.phone = self.code.getPhone()
             edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
+            edts.click()
+            dr.press_keycode(123)
+            time.sleep(0.5)
+            for i in range(15):
+                dr.press_keycode(67)
+                if edts.text == " 请输入手机号":
+                    break
             #输入手机号码
             edts.send_keys(self.phone)
             time.sleep(1)
@@ -126,8 +133,6 @@ class Machinex(Machine):
                     return self.exit
                 dr.press_keycode(4)
                 time.sleep(1)
-                dr.press_keycode(4)
-                time.sleep(1)
                 return self.signup
             #输入验证码
             edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
@@ -141,8 +146,6 @@ class Machinex(Machine):
             self.try_count += 1
             if self.try_count > 5:
                 return self.exit
-            dr.press_keycode(4)
-            time.sleep(1)
             dr.press_keycode(4)
             time.sleep(1)
             return self.signup

@@ -1,6 +1,6 @@
 ## 简介
 
-Brush是一个框架目标是在android手机上运行脚本程序实现模拟用户操作。
+>Brush是一个框架目标是在android手机上运行脚本程序实现模拟用户操作。
 
 ## 项目目录
 
@@ -67,7 +67,6 @@ Brush/slave/bootstrap.py中的setup_bootstrap函数可以在qpython中启动Appi
  
 ## 脚本撰写
 ### Quikc Start
-
 ``` python
     import time
     from appium4droid import webdriver
@@ -87,15 +86,15 @@ Brush/slave/bootstrap.py中的setup_bootstrap函数可以在qpython中启动Appi
 更多内容参考[Appium文档](https://testerhome.com/topics/3144)   
 ### snippets
 #### 一些操作
-
+``` python
 	dr.press_keycode(keycode)  # 按下按键
     dr.tap(320, 640)  # 点击坐标
     dr.swipe(x1, y1, x2, y2)  从(x1, y1)划到(x2, y2)
-    
+```
 
 keycode可参考[文档](http://developer.android.com/intl/zh-cn/reference/android/view/KeyEvent.html)
 #### 等待某元素出现
-
+``` python
 	from appium4droid.common.exceptions import *
 	from appium4droid.support.ui import WebDriverWait
 
@@ -106,23 +105,27 @@ keycode可参考[文档](http://developer.android.com/intl/zh-cn/reference/andro
 	except TimeoutException:  # 等待超时抛出TimeoutException
 		print("timeout")
 		# do somethin else
-#### 等待某元素消失用		
+```
 
+#### 等待某元素消失用		
+``` python
     try:
 	    WebDriverWait(dr, WAIT_TIME).until_not(lambda d: d.find_element_by_name(some_text_in_element))
 	except TimeoutException:  # 等待超时抛出TimeoutException
 		print("timeout")
 		# do somethin else
-		
-#### XPath 
+```
 
+#### XPath 
+``` python
 	# 寻找android.webkit.WebView下的第一个android.view.View
 	view = dr.find_element_by_xpath("//android.webkit.WebView/android.view.View")
 	# 寻找android.webkit.WebView下的所有android.view.View
 	views = dr.find_elements_by_xpath("//android.webkit.WebView/android.view.View")
+```
 
-常用xpath
-
+####常用xpath
+``` python
     # 寻找android.webkit.WebView下的第四个android.view.View
     xpath = "//android.webkit.WebView/android.view.View[3]"
     
@@ -137,11 +140,11 @@ keycode可参考[文档](http://developer.android.com/intl/zh-cn/reference/andro
 	
 	# 寻找package为com.miui.home的android.view.View元素
 	xpath = //android.view.View[@package='com.miui.home']"
-	
+```
 更多内容参考[XPath教程](http://www.w3school.com.cn/xpath/)
 
 #### 获取UI元素的属性
-
+``` python
     ele = dr.find_element_by_xpath(xpath)
     ele.text      # 元素的text
     ele.location  # 元素的位置,返回一个字典{'x': xxx, 'y': xxx}
@@ -149,7 +152,7 @@ keycode可参考[文档](http://developer.android.com/intl/zh-cn/reference/andro
     ele.get_attribute(attr)  # 获取元素的某个属性
     ele.get_attribute(“name”)  # 获取元素的content-desc
     ele.get_attribute(“className”)  # 获取元素的类名
-    
+```
 #### androidhelper库
 androidhelper库是qpython提供的可以调用android应用api的一个库。通过androidhelper的api我们可以获取手机的信息和控制手机进行部分操作。
 
@@ -160,7 +163,7 @@ demo
     droid = androidhelper.Android()
     droid.makeToast("hello welcome to qpython")
 一些例子，可以在scripts下的util.py看到
-
+``` python
 	import time
     import androidhelper
     
@@ -178,9 +181,8 @@ demo
     	time.sleep(20)
     	droid.toggleWifiState()
     	time.sleep(20)
-
+```
 更多内容参考[androidhelper文档](http://kylelk.github.io/html-examples/androidhelper.html)
 
-## Troubleshooting
-## FAQ
+
 
