@@ -1,0 +1,3 @@
+List of devices attached
+7C5906B53731	device
+

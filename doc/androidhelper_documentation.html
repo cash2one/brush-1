@@ -1,0 +1,1478 @@
+
+<!-- saved from url=(0056)http://kylelk.github.io/html-examples/androidhelper.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>androidhelper documentation</title>
+    <style>#cVim-link-container, .cVim-link-hint, #cVim-command-bar, #cVim-command-bar-mode, #cVim-command-bar-input, #cVim-command-bar-search-results, .cVim-completion-item, .cVim-completion-item .cVim-full, .cVim-completion-item .cVim-left, .cVim-completion-item .cVim-right, #cVim-hud, #cVim-status-bar {
+  font-family: Helvetica, Helvetica Neue, Neue, sans-serif, monospace, Arial;
+  font-size: 10pt !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+#cVim-link-container {
+  position: absolute;
+  pointer-events: none;
+  width: 100%; left: 0;
+  height: 100%; top: 0;
+  z-index: 2147483647;
+}
+
+.cVim-link-hint {
+  position: absolute;
+  color: #302505 !important;
+  background-color: #ffd76e !important;
+  border-radius: 2px !important;
+  padding: 2px !important;
+  font-size: 8pt !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  border: 1px solid #ad810c;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  box-shadow: 2px 2px 1px rgba(0,0,0,0.25) !important;
+}
+
+.cVim-link-hint_match {
+  color: #777;
+  text-transform: uppercase !important;
+}
+
+#cVim-command-bar {
+  position: fixed !important;
+  z-index: 2147483646 !important;
+  background-color: #1b1d1e !important;
+  color: #bbb !important;
+  display: none;
+  box-sizing: content-box !important;
+  box-shadow: 0 3px 3px rgba(0,0,0,0.4);
+  left: 0 !important;
+  width: 100% !important;
+  height: 20px !important;
+}
+
+#cVim-command-bar-mode {
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box !important;
+  padding-left: 2px !important;
+  height: 100% !important;
+  width: 10px !important;
+  padding-top: 2px !important;
+  color: #888 !important;
+}
+
+#cVim-command-bar-input {
+  background-color: #1b1d1e !important;
+  color: #bbb !important;
+  height: 100% !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: calc(100% - 10px) !important;
+  position: absolute !important;
+}
+
+#cVim-command-bar-search-results {
+  position: fixed;
+  width: 100% !important;
+  overflow: hidden;
+  z-index: 2147483647 !important;
+  left: 0;
+  box-shadow: 0 3px 3px rgba(0,0,0,0.4);
+  background-color: #1c1c1c;
+}
+
+.cVim-completion-item, .cVim-completion-item .cVim-full, .cVim-completion-item .cVim-left, .cVim-completion-item .cVim-right {
+  text-overflow: ellipsis;
+  padding: 1px;
+  display: inline-block;
+  box-sizing: border-box;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.cVim-completion-item:nth-child(even) {
+  background-color: #1f1f1f;
+}
+
+.cVim-completion-item {
+  width: 100%; left: 0;
+  color: #bcbcbc;
+}
+
+.cVim-completion-item .cVim-left {
+  color: #fff;
+  width: 37%;
+}
+
+.cVim-completion-item .cVim-right {
+  font-style: italic;
+  color: #888;
+  width: 57%;
+}
+
+#cVim-hud {
+  background-color: rgba(28,28,28,0.9);
+  position: fixed !important;
+  transition: right 0.2s ease-out;
+  z-index: 24724289;
+}
+
+#cVim-hud span {
+  padding: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+  color: #8f8f8f;
+  font-size: 10pt;
+}
+
+#cVim-frames-outline {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 9999999999;
+  box-sizing: border-box;
+  border: 3px solid yellow;
+}
+</style><style type="text/css">#yddContainer{display:block;font-family:Microsoft YaHei;position:relative;width:100%;height:100%;top:-4px;left:-4px;font-size:12px;border:1px solid}#yddTop{display:block;height:22px}#yddTopBorderlr{display:block;position:static;height:17px;padding:2px 28px;line-height:17px;font-size:12px;color:#5079bb;font-weight:bold;border-style:none solid;border-width:1px}#yddTopBorderlr .ydd-sp{position:absolute;top:2px;height:0;overflow:hidden}.ydd-icon{left:5px;width:17px;padding:0px 0px 0px 0px;padding-top:17px;background-position:-16px -44px}.ydd-close{right:5px;width:16px;padding-top:16px;background-position:left -44px}#yddKeyTitle{float:left;text-decoration:none}#yddMiddle{display:block;margin-bottom:10px}.ydd-tabs{display:block;margin:5px 0;padding:0 5px;height:18px;border-bottom:1px solid}.ydd-tab{display:block;float:left;height:18px;margin:0 5px -1px 0;padding:0 4px;line-height:18px;border:1px solid;border-bottom:none}.ydd-trans-container{display:block;line-height:160%}.ydd-trans-container a{text-decoration:none;}#yddBottom{position:absolute;bottom:0;left:0;width:100%;height:22px;line-height:22px;overflow:hidden;background-position:left -22px}.ydd-padding010{padding:0 10px}#yddWrapper{color:#252525;z-index:10001;background:url(chrome-extension://ibogfemlnclpecapkojhmanpiebldbnk/ab20.png);}#yddContainer{background:#fff;border-color:#4b7598}#yddTopBorderlr{border-color:#f0f8fc}#yddWrapper .ydd-sp{background-image:url(chrome-extension://ibogfemlnclpecapkojhmanpiebldbnk/ydd-sprite.png)}#yddWrapper a,#yddWrapper a:hover,#yddWrapper a:visited{color:#50799b}#yddWrapper .ydd-tabs{color:#959595}.ydd-tabs,.ydd-tab{background:#fff;border-color:#d5e7f3}#yddBottom{color:#363636}#yddWrapper{min-width:250px;max-width:400px;}</style></head><body><h1 style="text-align:center;">androidhelper documentation</h1>
+
+    <script async="" src="./androidhelper_documentation_files/analytics.js"></script><script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-48664735-1', 'kylelk.github.io');
+    ga('send', 'pageview');
+
+    </script>
+	
+
+<style>
+.discription{
+	padding:20px; 
+	font-size:14px;
+}
+.method-name{
+    font-size:18px;
+}
+
+
+</style>
+<script type="text/javascript">
+        function doSearch() {
+    		var searchText = document.getElementById('searchTerm').value;
+    		var targetTable = document.getElementById('dataTable');
+    		var targetTableColCount;
+
+    		//Loop through table rows
+    		for (var rowIndex = 0; rowIndex < targetTable.rows.length; rowIndex++) {
+    			var rowData = '';
+
+    			//Get column count from header row
+    			if (rowIndex == 0) {
+    				targetTableColCount = targetTable.rows.item(rowIndex).cells.length;
+    				continue; //do not execute further code for header row.
+    			}
+
+    			//Process data rows. (rowIndex >= 1)
+    			for (var colIndex = 0; colIndex < targetTableColCount; colIndex++) {
+    				var cellText = '';
+
+    				if (navigator.appName == 'Microsoft Internet Explorer')
+    					cellText = targetTable.rows.item(rowIndex).cells.item(colIndex).innerText;
+    				else
+    					cellText = targetTable.rows.item(rowIndex).cells.item(colIndex).textContent;
+
+    				rowData += cellText;
+    			}
+
+    			// Make search case insensitive.
+    			rowData = rowData.toLowerCase();
+    			searchText = searchText.toLowerCase();
+
+    			//If search term is not found in row data
+    			//then hide the row, else show
+    			if (rowData.indexOf(searchText) == -1)
+    				targetTable.rows.item(rowIndex).style.display = 'none';
+    			else
+    				targetTable.rows.item(rowIndex).style.display = 'table-row';
+    		}
+    	}
+</script>
+
+
+<h3>Purpose</h3>
+<pre class="purpose">    To simplify Python-for-Android SL4A development in IDEs with a
+    "hepler" class derived from the default Android class containing
+    SL4A facade functions &amp; API documentation
+</pre>
+<hr>
+
+<h3>Usage</h3>
+<pre class="usage">    copy androidhelper.py into either the folder containing your
+    SL4A python script or to some location on the python import path
+    that your IDE can see and in your script, instead of:
+
+        import android
+
+    use the following import code:
+
+    try:
+        import androidhelper as android
+    except:
+        import android
+</pre>
+<hr>
+
+<h3>Version</h3>
+<pre>    for SL4A Release R5, created on 7-Apr-2012
+</pre>
+<hr>
+
+<h3>Authors</h3>
+<pre>    Hariharan Srinath (srinathdevelopment@gmail.com) with inputs
+    from Robbie Matthews (rjmatthews62@gmail.com)
+</pre>
+<hr>
+
+<h3>Copyright</h3>
+<pre>    Copyright (C) 2012, Hariharan Srinath, Robbie Matthews
+    
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not
+    use this file except in compliance with the License. You may obtain a copy of
+    the License at
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and limitations under
+    the License.
+</pre>
+<hr>
+<br>
+
+
+
+Search <input type="text" id="searchTerm" class="search_box" onkeyup="doSearch()" size="50/">
+<br>
+<br>
+<table id="dataTable" border="1" width="100%">
+<tbody><tr>
+<th>Method</th>
+<th>Paramaters</th>
+</tr>
+
+<tr><td><p class="method-name">addContextMenuItem</p></td><td>self,label,event,eventData=None<br><div class="discription">addContextMenuItem(label,event,eventData=None)
+Adds a new item to context menu.
+        label (String) label for this menu item
+        event (String) event that will be generated on menu item click
+        eventData (Object)  (optional)
+Context menus are used primarily with webViewShow</div></td></tr> 
+
+<tr><td><p class="method-name">addOptionsMenuItem</p></td><td>self,label,event,eventData=None,iconName=None<br><div class="discription">addOptionsMenuItem(label,event,eventData=None,iconName=None)
+Adds a new item to options menu.
+        label (String) label for this menu item
+        event (String) event that will be generated on menu item click
+        eventData (Object)  (optional)
+        iconName (String) Android system menu icon, see http://developer.android.com/reference/android/R.drawable.html (optional)
+Example (python)
+import android
+droid=android.Android()
+droid.addOptionsMenuItem("Silly","silly",None,"star_on")
+droid.addOptionsMenuItem("Sensible","sensible","I bet.","star_off")
+droid.addOptionsMenuItem("Off","off",None,"ic_menu_revert")
+print "Hit menu to see extra options."
+print "Will timeout in 10 seconds if you hit nothing."
+while True: # Wait for events from the menu.
+response=droid.eventWait(10000).result
+if response==None:
+break
+print response
+if response["name"]=="off":
+break
+print "And done."</div></td></tr> 
+
+<tr><td><p class="method-name">batteryCheckPresent</p></td><td>self<br><div class="discription">batteryCheckPresent(self)
+Returns the most recently received battery presence data.
+Min SDK level=5</div></td></tr> 
+
+<tr><td><p class="method-name">batteryGetHealth</p></td><td>self<br><div class="discription">batteryGetHealth(self)
+Returns the most recently received battery health data:1 - unknown;2 - good;3 - overheat;4 - dead;5 - over voltage;6 - unspecified failure;</div></td></tr> 
+
+<tr><td><p class="method-name">batteryGetLevel</p></td><td>self<br><div class="discription">batteryGetLevel(self)
+Returns the most recently received battery level (percentage).
+Min SDK level=5</div></td></tr> 
+
+<tr><td><p class="method-name">batteryGetPlugType</p></td><td>self<br><div class="discription">batteryGetPlugType(self)
+Returns the most recently received plug type data:-1 - unknown0 - unplugged;1 - power source is an AC charger2 - power source is a USB port</div></td></tr> 
+
+<tr><td><p class="method-name">batteryGetStatus</p></td><td>self<br><div class="discription">batteryGetStatus(self)
+Returns  the most recently received battery status data:1 - unknown;2 - charging;3 - discharging;4 - not charging;5 - full;</div></td></tr> 
+
+<tr><td><p class="method-name">batteryGetTechnology</p></td><td>self<br><div class="discription">batteryGetTechnology(self)
+Returns the most recently received battery technology data.
+Min SDK level=5</div></td></tr> 
+
+<tr><td><p class="method-name">batteryGetTemperature</p></td><td>self<br><div class="discription">batteryGetTemperature(self)
+Returns the most recently received battery temperature.
+Min SDK level=5</div></td></tr> 
+
+<tr><td><p class="method-name">batteryGetVoltage</p></td><td>self<br><div class="discription">batteryGetVoltage(self)
+Returns the most recently received battery voltage.
+Min SDK level=5</div></td></tr> 
+
+<tr><td><p class="method-name">batteryStartMonitoring</p></td><td>self<br><div class="discription">batteryStartMonitoring(self)
+Starts tracking battery state.
+throws "battery" events</div></td></tr> 
+
+<tr><td><p class="method-name">batteryStopMonitoring</p></td><td>self<br><div class="discription">batteryStopMonitoring(self)
+Stops tracking battery state.</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothAccept</p></td><td>self,uuid='457807c0-4897-11df-9879-0800200c9a66',timeout=0<br><div class="discription">bluetoothAccept(uuid="457807c0-4897-11df-9879-0800200c9a66",timeout=0)
+Listens for and accepts a Bluetooth connection. Blocks until the connection is established or fails.
+        uuid (String)  (default=457807c0-4897-11df-9879-0800200c9a66)
+        timeout (Integer) How long to wait for a new connection, 0 is wait for ever (default=0)</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothActiveConnections</p></td><td>self<br><div class="discription">bluetoothActiveConnections(self)
+Returns true when there's an active Bluetooth connection.</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothConnect</p></td><td>self,uuid='457807c0-4897-11df-9879-0800200c9a66',address=None<br><div class="discription">bluetoothConnect(uuid="457807c0-4897-11df-9879-0800200c9a66",address=None)
+Connect to a device over Bluetooth. Blocks until the connection is established or fails.
+        uuid (String) The UUID passed here must match the UUID used by the server device. (default=457807c0-4897-11df-9879-0800200c9a66)
+        address (String) The user will be presented with a list of discovered devices to choose from if an address is not provided. (optional)
+returns: (String) True if the connection was established successfully.</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothGetConnectedDeviceName</p></td><td>self,connID=None<br><div class="discription">bluetoothGetConnectedDeviceName(connID=None)
+Returns the name of the connected device.
+        connID (String) Connection id (optional) (default=)</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothGetLocalName</p></td><td>self<br><div class="discription">bluetoothGetLocalName(self)
+Gets the Bluetooth Visible device name</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothGetRemoteDeviceName</p></td><td>self,address<br><div class="discription">bluetoothGetRemoteDeviceName(address)
+Queries a remote device for it's name or null if it can't be resolved
+        address (String) Bluetooth Address For Target Device</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothGetScanMode</p></td><td>self<br><div class="discription">bluetoothGetScanMode(self)
+Gets the scan mode for the local dongle.
+Return values:
+        -1 when Bluetooth is disabled.
+        0 if non discoverable and non connectable.
+
+1 connectable non discoverable.
+3 connectable and discoverable.</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothMakeDiscoverable</p></td><td>self,duration=300<br><div class="discription">bluetoothMakeDiscoverable(duration=300)
+Requests that the device be discoverable for Bluetooth connections.
+        duration (Integer) period of time, in seconds, during which the device should be discoverable (default=300)</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothRead</p></td><td>self,bufferSize=4096,connID=None<br><div class="discription">bluetoothRead(bufferSize=4096,connID=None)
+Read up to bufferSize ASCII characters.
+        bufferSize (Integer)  (default=4096)
+        connID (String) Connection id (optional) (default=)</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothReadBinary</p></td><td>self,bufferSize=4096,connID=None<br><div class="discription">bluetoothReadBinary(bufferSize=4096,connID=None)
+Read up to bufferSize bytes and return a chunked, base64 encoded string.
+        bufferSize (Integer)  (default=4096)
+        connID (String) Connection id (optional) (default=)</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothReadLine</p></td><td>self,connID=None<br><div class="discription">bluetoothReadLine(connID=None)
+Read the next line.
+        connID (String) Connection id (optional) (default=)</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothReadReady</p></td><td>self,connID=None<br><div class="discription">bluetoothReadReady(connID=None)
+Returns True if the next read is guaranteed not to block.
+        connID (String) Connection id (optional) (default=)</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothSetLocalName</p></td><td>self,name<br><div class="discription">bluetoothSetLocalName(name)
+Sets the Bluetooth Visible device name, returns True on success
+        name (String) New local name</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothStop</p></td><td>self,connID=None<br><div class="discription">bluetoothStop(connID=None)
+Stops Bluetooth connection.
+        connID (String) Connection id (optional) (default=)</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothWrite</p></td><td>self,ascii,connID=''<br><div class="discription">bluetoothWrite(ascii,connID="")
+Sends ASCII characters over the currently open Bluetooth connection.
+        ascii (String)
+        connID (String) Connection id (default=)</div></td></tr> 
+
+<tr><td><p class="method-name">bluetoothWriteBinary</p></td><td>self,base64,connID=None<br><div class="discription">bluetoothWriteBinary(base64,connID=None)
+Send bytes over the currently open Bluetooth connection.
+        base64 (String) A base64 encoded String of the bytes to be sent.
+        connID (String) Connection id (optional) (default=)</div></td></tr> 
+
+<tr><td><p class="method-name">cameraCapturePicture</p></td><td>self,targetPath,useAutoFocus=True<br><div class="discription">cameraCapturePicture(targetPath,useAutoFocus=True)
+Take a picture and save it to the specified path.
+        targetPath (String)
+        useAutoFocus (Boolean)  (default=true)
+returns: (Bundle) A map of Booleans autoFocus and takePicture where True indicates success.</div></td></tr> 
+
+<tr><td><p class="method-name">cameraInteractiveCapturePicture</p></td><td>self,targetPath<br><div class="discription">cameraInteractiveCapturePicture(targetPath)
+Starts the image capture application to take a picture and saves it to the specified path.
+        targetPath (String)</div></td></tr> 
+
+<tr><td><p class="method-name">cameraStartPreview</p></td><td>self,resolutionLevel=0,jpegQuality=20,filepath=None<br><div class="discription">cameraStartPreview(resolutionLevel=0,jpegQuality=20,filepath=None)
+Start Preview Mode. Throws 'preview' events.
+        resolutionLevel (Integer) increasing this number provides higher resolution (default=0)
+        jpegQuality (Integer) a number from 0-100 (default=20)
+        filepath (String) Path to store jpeg files. (optional)
+returns: (boolean) True if successful</div></td></tr> 
+
+<tr><td><p class="method-name">cameraStopPreview</p></td><td>self<br><div class="discription">cameraStopPreview(self)
+Stop the preview mode.</div></td></tr> 
+
+<tr><td><p class="method-name">checkAirplaneMode</p></td><td>self<br><div class="discription">checkAirplaneMode(self)
+Checks the airplane mode setting.
+returns: (Boolean) True if airplane mode is enabled.</div></td></tr> 
+
+<tr><td><p class="method-name">checkBluetoothState</p></td><td>self<br><div class="discription">checkBluetoothState(self)
+Checks Bluetooth state.
+returns: (Boolean) True if Bluetooth is enabled.</div></td></tr> 
+
+<tr><td><p class="method-name">checkNetworkRoaming</p></td><td>self<br><div class="discription">checkNetworkRoaming(self)
+Returns true if the device is considered roaming on the current network, for GSM purposes.</div></td></tr> 
+
+<tr><td><p class="method-name">checkRingerSilentMode</p></td><td>self<br><div class="discription">checkRingerSilentMode(self)
+Checks the ringer silent mode setting.
+returns: (Boolean) True if ringer silent mode is enabled.</div></td></tr> 
+
+<tr><td><p class="method-name">checkScreenOn</p></td><td>self<br><div class="discription">checkScreenOn(self)
+Checks if the screen is on or off (requires API level 7).
+returns: (Boolean) True if the screen is currently on.</div></td></tr> 
+
+<tr><td><p class="method-name">checkWifiState</p></td><td>self<br><div class="discription">checkWifiState(self)
+Checks Wifi state.
+returns: (Boolean) True if Wifi is enabled.</div></td></tr> 
+
+<tr><td><p class="method-name">clearContextMenu</p></td><td>self<br><div class="discription">clearContextMenu(self)
+Removes all items previously added to context menu.</div></td></tr> 
+
+<tr><td><p class="method-name">clearOptionsMenu</p></td><td>self<br><div class="discription">clearOptionsMenu(self)
+Removes all items previously added to options menu.</div></td></tr> 
+
+<tr><td><p class="method-name">contactsGet</p></td><td>self,attributes=None<br><div class="discription">contactsGet(attributes=None)
+Returns a List of all contacts.
+        attributes (JSONArray)  (optional)
+returns: (List) a List of contacts as Maps</div></td></tr> 
+
+<tr><td><p class="method-name">contactsGetAttributes</p></td><td>self<br><div class="discription">contactsGetAttributes(self)
+Returns a List of all possible attributes for contacts.</div></td></tr> 
+
+<tr><td><p class="method-name">contactsGetById</p></td><td>self,id,attributes=None<br><div class="discription">contactsGetById(id,attributes=None)
+Returns contacts by ID.
+        id (Integer)
+        attributes (JSONArray)  (optional)</div></td></tr> 
+
+<tr><td><p class="method-name">contactsGetCount</p></td><td>self<br><div class="discription">contactsGetCount(self)
+Returns the number of contacts.</div></td></tr> 
+
+<tr><td><p class="method-name">contactsGetIds</p></td><td>self<br><div class="discription">contactsGetIds(self)
+Returns a List of all contact IDs.</div></td></tr> 
+
+<tr><td><p class="method-name">dialogCreateAlert</p></td><td>self,title=None,message=None<br><div class="discription">dialogCreateAlert(title=None,message=None)
+Create alert dialog.
+        title (String)  (optional)
+        message (String)  (optional)
+Example (python)
+import android
+droid=android.Android()
+droid.dialogCreateAlert("I like swords.","Do you like swords?")
+droid.dialogSetPositiveButtonText("Yes")
+droid.dialogSetNegativeButtonText("No")
+droid.dialogShow()
+response=droid.dialogGetResponse().result
+droid.dialogDismiss()
+if response.has_key("which"):
+result=response["which"]
+if result=="positive":
+print "Yay! I like swords too!"
+elif result=="negative":
+print "Oh. How sad."
+elif response.has_key("canceled"): # Yes, I know it's mispelled.
+print "You can't even make up your mind?"
+else:
+print "Unknown response=",response
+print "Done"</div></td></tr> 
+
+<tr><td><p class="method-name">dialogCreateDatePicker</p></td><td>self,year=1970,month=1,day=1<br><div class="discription">dialogCreateDatePicker(year=1970,month=1,day=1)
+Create date picker dialog.
+        year (Integer)  (default=1970)
+        month (Integer)  (default=1)
+        day (Integer)  (default=1)</div></td></tr> 
+
+<tr><td><p class="method-name">dialogCreateHorizontalProgress</p></td><td>self,title=None,message=None,maximum_progress=100<br><div class="discription">dialogCreateHorizontalProgress(title=None,message=None,maximum_progress=100)
+Create a horizontal progress dialog.
+        title (String)  (optional)
+        message (String)  (optional)
+        maximum progress (Integer)  (default=100)</div></td></tr> 
+
+<tr><td><p class="method-name">dialogCreateInput</p></td><td>self,title='Value',message='Pleaseentervalue:',defaultText=None,inputType=None<br><div class="discription">dialogCreateInput(title="Value",message="Please enter value:",defaultText=None,inputType=None)
+Create a text input dialog.
+        title (String) title of the input box (default=Value)
+        message (String) message to display above the input box (default=Please enter value:)
+        defaultText (String) text to insert into the input box (optional)
+        inputType (String) type of input data, ie number or text (optional)
+For inputType, see InputTypes. Some useful ones are text, number, and textUri. Multiple flags can be
+supplied, seperated by "|", ie: "textUri|textAutoComplete"</div></td></tr> 
+
+<tr><td><p class="method-name">dialogCreatePassword</p></td><td>self,title='Password',message='Pleaseenterpassword:'<br><div class="discription">dialogCreatePassword(title="Password",message="Please enter password:")
+Create a password input dialog.
+        title (String) title of the input box (default=Password)
+        message (String) message to display above the input box (default=Please enter password:)</div></td></tr> 
+
+<tr><td><p class="method-name">dialogCreateSeekBar</p></td><td>self,starting_value=50,maximum_value=100,title='',message=''<br><div class="discription">dialogCreateSeekBar(starting_value=50,maximum_value=100,title,message)
+Create seek bar dialog.
+        starting value (Integer)  (default=50)
+        maximum value (Integer)  (default=100)
+        title (String)
+        message (String)
+Will produce "dialog" events on change, containing:
+"progress" - Position chosen, between 0 and max
+"which" = "seekbar"
+"fromuser" = true/false change is from user input
+Response will contain a "progress" element.</div></td></tr> 
+
+<tr><td><p class="method-name">dialogCreateSpinnerProgress</p></td><td>self,title=None,message=None,maximum_progress=100<br><div class="discription">dialogCreateSpinnerProgress(title=None,message=None,maximum_progress=100)
+Create a spinner progress dialog.
+        title (String)  (optional)
+        message (String)  (optional)
+        maximum progress (Integer)  (default=100)</div></td></tr> 
+
+<tr><td><p class="method-name">dialogCreateTimePicker</p></td><td>self,hour=0,minute=0,is24hour=False<br><div class="discription">dialogCreateTimePicker(hour=0,minute=0,is24hour=False)
+Create time picker dialog.
+        hour (Integer)  (default=0)
+        minute (Integer)  (default=0)
+        is24hour (Boolean) Use 24 hour clock (default=false)</div></td></tr> 
+
+<tr><td><p class="method-name">dialogDismiss</p></td><td>self<br><div class="discription">dialogDismiss(self)
+Dismiss dialog.</div></td></tr> 
+
+<tr><td><p class="method-name">dialogGetInput</p></td><td>self,title='Value',message='Pleaseentervalue:',defaultText=None<br><div class="discription">dialogGetInput(title="Value",message="Please enter value:",defaultText=None)
+Queries the user for a text input.
+        title (String) title of the input box (default=Value)
+        message (String) message to display above the input box (default=Please enter value:)
+        defaultText (String) text to insert into the input box (optional)
+The result is the user's input, or None (null) if cancel was hit.
+Example (python)
+import android
+droid=android.Android()
+print droid.dialogGetInput("Title","Message","Default").result</div></td></tr> 
+
+<tr><td><p class="method-name">dialogGetPassword</p></td><td>self,title='Password',message='Pleaseenterpassword:'<br><div class="discription">dialogGetPassword(title="Password",message="Please enter password:")
+Queries the user for a password.
+        title (String) title of the password box (default=Password)
+        message (String) message to display above the input box (default=Please enter password:)</div></td></tr> 
+
+<tr><td><p class="method-name">dialogGetResponse</p></td><td>self<br><div class="discription">dialogGetResponse(self)
+Returns dialog response.</div></td></tr> 
+
+<tr><td><p class="method-name">dialogGetSelectedItems</p></td><td>self<br><div class="discription">dialogGetSelectedItems(self)
+This method provides list of items user selected.
+returns: (Set) Selected items</div></td></tr> 
+
+<tr><td><p class="method-name">dialogSetCurrentProgress</p></td><td>self,current<br><div class="discription">dialogSetCurrentProgress(current)
+Set progress dialog current value.
+        current (Integer)</div></td></tr> 
+
+<tr><td><p class="method-name">dialogSetItems</p></td><td>self,items<br><div class="discription">dialogSetItems(items)
+Set alert dialog list items.
+        items (JSONArray)
+This effectively creates list of options. Clicking on an item will immediately return an "item"
+element, which is the index of the selected item.</div></td></tr> 
+
+<tr><td><p class="method-name">dialogSetMaxProgress</p></td><td>self,max<br><div class="discription">dialogSetMaxProgress(max)
+Set progress dialog maximum value.
+        max (Integer)</div></td></tr> 
+
+<tr><td><p class="method-name">dialogSetMultiChoiceItems</p></td><td>self,items,selected=None<br><div class="discription">dialogSetMultiChoiceItems(items,selected=None)
+Set dialog multiple choice items and selection.
+        items (JSONArray)
+        selected (JSONArray) list of selected items (optional)
+This creates a list of check boxes. You can select multiple items out of the list. A response
+will not be returned until the dialog is closed, either with the Cancel key or a button
+(positive/negative/neutral). Use dialogGetSelectedItems() to find out what was
+selected.</div></td></tr> 
+
+<tr><td><p class="method-name">dialogSetNegativeButtonText</p></td><td>self,text<br><div class="discription">dialogSetNegativeButtonText(text)
+Set alert dialog button text.
+        text (String)</div></td></tr> 
+
+<tr><td><p class="method-name">dialogSetNeutralButtonText</p></td><td>self,text<br><div class="discription">dialogSetNeutralButtonText(text)
+Set alert dialog button text.
+        text (String)</div></td></tr> 
+
+<tr><td><p class="method-name">dialogSetPositiveButtonText</p></td><td>self,text<br><div class="discription">dialogSetPositiveButtonText(text)
+Set alert dialog positive button text.
+        text (String)</div></td></tr> 
+
+<tr><td><p class="method-name">dialogSetSingleChoiceItems</p></td><td>self,items,selected=0<br><div class="discription">dialogSetSingleChoiceItems(items,selected=0)
+Set dialog single choice items and selected item.
+        items (JSONArray)
+        selected (Integer) selected item index (default=0)
+This creates a list of radio buttons. You can select one item out of the list. A response will
+not be returned until the dialog is closed, either with the Cancel key or a button
+(positive/negative/neutral). Use dialogGetSelectedItems() to find out what was
+selected.</div></td></tr> 
+
+<tr><td><p class="method-name">dialogShow</p></td><td>self<br><div class="discription">dialogShow(self)
+Show dialog.</div></td></tr> 
+
+<tr><td><p class="method-name">environment</p></td><td>self<br><div class="discription">environment(self)
+A map of various useful environment details
+Map returned:
+TZ = Timezone
+id = Timezone ID
+display = Timezone display name
+offset = Offset from UTC (in ms)
+SDK = SDK Version
+download = default download path
+appcache = Location of application cache
+sdcard = Space on sdcard
+availblocks = Available blocks
+blockcount = Total Blocks
+blocksize = size of block.</div></td></tr> 
+
+<tr><td><p class="method-name">eventClearBuffer</p></td><td>self<br><div class="discription">eventClearBuffer(self)
+Clears all events from the event buffer.
+Example (python): droid.eventClearBuffer()</div></td></tr> 
+
+<tr><td><p class="method-name">eventGetBrodcastCategories</p></td><td>self<br><div class="discription">eventGetBrodcastCategories(self)
+Lists all the broadcast signals we are listening for</div></td></tr> 
+
+<tr><td><p class="method-name">eventPoll</p></td><td>self,number_of_events=1<br><div class="discription">eventPoll(number_of_events=1)
+Returns and removes the oldest n events (i.e. location or sensor update, etc.) from the event buffer.
+        number_of_events (Integer)  (default=1)
+returns: (List) A List of Maps of event properties.
+Actual data returned in the map will depend on the type of event.
+Example (python):
+import android, time
+droid = android.Android()
+droid.startSensing()
+time.sleep(1)
+droid.eventClearBuffer()
+time.sleep(1)
+e = eventPoll(1).result
+event_entry_number = 0
+x = e[event_entry_ number]['data']['xforce']
+e has the format:
+[{u'data': {u'accuracy': 0, u'pitch': -0.48766891956329345, u'xmag': -5.6875, u'azimuth':
+0.3312483489513397, u'zforce': 8.3492730000000002, u'yforce': 4.5628165999999997, u'time':
+1297072704.813, u'ymag': -11.125, u'zmag': -42.375, u'roll': -0.059393649548292161, u'xforce':
+0.42223078000000003}, u'name': u'sensors', u'time': 1297072704813000L}]
+x has the string value of the x force data (0.42223078000000003) at the time of the event
+entry.</div></td></tr> 
+
+<tr><td><p class="method-name">eventPost</p></td><td>self,name,data,enqueue=None<br><div class="discription">eventPost(name,data,enqueue=None)
+Post an event to the event queue.
+        name (String) Name of event
+        data (String) Data contained in event.
+        enqueue (Boolean) Set to False if you don't want your events to be added to the event queue, just dispatched. (optional) (default=false)
+Example:
+import android
+from datetime import datetime
+droid = android.Android()
+t = datetime.now()
+droid.eventPost('Some Event', t)</div></td></tr> 
+
+<tr><td><p class="method-name">eventRegisterForBroadcast</p></td><td>self,category,enqueue=True<br><div class="discription">eventRegisterForBroadcast(category,enqueue=True)
+Registers a listener for a new broadcast signal
+        category (String)
+        enqueue (Boolean) Should this events be added to the event queue or only dispatched (default=true)
+Registers a listener for a new broadcast signal</div></td></tr> 
+
+<tr><td><p class="method-name">eventUnregisterForBroadcast</p></td><td>self,category<br><div class="discription">eventUnregisterForBroadcast(category)
+Stop listening for a broadcast signal
+        category (String)</div></td></tr> 
+
+<tr><td><p class="method-name">eventWait</p></td><td>self,timeout=None<br><div class="discription">eventWait(timeout=None)
+Blocks until an event occurs. The returned event is removed from the buffer.
+        timeout (Integer) the maximum time to wait (optional)
+returns: (Event) Map of event properties.</div></td></tr> 
+
+<tr><td><p class="method-name">eventWaitFor</p></td><td>self,eventName,timeout=None<br><div class="discription">eventWaitFor(eventName,timeout=None)
+Blocks until an event with the supplied name occurs. The returned event is not removed from the buffer.
+        eventName (String)
+        timeout (Integer) the maximum time to wait (in ms) (optional)
+returns: (Event) Map of event properties.</div></td></tr> 
+
+<tr><td><p class="method-name">forceStopPackage</p></td><td>self,packageName<br><div class="discription">forceStopPackage(packageName)
+Force stops a package.
+        packageName (String) name of package</div></td></tr> 
+
+<tr><td><p class="method-name">fullDismiss</p></td><td>self<br><div class="discription">fullDismiss(self)
+Dismiss Full Screen.</div></td></tr> 
+
+<tr><td><p class="method-name">fullQuery</p></td><td>self<br><div class="discription">fullQuery(self)
+Get Fullscreen Properties</div></td></tr> 
+
+<tr><td><p class="method-name">fullQueryDetail</p></td><td>self,id<br><div class="discription">fullQueryDetail(id)
+Get fullscreen properties for a specific widget
+        id (String) id of layout widget</div></td></tr> 
+
+<tr><td><p class="method-name">fullSetList</p></td><td>self,id,list<br><div class="discription">fullSetList(id,list)
+Attach a list to a fullscreen widget
+        id (String) id of layout widget
+        list (JSONArray) List to set</div></td></tr> 
+
+<tr><td><p class="method-name">fullSetProperty</p></td><td>self,id,property,value<br><div class="discription">fullSetProperty(id,property,value)
+Set fullscreen widget property
+        id (String) id of layout widget
+        property (String) name of property to set
+        value (String) value to set property to</div></td></tr> 
+
+<tr><td><p class="method-name">fullShow</p></td><td>self,layout<br><div class="discription">fullShow(layout)
+Show Full Screen.
+        layout (String) String containing View layout
+See wiki page for more
+detail.</div></td></tr> 
+
+<tr><td><p class="method-name">generateDtmfTones</p></td><td>self,phoneNumber,toneDuration=100<br><div class="discription">generateDtmfTones(phoneNumber,toneDuration=100)
+Generate DTMF tones for the given phone number.
+        phoneNumber (String)
+        toneDuration (Integer) duration of each tone in milliseconds (default=100)</div></td></tr> 
+
+<tr><td><p class="method-name">geocode</p></td><td>self,latitude,longitude,maxResults=1<br><div class="discription">geocode(latitude,longitude,maxResults=1)
+Returns a list of addresses for the given latitude and longitude.
+        latitude (Double)
+        longitude (Double)
+        maxResults (Integer) maximum number of results (default=1)
+returns: (List) A list of addresses.</div></td></tr> 
+
+<tr><td><p class="method-name">getCellLocation</p></td><td>self<br><div class="discription">getCellLocation(self)
+Returns the current cell location.</div></td></tr> 
+
+<tr><td><p class="method-name">getClipboard</p></td><td>self<br><div class="discription">getClipboard(self)
+Read text from the clipboard.
+returns: (String) The text in the clipboard.</div></td></tr> 
+
+<tr><td><p class="method-name">getConstants</p></td><td>self,classname<br><div class="discription">getConstants(classname)
+Get list of constants (static final fields) for a class
+        classname (String) Class to get constants from</div></td></tr> 
+
+<tr><td><p class="method-name">getDeviceId</p></td><td>self<br><div class="discription">getDeviceId(self)
+Returns the unique device ID, for example, the IMEI for GSM and the MEID for CDMA phones. Return null if device ID is not available.</div></td></tr> 
+
+<tr><td><p class="method-name">getDeviceSoftwareVersion</p></td><td>self<br><div class="discription">getDeviceSoftwareVersion(self)
+Returns the software version number for the device, for example, the IMEI/SV for GSM phones. Return null if the software version is not available.</div></td></tr> 
+
+<tr><td><p class="method-name">getInput</p></td><td>self,title='SL4AInput',message='Pleaseentervalue:'<br><div class="discription">getInput(title="SL4A Input",message="Please enter value:")
+Queries the user for a text input.
+        title (String) title of the input box (default=SL4A Input)
+        message (String) message to display above the input box (default=Please enter value:)
+Deprecated in r3. Use dialogGetInput instead.</div></td></tr> 
+
+<tr><td><p class="method-name">getIntent</p></td><td>self<br><div class="discription">getIntent(self)
+Returns the intent that launched the script.</div></td></tr> 
+
+<tr><td><p class="method-name">getLastKnownLocation</p></td><td>self<br><div class="discription">getLastKnownLocation(self)
+Returns the last known location of the device.
+returns: (Map) A map of location information by provider.</div></td></tr> 
+
+<tr><td><p class="method-name">getLaunchableApplications</p></td><td>self<br><div class="discription">getLaunchableApplications(self)
+Returns a list of all launchable application class names.</div></td></tr> 
+
+<tr><td><p class="method-name">getLine1Number</p></td><td>self<br><div class="discription">getLine1Number(self)
+Returns the phone number string for line 1, for example, the MSISDN for a GSM phone. Return null if it is unavailable.</div></td></tr> 
+
+<tr><td><p class="method-name">getMaxMediaVolume</p></td><td>self<br><div class="discription">getMaxMediaVolume(self)
+Returns the maximum media volume.</div></td></tr> 
+
+<tr><td><p class="method-name">getMaxRingerVolume</p></td><td>self<br><div class="discription">getMaxRingerVolume(self)
+Returns the maximum ringer volume.</div></td></tr> 
+
+<tr><td><p class="method-name">getMediaVolume</p></td><td>self<br><div class="discription">getMediaVolume(self)
+Returns the current media volume.</div></td></tr> 
+
+<tr><td><p class="method-name">getNeighboringCellInfo</p></td><td>self<br><div class="discription">getNeighboringCellInfo(self)
+Returns the neighboring cell information of the device.</div></td></tr> 
+
+<tr><td><p class="method-name">getNetworkOperator</p></td><td>self<br><div class="discription">getNetworkOperator(self)
+Returns the numeric name (MCC+MNC) of current registered operator.</div></td></tr> 
+
+<tr><td><p class="method-name">getNetworkOperatorName</p></td><td>self<br><div class="discription">getNetworkOperatorName(self)
+Returns the alphabetic name of current registered operator.</div></td></tr> 
+
+<tr><td><p class="method-name">getNetworkType</p></td><td>self<br><div class="discription">getNetworkType(self)
+Returns a the radio technology (network type) currently in use on the device.</div></td></tr> 
+
+<tr><td><p class="method-name">getPackageVersion</p></td><td>self,packageName<br><div class="discription">getPackageVersion(packageName)
+Returns package version name.
+        packageName (String)</div></td></tr> 
+
+<tr><td><p class="method-name">getPackageVersionCode</p></td><td>self,packageName<br><div class="discription">getPackageVersionCode(packageName)
+Returns package version code.
+        packageName (String)</div></td></tr> 
+
+<tr><td><p class="method-name">getPassword</p></td><td>self,title='SL4APasswordInput',message='Pleaseenterpassword:'<br><div class="discription">getPassword(title="SL4A Password Input",message="Please enter password:")
+Queries the user for a password.
+        title (String) title of the input box (default=SL4A Password Input)
+        message (String) message to display above the input box (default=Please enter password:)
+Deprecated in r3. Use dialogGetPassword instead.</div></td></tr> 
+
+<tr><td><p class="method-name">getPhoneType</p></td><td>self<br><div class="discription">getPhoneType(self)
+Returns the device phone type.</div></td></tr> 
+
+<tr><td><p class="method-name">getRingerVolume</p></td><td>self<br><div class="discription">getRingerVolume(self)
+Returns the current ringer volume.</div></td></tr> 
+
+<tr><td><p class="method-name">getRunningPackages</p></td><td>self<br><div class="discription">getRunningPackages(self)
+Returns a list of packages running activities or services.
+returns: (List) List of packages running activities.</div></td></tr> 
+
+<tr><td><p class="method-name">getScreenBrightness</p></td><td>self<br><div class="discription">getScreenBrightness(self)
+Returns the screen backlight brightness.
+returns: (Integer) the current screen brightness between 0 and 255</div></td></tr> 
+
+<tr><td><p class="method-name">getScreenTimeout</p></td><td>self<br><div class="discription">getScreenTimeout(self)
+Returns the current screen timeout in seconds.
+returns: (Integer) the current screen timeout in seconds.</div></td></tr> 
+
+<tr><td><p class="method-name">getSimCountryIso</p></td><td>self<br><div class="discription">getSimCountryIso(self)
+Returns the ISO country code equivalent for the SIM provider's country code.</div></td></tr> 
+
+<tr><td><p class="method-name">getSimOperator</p></td><td>self<br><div class="discription">getSimOperator(self)
+Returns the MCC+MNC (mobile country code + mobile network code) of the provider of the SIM. 5 or 6 decimal digits.</div></td></tr> 
+
+<tr><td><p class="method-name">getSimOperatorName</p></td><td>self<br><div class="discription">getSimOperatorName(self)
+Returns the Service Provider Name (SPN).</div></td></tr> 
+
+<tr><td><p class="method-name">getSimSerialNumber</p></td><td>self<br><div class="discription">getSimSerialNumber(self)
+Returns the serial number of the SIM, if applicable. Return null if it is unavailable.</div></td></tr> 
+
+<tr><td><p class="method-name">getSimState</p></td><td>self<br><div class="discription">getSimState(self)
+Returns the state of the device SIM card.</div></td></tr> 
+
+<tr><td><p class="method-name">getSubscriberId</p></td><td>self<br><div class="discription">getSubscriberId(self)
+Returns the unique subscriber ID, for example, the IMSI for a GSM phone. Return null if it is unavailable.</div></td></tr> 
+
+<tr><td><p class="method-name">getVibrateMode</p></td><td>self,ringer=None<br><div class="discription">getVibrateMode(ringer=None)
+Checks Vibration setting. If ringer=true then query Ringer setting, else query Notification setting
+        ringer (Boolean)  (optional)
+returns: (Boolean) True if vibrate mode is enabled.</div></td></tr> 
+
+<tr><td><p class="method-name">getVoiceMailAlphaTag</p></td><td>self<br><div class="discription">getVoiceMailAlphaTag(self)
+Retrieves the alphabetic identifier associated with the voice mail number.</div></td></tr> 
+
+<tr><td><p class="method-name">getVoiceMailNumber</p></td><td>self<br><div class="discription">getVoiceMailNumber(self)
+Returns the voice mail number. Return null if it is unavailable.</div></td></tr> 
+
+<tr><td><p class="method-name">launch</p></td><td>self,className<br><div class="discription">launch(className)
+Start activity with the given class name.
+        className (String)</div></td></tr> 
+
+<tr><td><p class="method-name">log</p></td><td>self,message<br><div class="discription">log(message)
+Writes message to logcat.
+        message (String)</div></td></tr> 
+
+<tr><td><p class="method-name">makeIntent</p></td><td>self,action,uri=None,type=None,extras=None,categories=None,packagename=None,classname=None,flags=None<br><div class="discription">makeIntent(action,uri=None,type=None,extras=None,categories=None,packagename=None,classname=None,flags=None)
+Create an Intent.
+        action (String)
+        uri (String)  (optional)
+        type (String) MIME type/subtype of the URI (optional)
+        extras (JSONObject) a Map of extras to add to the Intent (optional)
+        categories (JSONArray) a List of categories to add to the Intent (optional)
+        packagename (String) name of package. If used, requires classname to be useful (optional)
+        classname (String) name of class. If used, requires packagename to be useful (optional)
+        flags (Integer) Intent flags (optional)
+returns: (Intent) An object representing an Intent</div></td></tr> 
+
+<tr><td><p class="method-name">makeToast</p></td><td>self,message<br><div class="discription">makeToast(message)
+Displays a short-duration Toast notification.
+        message (String)</div></td></tr> 
+
+<tr><td><p class="method-name">mediaIsPlaying</p></td><td>self,tag='default'<br><div class="discription">mediaIsPlaying(tag="default")
+Checks if media file is playing.
+        tag (String) string identifying resource (default=default)
+returns: (boolean) true if playing</div></td></tr> 
+
+<tr><td><p class="method-name">mediaPlay</p></td><td>self,url,tag='default',play=True<br><div class="discription">mediaPlay(url,tag="default",play=True)
+Open a media file
+        url (String) url of media resource
+        tag (String) string identifying resource (default=default)
+        play (Boolean) start playing immediately (default=true)
+returns: (boolean) true if play successful</div></td></tr> 
+
+<tr><td><p class="method-name">mediaPlayClose</p></td><td>self,tag='default'<br><div class="discription">mediaPlayClose(tag="default")
+Close media file
+        tag (String) string identifying resource (default=default)
+returns: (boolean) true if successful</div></td></tr> 
+
+<tr><td><p class="method-name">mediaPlayInfo</p></td><td>self,tag='default'<br><div class="discription">mediaPlayInfo(tag="default")
+Information on current media
+        tag (String) string identifying resource (default=default)
+returns: (Map) Media Information</div></td></tr> 
+
+<tr><td><p class="method-name">mediaPlayList</p></td><td>self<br><div class="discription">mediaPlayList(self)
+Lists currently loaded media
+returns: (Set) List of Media Tags</div></td></tr> 
+
+<tr><td><p class="method-name">mediaPlayPause</p></td><td>self,tag='default'<br><div class="discription">mediaPlayPause(tag="default")
+pause playing media file
+        tag (String) string identifying resource (default=default)
+returns: (boolean) true if successful</div></td></tr> 
+
+<tr><td><p class="method-name">mediaPlaySeek</p></td><td>self,msec,tag='default'<br><div class="discription">mediaPlaySeek(msec,tag="default")
+Seek To Position
+        msec (Integer) Position in millseconds
+        tag (String) string identifying resource (default=default)
+returns: (int) New Position (in ms)</div></td></tr> 
+
+<tr><td><p class="method-name">mediaPlaySetLooping</p></td><td>self,enabled=True,tag='default'<br><div class="discription">mediaPlaySetLooping(enabled=True,tag="default")
+Set Looping
+        enabled (Boolean)  (default=true)
+        tag (String) string identifying resource (default=default)
+returns: (boolean) True if successful</div></td></tr> 
+
+<tr><td><p class="method-name">mediaPlayStart</p></td><td>self,tag='default'<br><div class="discription">mediaPlayStart(tag="default")
+start playing media file
+        tag (String) string identifying resource (default=default)
+returns: (boolean) true if successful</div></td></tr> 
+
+<tr><td><p class="method-name">notify</p></td><td>self,title,message<br><div class="discription">notify(title,message)
+Displays a notification that will be canceled when the user clicks on it.
+        title (String) title
+        message (String)</div></td></tr> 
+
+<tr><td><p class="method-name">phoneCall</p></td><td>self,uri<br><div class="discription">phoneCall(uri)
+Calls a contact/phone number by URI.
+        uri (String)</div></td></tr> 
+
+<tr><td><p class="method-name">phoneCallNumber</p></td><td>self,phone_number<br><div class="discription">phoneCallNumber(phone_number)
+Calls a phone number.
+        phone number (String)</div></td></tr> 
+
+<tr><td><p class="method-name">phoneDial</p></td><td>self,uri<br><div class="discription">phoneDial(uri)
+Dials a contact/phone number by URI.
+        uri (String)</div></td></tr> 
+
+<tr><td><p class="method-name">phoneDialNumber</p></td><td>self,phone_number<br><div class="discription">phoneDialNumber(phone_number)
+Dials a phone number.
+        phone number (String)</div></td></tr> 
+
+<tr><td><p class="method-name">pick</p></td><td>self,uri<br><div class="discription">pick(uri)
+Display content to be picked by URI (e.g. contacts)
+        uri (String)
+returns: (Intent) A map of result values.</div></td></tr> 
+
+<tr><td><p class="method-name">pickContact</p></td><td>self<br><div class="discription">pickContact(self)
+Displays a list of contacts to pick from.
+returns: (Intent) A map of result values.</div></td></tr> 
+
+<tr><td><p class="method-name">pickPhone</p></td><td>self<br><div class="discription">pickPhone(self)
+Displays a list of phone numbers to pick from.
+returns: (String) The selected phone number.</div></td></tr> 
+
+<tr><td><p class="method-name">prefGetAll</p></td><td>self,filename=None<br><div class="discription">prefGetAll(filename=None)
+Get list of Shared Preference Values
+        filename (String) Desired preferences file. If not defined, uses the default Shared Preferences. (optional)
+returns: (Map) Map of key,value</div></td></tr> 
+
+<tr><td><p class="method-name">prefGetValue</p></td><td>self,key,filename=None<br><div class="discription">prefGetValue(key,filename=None)
+Read a value from shared preferences
+        key (String)
+        filename (String) Desired preferences file. If not defined, uses the default Shared Preferences. (optional)</div></td></tr> 
+
+<tr><td><p class="method-name">prefPutValue</p></td><td>self,key,value,filename=None<br><div class="discription">prefPutValue(key,value,filename=None)
+Write a value to shared preferences
+        key (String)
+        value (Object)
+        filename (String) Desired preferences file. If not defined, uses the default Shared Preferences. (optional)</div></td></tr> 
+
+<tr><td><p class="method-name">queryAttributes</p></td><td>self,uri<br><div class="discription">queryAttributes(uri)
+Content Resolver Query Attributes
+        uri (String) The URI, using the content:// scheme, for the content to retrieve.
+returns: (JSONArray) a list of available columns for a given content uri</div></td></tr> 
+
+<tr><td><p class="method-name">queryContent</p></td><td>self,uri,attributes=None,selection=None,selectionArgs=None,order=None<br><div class="discription">queryContent(uri,attributes=None,selection=None,selectionArgs=None,order=None)
+Content Resolver Query
+        uri (String) The URI, using the content:// scheme, for the content to retrieve.
+        attributes (JSONArray) A list of which columns to return. Passing null will return all columns (optional)
+        selection (String) A filter declaring which rows to return (optional)
+        selectionArgs (JSONArray) You may include ?s in selection, which will be replaced by the values from selectionArgs (optional)
+        order (String) How to order the rows (optional)
+returns: (List) result of query as Maps
+Exactly as per ContentResolver.query</div></td></tr> 
+
+<tr><td><p class="method-name">readBatteryData</p></td><td>self<br><div class="discription">readBatteryData(self)
+Returns the most recently recorded battery data.</div></td></tr> 
+
+<tr><td><p class="method-name">readLocation</p></td><td>self<br><div class="discription">readLocation(self)
+Returns the current location as indicated by all available providers.
+returns: (Map) A map of location information by provider.</div></td></tr> 
+
+<tr><td><p class="method-name">readPhoneState</p></td><td>self<br><div class="discription">readPhoneState(self)
+Returns the current phone state and incoming number.
+returns: (Bundle) A Map of "state" and "incomingNumber"</div></td></tr> 
+
+<tr><td><p class="method-name">readSensors</p></td><td>self<br><div class="discription">readSensors(self)
+Returns the most recently recorded sensor data.</div></td></tr> 
+
+<tr><td><p class="method-name">readSignalStrengths</p></td><td>self<br><div class="discription">readSignalStrengths(self)
+Returns the current signal strengths.
+returns: (Bundle) A map of "gsm_signal_strength"</div></td></tr> 
+
+<tr><td><p class="method-name">receiveEvent</p></td><td>self<br><div class="discription">receiveEvent(self)
+Returns and removes the oldest event (i.e. location or sensor update, etc.) from the event buffer.
+returns: (Event) Map of event properties.
+Deprecated in r4. Use eventPoll instead.</div></td></tr> 
+
+<tr><td><p class="method-name">recognizeSpeech</p></td><td>self,prompt=None,language=None,languageModel=None<br><div class="discription">recognizeSpeech(prompt=None,language=None,languageModel=None)
+Recognizes user's speech and returns the most likely result.
+        prompt (String) text prompt to show to the user when asking them to speak (optional)
+        language (String) language override to inform the recognizer that it should expect speech in a language different than the one set in the java.util.Locale.getDefault() (optional)
+        languageModel (String) informs the recognizer which speech model to prefer (see android.speech.RecognizeIntent) (optional)
+returns: (String) An empty string in case the speech cannot be recongnized.</div></td></tr> 
+
+<tr><td><p class="method-name">recorderCaptureVideo</p></td><td>self,targetPath,duration=None,recordAudio=True<br><div class="discription">recorderCaptureVideo(targetPath,duration=None,recordAudio=True)
+Records video (and optionally audio) from the camera and saves it to the given location. Duration specifies the maximum duration of the recording session. If duration is not provided this method will return immediately and the recording will only be stopped when recorderStop is called or when a scripts exits. Otherwise it will block for the time period equal to the duration argument.
+        targetPath (String)
+        duration (Integer)  (optional)
+        recordAudio (Boolean)  (default=true)</div></td></tr> 
+
+<tr><td><p class="method-name">recorderStartMicrophone</p></td><td>self,targetPath<br><div class="discription">recorderStartMicrophone(targetPath)
+Records audio from the microphone and saves it to the given location.
+        targetPath (String)</div></td></tr> 
+
+<tr><td><p class="method-name">recorderStartVideo</p></td><td>self,targetPath,duration=0,videoSize=1<br><div class="discription">recorderStartVideo(targetPath,duration=0,videoSize=1)
+Records video from the camera and saves it to the given location. Duration specifies the maximum duration of the recording session. If duration is 0 this method will return and the recording will only be stopped when recorderStop is called or when a scripts exits. Otherwise it will block for the time period equal to the duration argument.videoSize: 0=160x120, 1=320x240, 2=352x288, 3=640x480, 4=800x480.
+        targetPath (String)
+        duration (Integer)  (default=0)
+        videoSize (Integer)  (default=1)</div></td></tr> 
+
+<tr><td><p class="method-name">recorderStop</p></td><td>self<br><div class="discription">recorderStop(self)
+Stops a previously started recording.</div></td></tr> 
+
+<tr><td><p class="method-name">requiredVersion</p></td><td>self,requiredVersion<br><div class="discription">requiredVersion(requiredVersion)
+Checks if version of SL4A is greater than or equal to the specified version.
+        requiredVersion (Integer)</div></td></tr> 
+
+<tr><td><p class="method-name">rpcPostEvent</p></td><td>self,name,data<br><div class="discription">rpcPostEvent(name,data)
+Post an event to the event queue.
+        name (String)
+        data (String)
+Deprecated in r4. Use eventPost instead.</div></td></tr> 
+
+<tr><td><p class="method-name">scanBarcode</p></td><td>self<br><div class="discription">scanBarcode(self)
+Starts the barcode scanner.
+returns: (Intent) A Map representation of the result Intent.</div></td></tr> 
+
+<tr><td><p class="method-name">search</p></td><td>self,query<br><div class="discription">search(query)
+Starts a search for the given query.
+        query (String)</div></td></tr> 
+
+<tr><td><p class="method-name">sendBroadcast</p></td><td>self,action,uri=None,type=None,extras=None,packagename=None,classname=None<br><div class="discription">sendBroadcast(action,uri=None,type=None,extras=None,packagename=None,classname=None)
+Send a broadcast.
+        action (String)
+        uri (String)  (optional)
+        type (String) MIME type/subtype of the URI (optional)
+        extras (JSONObject) a Map of extras to add to the Intent (optional)
+        packagename (String) name of package. If used, requires classname to be useful (optional)
+        classname (String) name of class. If used, requires packagename to be useful (optional)</div></td></tr> 
+
+<tr><td><p class="method-name">sendBroadcastIntent</p></td><td>self,intent<br><div class="discription">sendBroadcastIntent(intent)
+Send Broadcast Intent
+        intent (Intent) Intent in the format as returned from makeIntent</div></td></tr> 
+
+<tr><td><p class="method-name">sendEmail</p></td><td>self,to,subject,body,attachmentUri=None<br><div class="discription">sendEmail(to,subject,body,attachmentUri=None)
+Launches an activity that sends an e-mail message to a given recipient.
+        to (String) A comma separated list of recipients.
+        subject (String)
+        body (String)
+        attachmentUri (String)  (optional)</div></td></tr> 
+
+<tr><td><p class="method-name">sensorsGetAccuracy</p></td><td>self<br><div class="discription">sensorsGetAccuracy(self)
+Returns the most recently received accuracy value.</div></td></tr> 
+
+<tr><td><p class="method-name">sensorsGetLight</p></td><td>self<br><div class="discription">sensorsGetLight(self)
+Returns the most recently received light value.</div></td></tr> 
+
+<tr><td><p class="method-name">sensorsReadAccelerometer</p></td><td>self<br><div class="discription">sensorsReadAccelerometer(self)
+Returns the most recently received accelerometer values.
+returns: (List) a List of Floats [(acceleration on the) X axis, Y axis, Z axis].</div></td></tr> 
+
+<tr><td><p class="method-name">sensorsReadMagnetometer</p></td><td>self<br><div class="discription">sensorsReadMagnetometer(self)
+Returns the most recently received magnetic field values.
+returns: (List) a List of Floats [(magnetic field value for) X axis, Y axis, Z axis].</div></td></tr> 
+
+<tr><td><p class="method-name">sensorsReadOrientation</p></td><td>self<br><div class="discription">sensorsReadOrientation(self)
+Returns the most recently received orientation values.
+returns: (List) a List of Doubles [azimuth, pitch, roll].</div></td></tr> 
+
+<tr><td><p class="method-name">setClipboard</p></td><td>self,text<br><div class="discription">setClipboard(text)
+Put text in the clipboard.
+        text (String)
+Creates a new AndroidFacade that simplifies the interface to various Android APIs.</div></td></tr> 
+
+<tr><td><p class="method-name">setMediaVolume</p></td><td>self,volume<br><div class="discription">setMediaVolume(volume)
+Sets the media volume.
+        volume (Integer)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultBoolean</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultBoolean(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Boolean)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultBooleanArray</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultBooleanArray(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Boolean)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultByte</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultByte(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Byte)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultByteArray</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultByteArray(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Byte)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultChar</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultChar(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Character)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultCharArray</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultCharArray(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Character)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultDouble</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultDouble(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Double)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultDoubleArray</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultDoubleArray(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Double)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultFloat</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultFloat(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Float)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultFloatArray</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultFloatArray(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Float)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultInteger</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultInteger(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Integer)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultIntegerArray</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultIntegerArray(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Integer)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultLong</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultLong(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Long)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultLongArray</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultLongArray(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Long)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultSerializable</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultSerializable(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Serializable)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultShort</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultShort(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Short)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultShortArray</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultShortArray(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (Short)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultString</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultString(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (String)</div></td></tr> 
+
+<tr><td><p class="method-name">setResultStringArray</p></td><td>self,resultCode,resultValue<br><div class="discription">setResultStringArray(resultCode,resultValue)
+Sets the result of a script execution. Whenever the script APK is called via startActivityForResult(), the resulting intent will contain SCRIPT_RESULT extra with the given value.
+        resultCode (Integer) The result code to propagate back to the originating activity, often RESULT_CANCELED (0) or RESULT_OK (-1)
+        resultValue (String)</div></td></tr> 
+
+<tr><td><p class="method-name">setRingerVolume</p></td><td>self,volume<br><div class="discription">setRingerVolume(volume)
+Sets the ringer volume.
+        volume (Integer)</div></td></tr> 
+
+<tr><td><p class="method-name">setScreenBrightness</p></td><td>self,value<br><div class="discription">setScreenBrightness(value)
+Sets the the screen backlight brightness.
+        value (Integer) brightness value between 0 and 255
+returns: (Integer) the original screen brightness.</div></td></tr> 
+
+<tr><td><p class="method-name">setScreenTimeout</p></td><td>self,value<br><div class="discription">setScreenTimeout(value)
+Sets the screen timeout to this number of seconds.
+        value (Integer)
+returns: (Integer) The original screen timeout.</div></td></tr> 
+
+<tr><td><p class="method-name">smsDeleteMessage</p></td><td>self,id<br><div class="discription">smsDeleteMessage(id)
+Deletes a message.
+        id (Integer)
+returns: (Boolean) True if the message was deleted</div></td></tr> 
+
+<tr><td><p class="method-name">smsGetAttributes</p></td><td>self<br><div class="discription">smsGetAttributes(self)
+Returns a List of all possible message attributes.</div></td></tr> 
+
+<tr><td><p class="method-name">smsGetMessageById</p></td><td>self,id,attributes=None<br><div class="discription">smsGetMessageById(id,attributes=None)
+Returns message attributes.
+        id (Integer) message ID
+        attributes (JSONArray)  (optional)</div></td></tr> 
+
+<tr><td><p class="method-name">smsGetMessageCount</p></td><td>self,unreadOnly,folder='inbox'<br><div class="discription">smsGetMessageCount(unreadOnly,folder="inbox")
+Returns the number of messages.
+        unreadOnly (Boolean)
+        folder (String)  (default=inbox)</div></td></tr> 
+
+<tr><td><p class="method-name">smsGetMessageIds</p></td><td>self,unreadOnly,folder='inbox'<br><div class="discription">smsGetMessageIds(unreadOnly,folder="inbox")
+Returns a List of all message IDs.
+        unreadOnly (Boolean)
+        folder (String)  (default=inbox)</div></td></tr> 
+
+<tr><td><p class="method-name">smsGetMessages</p></td><td>self,unreadOnly,folder='inbox',attributes=None<br><div class="discription">smsGetMessages(unreadOnly,folder="inbox",attributes=None)
+Returns a List of all messages.
+        unreadOnly (Boolean)
+        folder (String)  (default=inbox)
+        attributes (JSONArray)  (optional)
+returns: (List) a List of messages as Maps</div></td></tr> 
+
+<tr><td><p class="method-name">smsMarkMessageRead</p></td><td>self,ids,read<br><div class="discription">smsMarkMessageRead(ids,read)
+Marks messages as read.
+        ids (JSONArray) List of message IDs to mark as read.
+        read (Boolean)
+returns: (Integer) number of messages marked read</div></td></tr> 
+
+<tr><td><p class="method-name">smsSend</p></td><td>self,destinationAddress,text<br><div class="discription">smsSend(destinationAddress,text)
+Sends an SMS.
+        destinationAddress (String) typically a phone number
+        text (String)</div></td></tr> 
+
+<tr><td><p class="method-name">startActivity</p></td><td>self,action,uri=None,type=None,extras=None,wait=None,packagename=None,classname=None<br><div class="discription">startActivity(action,uri=None,type=None,extras=None,wait=None,packagename=None,classname=None)
+Starts an activity.
+        action (String)
+        uri (String)  (optional)
+        type (String) MIME type/subtype of the URI (optional)
+        extras (JSONObject) a Map of extras to add to the Intent (optional)
+        wait (Boolean) block until the user exits the started activity (optional)
+        packagename (String) name of package. If used, requires classname to be useful (optional)
+        classname (String) name of class. If used, requires packagename to be useful (optional)
+packagename and classname, if provided, are used in a 'setComponent' call.</div></td></tr> 
+
+<tr><td><p class="method-name">startActivityForResult</p></td><td>self,action,uri=None,type=None,extras=None,packagename=None,classname=None<br><div class="discription">startActivityForResult(action,uri=None,type=None,extras=None,packagename=None,classname=None)
+Starts an activity and returns the result.
+        action (String)
+        uri (String)  (optional)
+        type (String) MIME type/subtype of the URI (optional)
+        extras (JSONObject) a Map of extras to add to the Intent (optional)
+        packagename (String) name of package. If used, requires classname to be useful (optional)
+        classname (String) name of class. If used, requires packagename to be useful (optional)
+returns: (Intent) A Map representation of the result Intent.</div></td></tr> 
+
+<tr><td><p class="method-name">startActivityForResultIntent</p></td><td>self,intent<br><div class="discription">startActivityForResultIntent(intent)
+Starts an activity and returns the result.
+        intent (Intent) Intent in the format as returned from makeIntent
+returns: (Intent) A Map representation of the result Intent.</div></td></tr> 
+
+<tr><td><p class="method-name">startActivityIntent</p></td><td>self,intent,wait=None<br><div class="discription">startActivityIntent(intent,wait=None)
+Start Activity using Intent
+        intent (Intent) Intent in the format as returned from makeIntent
+        wait (Boolean) block until the user exits the started activity (optional)</div></td></tr> 
+
+<tr><td><p class="method-name">startEventDispatcher</p></td><td>self,port=None<br><div class="discription">startEventDispatcher(port=None)
+Opens up a socket where you can read for events posted
+        port (Integer) Port to use (optional) (default=0)</div></td></tr> 
+
+<tr><td><p class="method-name">startInteractiveVideoRecording</p></td><td>self,path<br><div class="discription">startInteractiveVideoRecording(path)
+Starts the video capture application to record a video and saves it to the specified path.
+        path (String)</div></td></tr> 
+
+<tr><td><p class="method-name">startLocating</p></td><td>self,minDistance=60000,minUpdateDistance=30<br><div class="discription">startLocating(minDistance=60000,minUpdateDistance=30)
+Starts collecting location data.
+        minDistance (Integer) minimum time between updates in milliseconds (default=60000)
+        minUpdateDistance (Integer) minimum distance between updates in meters (default=30)</div></td></tr> 
+
+<tr><td><p class="method-name">startSensing</p></td><td>self,sampleSize=5<br><div class="discription">startSensing(sampleSize=5)
+Starts recording sensor data to be available for polling.
+        sampleSize (Integer) number of samples for calculating average readings (default=5)
+Deprecated in 4. Use startSensingTimed or startSensingThreshhold instead.</div></td></tr> 
+
+<tr><td><p class="method-name">startSensingThreshold</p></td><td>self,sensorNumber,threshold,axis<br><div class="discription">startSensingThreshold(sensorNumber,threshold,axis)
+Records to the Event Queue sensor data exceeding a chosen threshold.
+        sensorNumber (Integer) 1 = Orientation, 2 = Accelerometer, 3 = Magnetometer and 4 = Light
+        threshold (Integer) Threshold level for chosen sensor (integer)
+        axis (Integer) 0 = No axis, 1 = X, 2 = Y, 3 = X+Y, 4 = Z, 5= X+Z, 6 = Y+Z, 7 = X+Y+Z</div></td></tr> 
+
+<tr><td><p class="method-name">startSensingTimed</p></td><td>self,sensorNumber,delayTime<br><div class="discription">startSensingTimed(sensorNumber,delayTime)
+Starts recording sensor data to be available for polling.
+        sensorNumber (Integer) 1 = All, 2 = Accelerometer, 3 = Magnetometer and 4 = Light
+        delayTime (Integer) Minimum time between readings in milliseconds</div></td></tr> 
+
+<tr><td><p class="method-name">startTrackingPhoneState</p></td><td>self<br><div class="discription">startTrackingPhoneState(self)
+Starts tracking phone state.</div></td></tr> 
+
+<tr><td><p class="method-name">startTrackingSignalStrengths</p></td><td>self<br><div class="discription">startTrackingSignalStrengths(self)
+Starts tracking signal strengths.</div></td></tr> 
+
+<tr><td><p class="method-name">stopEventDispatcher</p></td><td>self<br><div class="discription">stopEventDispatcher(self)
+Stops the event server, you can't read in the port anymore</div></td></tr> 
+
+<tr><td><p class="method-name">stopLocating</p></td><td>self<br><div class="discription">stopLocating(self)
+Stops collecting location data.</div></td></tr> 
+
+<tr><td><p class="method-name">stopSensing</p></td><td>self<br><div class="discription">stopSensing(self)
+Stops collecting sensor data.</div></td></tr> 
+
+<tr><td><p class="method-name">stopTrackingPhoneState</p></td><td>self<br><div class="discription">stopTrackingPhoneState(self)
+Stops tracking phone state.</div></td></tr> 
+
+<tr><td><p class="method-name">stopTrackingSignalStrengths</p></td><td>self<br><div class="discription">stopTrackingSignalStrengths(self)
+Stops tracking signal strength.</div></td></tr> 
+
+<tr><td><p class="method-name">toggleAirplaneMode</p></td><td>self,enabled=None<br><div class="discription">toggleAirplaneMode(enabled=None)
+Toggles airplane mode on and off.
+        enabled (Boolean)  (optional)
+returns: (Boolean) True if airplane mode is enabled.</div></td></tr> 
+
+<tr><td><p class="method-name">toggleBluetoothState</p></td><td>self,enabled=None,prompt=True<br><div class="discription">toggleBluetoothState(enabled=None,prompt=True)
+Toggle Bluetooth on and off.
+        enabled (Boolean)  (optional)
+        prompt (Boolean) Prompt the user to confirm changing the Bluetooth state. (default=true)
+returns: (Boolean) True if Bluetooth is enabled.</div></td></tr> 
+
+<tr><td><p class="method-name">toggleRingerSilentMode</p></td><td>self,enabled=None<br><div class="discription">toggleRingerSilentMode(enabled=None)
+Toggles ringer silent mode on and off.
+        enabled (Boolean)  (optional)
+returns: (Boolean) True if ringer silent mode is enabled.</div></td></tr> 
+
+<tr><td><p class="method-name">toggleVibrateMode</p></td><td>self,enabled=None,ringer=None<br><div class="discription">toggleVibrateMode(enabled=None,ringer=None)
+Toggles vibrate mode on and off. If ringer=true then set Ringer setting, else set Notification setting
+        enabled (Boolean)  (optional)
+        ringer (Boolean)  (optional)
+returns: (Boolean) True if vibrate mode is enabled.</div></td></tr> 
+
+<tr><td><p class="method-name">toggleWifiState</p></td><td>self,enabled=None<br><div class="discription">toggleWifiState(enabled=None)
+Toggle Wifi on and off.
+        enabled (Boolean)  (optional)
+returns: (Boolean) True if Wifi is enabled.</div></td></tr> 
+
+<tr><td><p class="method-name">ttsIsSpeaking</p></td><td>self<br><div class="discription">ttsIsSpeaking(self)
+Returns True if speech is currently in progress.</div></td></tr> 
+
+<tr><td><p class="method-name">ttsSpeak</p></td><td>self,message<br><div class="discription">ttsSpeak(message)
+Speaks the provided message via TTS.
+        message (String)</div></td></tr> 
+
+<tr><td><p class="method-name">vibrate</p></td><td>self,duration=300<br><div class="discription">vibrate(duration=300)
+Vibrates the phone or a specified duration in milliseconds.
+        duration (Integer) duration in milliseconds (default=300)</div></td></tr> 
+
+<tr><td><p class="method-name">view</p></td><td>self,uri,type=None,extras=None<br><div class="discription">view(uri,type=None,extras=None)
+Start activity with view action by URI (i.e. browser, contacts, etc.).
+        uri (String)
+        type (String) MIME type/subtype of the URI (optional)
+        extras (JSONObject) a Map of extras to add to the Intent (optional)</div></td></tr> 
+
+<tr><td><p class="method-name">viewContacts</p></td><td>self<br><div class="discription">viewContacts(self)
+Opens the list of contacts.</div></td></tr> 
+
+<tr><td><p class="method-name">viewHtml</p></td><td>self,path<br><div class="discription">viewHtml(path)
+Opens the browser to display a local HTML file.
+        path (String) the path to the HTML file</div></td></tr> 
+
+<tr><td><p class="method-name">viewMap</p></td><td>self,query<br><div class="discription">viewMap(query,_e.g._pizza,_123_My_Street)
+Opens a map search for query (e.g. pizza, 123 My Street).
+        query, e.g. pizza, 123 My Street (String)</div></td></tr> 
+
+<tr><td><p class="method-name">waitForEvent</p></td><td>self,eventName,timeout=None<br><div class="discription">waitForEvent(eventName,timeout=None)
+Blocks until an event with the supplied name occurs. The returned event is not removed from the buffer.
+        eventName (String)
+        timeout (Integer) the maximum time to wait (optional)
+returns: (Event) Map of event properties.
+Deprecated in r4. Use eventWaitFor instead.</div></td></tr> 
+
+<tr><td><p class="method-name">wakeLockAcquireBright</p></td><td>self<br><div class="discription">wakeLockAcquireBright(self)
+Acquires a bright wake lock (CPU on, screen bright).</div></td></tr> 
+
+<tr><td><p class="method-name">wakeLockAcquireDim</p></td><td>self<br><div class="discription">wakeLockAcquireDim(self)
+Acquires a dim wake lock (CPU on, screen dim).</div></td></tr> 
+
+<tr><td><p class="method-name">wakeLockAcquireFull</p></td><td>self<br><div class="discription">wakeLockAcquireFull(self)
+Acquires a full wake lock (CPU on, screen bright, keyboard bright).</div></td></tr> 
+
+<tr><td><p class="method-name">wakeLockAcquirePartial</p></td><td>self<br><div class="discription">wakeLockAcquirePartial(self)
+Acquires a partial wake lock (CPU on).</div></td></tr> 
+
+<tr><td><p class="method-name">wakeLockRelease</p></td><td>self<br><div class="discription">wakeLockRelease(self)
+Releases the wake lock.</div></td></tr> 
+
+<tr><td><p class="method-name">webViewShow</p></td><td>self,url,wait=None<br><div class="discription">webViewShow(url,wait=None)
+Display a WebView with the given URL.
+        url (String)
+        wait (Boolean) block until the user exits the WebView (optional)
+See wiki page for more
+detail.</div></td></tr> 
+
+<tr><td><p class="method-name">webcamAdjustQuality</p></td><td>self,resolutionLevel=0,jpegQuality=20<br><div class="discription">webcamAdjustQuality(resolutionLevel=0,jpegQuality=20)
+Adjusts the quality of the webcam stream while it is running.
+        resolutionLevel (Integer) increasing this number provides higher resolution (default=0)
+        jpegQuality (Integer) a number from 0-100 (default=20)</div></td></tr> 
+
+<tr><td><p class="method-name">webcamStart</p></td><td>self,resolutionLevel=0,jpegQuality=20,port=0<br><div class="discription">webcamStart(resolutionLevel=0,jpegQuality=20,port=0)
+Starts an MJPEG stream and returns a Tuple of address and port for the stream.
+        resolutionLevel (Integer) increasing this number provides higher resolution (default=0)
+        jpegQuality (Integer) a number from 0-100 (default=20)
+        port (Integer) If port is specified, the webcam service will bind to port, otherwise it will pick any available port. (default=0)</div></td></tr> 
+
+<tr><td><p class="method-name">webcamStop</p></td><td>self<br><div class="discription">webcamStop(self)
+Stops the webcam stream.</div></td></tr> 
+
+<tr><td><p class="method-name">wifiDisconnect</p></td><td>self<br><div class="discription">wifiDisconnect(self)
+Disconnects from the currently active access point.
+returns: (Boolean) True if the operation succeeded.</div></td></tr> 
+
+<tr><td><p class="method-name">wifiGetConnectionInfo</p></td><td>self<br><div class="discription">wifiGetConnectionInfo(self)
+Returns information about the currently active access point.</div></td></tr> 
+
+<tr><td><p class="method-name">wifiGetScanResults</p></td><td>self<br><div class="discription">wifiGetScanResults(self)
+Returns the list of access points found during the most recent Wifi scan.</div></td></tr> 
+
+<tr><td><p class="method-name">wifiLockAcquireFull</p></td><td>self<br><div class="discription">wifiLockAcquireFull(self)
+Acquires a full Wifi lock.</div></td></tr> 
+
+<tr><td><p class="method-name">wifiLockAcquireScanOnly</p></td><td>self<br><div class="discription">wifiLockAcquireScanOnly(self)
+Acquires a scan only Wifi lock.</div></td></tr> 
+
+<tr><td><p class="method-name">wifiLockRelease</p></td><td>self<br><div class="discription">wifiLockRelease(self)
+Releases a previously acquired Wifi lock.</div></td></tr> 
+
+<tr><td><p class="method-name">wifiReassociate</p></td><td>self<br><div class="discription">wifiReassociate(self)
+Reassociates with the currently active access point.
+returns: (Boolean) True if the operation succeeded.</div></td></tr> 
+
+<tr><td><p class="method-name">wifiReconnect</p></td><td>self<br><div class="discription">wifiReconnect(self)
+Reconnects to the currently active access point.
+returns: (Boolean) True if the operation succeeded.</div></td></tr> 
+
+<tr><td><p class="method-name">wifiStartScan</p></td><td>self<br><div class="discription">wifiStartScan(self)
+Starts a scan for Wifi access points.
+returns: (Boolean) True if the scan was initiated successfully.</div></td></tr> 
+
+</tbody></table>
+</body><div id="cVim-status-bar" style="top: 0px;"></div><iframe src="./androidhelper_documentation_files/cmdline_frame.html" id="cVim-command-frame"></iframe></html>

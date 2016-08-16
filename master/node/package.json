@@ -1,0 +1,12 @@
+{
+  "name": "hubserver",
+  "version": "0.0.1",
+  "description": "hubserver socket.io version",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "multer": "^1.1.0",
+    "socket.io": "^1.3.7",
+    "swig": "^1.4.2"
+  }
+}
