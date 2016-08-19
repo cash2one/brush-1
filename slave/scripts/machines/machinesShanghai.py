@@ -124,7 +124,7 @@ class Machinex(Machine):
             time.sleep(1)
             #选择接码平台获取验证码
             #感谢您注册上海观察,验证码:[8596],有效期为5分钟
-            regrex = r'验证码:\[(\d+)'
+            regrex = r'验证码:[\[\(](\d+)'
             captcha = self.code.waitForMessage(regrex, self.phone)
             if captcha is None:
                 print("getMessage failed,try_count:%s" % self.try_count)

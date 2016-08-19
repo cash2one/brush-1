@@ -142,7 +142,9 @@ class Machinex(Machine):
                   "a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
                   "k", "l", "m", "n", "o", "p", "q", "r", "s", "t",
                   "u", "v", "w", "x", "y", "z"]
-        self.pwd = choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)
+        self.pwd = choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)
+        for x in range(random.randint(0, 3)):
+            self.pwd += choice(pwd_li)
         try:
             #选择接码平台获取手机号码
             self.phone = self.code.getPhone()
@@ -489,6 +491,12 @@ class Machinex2(Machine):
             time.sleep(1)
             WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.huajiao:id/login_btn")).click()
             time.sleep(5)
+            #修改密码
+            try:
+                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.huajiao:id/top_bar_right_btn")).click()
+                time.sleep(1)
+            except TimeoutException:
+                pass
             #进入
             try:
                 WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.huajiao:id/onesharedialog_imagebutton_close")).click()
