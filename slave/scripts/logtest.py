@@ -395,3 +395,33 @@
 #     touchAction1.press(beginX,beginY).moveTo(0,yStep).moveTo(0,yStep).release().perform();
 #     logger.info("手势密码设置完毕");
 # }
+
+#########################xlswriter##########################################################################
+
+# import time
+# time.strftime('%Y%m%d')
+# 获取了当前时间的年月日
+
+# 获取昨天的时间datetime
+
+# import datetime
+# now_time = datetime.datetime.now()
+# yes_time = now_time + datetime.timedelta(days=-1)
+# a = yes_time.strftime('%Y-%m-%d')
+
+#########################xlswriter##########################################################################
+# from PIL import Image
+# import pytesseract
+# image = Image.open('caca.png')
+# print(image)
+# print(pytesseract.image_to_string('caca1.png'))
+# print(pytesseract.image_to_string(image))
+
+import pytesseract
+from PIL import Image
+
+image = Image.open('caca.png')
+
+vcode = pytesseract.image_to_string(image)
+
+print(vcode)

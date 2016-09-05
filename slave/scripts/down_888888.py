@@ -82,46 +82,19 @@ class TotalMachine(WorkMachine):
                 #输入网址
                 edts = WebDriverWait(dr, 60).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
                 edts.click()
-                edts.send_keys("http://ad.ledo.com/ad/yhzg/yhzg.html?game_type=111&app_id=120005&cid=10044.1298")
+                edts.send_keys("http://www.bandaoapp.com/bandao/down.php?code=888888")
                 time.sleep(1)
                 dr.press_keycode(66)
                 time.sleep(5)
                 #点击下载
-                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_xpath("//android.view.View[@content-desc='index']")).click()
+                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_xpath("//android.view.View[@content-desc='下载应用程序']")).click()
                 time.sleep(1)
                 WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.android.chrome:id/button_primary")).click()
                 time.sleep(5)
-                #关闭页面
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.android.browser:id/action_tabs")).click()
-                # time.sleep(1)
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.android.browser:id/closeBtn")).click()
-                # time.sleep(1)
-                #清楚数据
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.android.browser:id/action_more")).click()
-                # time.sleep(1)
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.android.browser:id/action_menu_setting")).click()
-                # time.sleep(2)
-                # dr.swipe(300, 800, 300, 300)
-                # time.sleep(1)
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("清除数据")).click()
-                # time.sleep(1)
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.android.browser:id/button")).click()
-                # time.sleep(1)
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("android:id/button1")).click()
-                # time.sleep(1)
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.android.browser:id/up")).click()
-                # time.sleep(1)
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.android.browser:id/up")).click()
-                # time.sleep(1)
-                #退出
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.android.browser:id/action_more")).click()
-                # time.sleep(1)
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.android.browser:id/action_menu_exit")).click()
-                # time.sleep(1)
                 self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
                 time.sleep(2)
                 try:
-                    with open('/sdcard/1/game_downnum.log', 'a') as f:
+                    with open('/sdcard/1/888888_downnum.log', 'a') as f:
                         f.write('\n激活 %s.%s, %s, %s, count:%s' % (time.localtime().tm_mon, time.localtime().tm_mday, self.begintime, self.endstime, self.runnum))
                 except:
                     pass

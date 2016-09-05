@@ -67,16 +67,16 @@ class Machinex(Machine):
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
         time.sleep(10)
         #检测已进入app
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/enter_tv"))
+        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_layout"))
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         time.sleep(1)
         #注册率
         sign_rate = random.randint(1, 10000)
         if sign_rate <= 2000:
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/enter_tv")).click()
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_layout")).click()
             time.sleep(1)
             return self.login_code_platform
-        time.sleep(random.randint(10, 20))
+        time.sleep(random.randint(5, 15))
         return self.ends
 
     def login_code_platform(self):
@@ -226,7 +226,7 @@ class Machinex(Machine):
             except TimeoutException:
                 pass
             time.sleep(5)
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/enter_tv")).click()
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_layout")).click()
             time.sleep(1)
             return self.begin_signup
 
@@ -290,10 +290,6 @@ class Machinex(Machine):
             except:
                 self.select_one_by_id("com.huajiao:id/feed_live_cover_view")
             time.sleep(random.randint(150, 180))
-            #转换到其他房间
-            for i in range(random.randint(0, 1)):
-                dr.swipe(300, 500, random.randint(50, 600), 500)
-                time.sleep(random.randint(150, 180))
             dr.press_keycode(4)
             time.sleep(1)
             dr.press_keycode(4)
@@ -319,13 +315,6 @@ class Machinex(Machine):
                 self.select_one_by_id("com.huajiao:id/img_header")
                 time.sleep(5)
                 self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 3), 5)
-                # try:
-                #     self.select_one_by_id(choice(["com.huajiao:id/left_img", "com.huajiao:id/center_img", "com.huajiao:id/right_img"]))
-                #     time.sleep(random.randint(20, 30))
-                #     dr.press_keycode(4)
-                #     time.sleep(1)
-                # except TimeoutException:
-                #     pass
                 dr.press_keycode(4)
                 time.sleep(1)
                 dr.press_keycode(4)
@@ -370,6 +359,13 @@ class Machinex(Machine):
         return self.do
 
     def ends(self):
+        dr = self.driver
+        dr.press_keycode(3)
+        time.sleep(1)
+        dr.press_keycode(3)
+        time.sleep(30)
+        WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+        time.sleep(1)
         #记录时间
         self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         print(self.begintime)
@@ -466,7 +462,7 @@ class Machinex2(Machine):
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
         time.sleep(10)
         #检测已进入app
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/enter_tv"))
+        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_layout"))
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         time.sleep(1)
         return self.login
@@ -482,7 +478,7 @@ class Machinex2(Machine):
         user = re.search(r'imei:%s,(\d+)' % self.imei, selectuser)
         pwd = re.search(r'imei:%s,\d+,([0-9a-z]+)' % self.imei, selectuser)
         if user and pwd:
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.huajiao:id/enter_tv")).click()
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_layout")).click()
             time.sleep(1)
             edit = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
             edit[0].send_keys(str(user.group(1)))
@@ -517,7 +513,7 @@ class Machinex2(Machine):
             WebDriverWait(dr, 120).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_tab_play"))
             time.sleep(1)
             return self.do
-        time.sleep(random.randint(10, 20))
+        time.sleep(random.randint(5, 10))
         return self.ends
 
     def do(self):
@@ -580,10 +576,6 @@ class Machinex2(Machine):
             except:
                 self.select_one_by_id("com.huajiao:id/feed_live_cover_view")
             time.sleep(random.randint(150, 180))
-            #转换到其他房间
-            # for x in range(random.randint(1, 2)):
-            #     dr.swipe(300, 500, random.randint(50, 600), 500)
-            #     time.sleep(random.randint(150, 180))
             dr.press_keycode(4)
             time.sleep(1)
             dr.press_keycode(4)
@@ -635,6 +627,13 @@ class Machinex2(Machine):
         return self.do
 
     def ends(self):
+        dr = self.driver
+        dr.press_keycode(3)
+        time.sleep(1)
+        dr.press_keycode(3)
+        time.sleep(30)
+        WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+        time.sleep(1)
         #记录时间
         self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         print(self.begintime)

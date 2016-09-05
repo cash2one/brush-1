@@ -1,10 +1,12 @@
 #! -*- coding=utf-8 -*-
 import time
+import datetime
 from appium4droid import webdriver
 from appium4droid.common.exceptions import *
 from appium4droid.support.ui import WebDriverWait
 from machines.StateMachine import Machine
 import random
+
 try:
     from util import reset_wifi, alert, copyfile, removefile
 except ImportError:
@@ -23,7 +25,13 @@ class Machine008(Machine):
         self.task_schedule = ["do_all_one_key", "modify_data"] if tasks is None else tasks
         self.tasks = iter([])
         self.imei = None
-        self.remain_rate = [50, 45, 40, 35, 30, 25, 20, 15, 10, 5]
+        self.remain_rate = [50, 45, 40, 35, 30, 25, 20, 15, 10, 5,
+                            50, 45, 40, 35, 30, 25, 20, 15, 10, 5,
+                            50, 45, 40, 35, 30, 25, 20, 15, 10, 5,
+                            50, 45, 40, 35, 30, 25, 20, 15, 10, 5,
+                            50, 45, 40, 35, 30, 25, 20, 15, 10, 5,
+                            50, 45, 40, 35, 30, 25, 20, 15, 10, 5,
+                            ]
         self.change = True
 
     #进入008
@@ -34,7 +42,7 @@ class Machine008(Machine):
         time.sleep(1)
         dr.press_keycode(3)  # back to Home
         time.sleep(1)
-        WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("008神器0301")).click()
+        WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("008神器0727")).click()
         time.sleep(1)
         #检测网络是否正常
         try:
@@ -202,6 +210,9 @@ class Machine008(Machine):
                 break
             except TimeoutException:
                 pass
+        #0点增加留存记录
+        if time.localtime().tm_hour == 0:
+            self.add_remain_data()
         #激活
         if self.frist_day:
             dr.find_element_by_name("从网络获取数据").click()
@@ -252,9 +263,6 @@ class Machine008(Machine):
                     dr.press_keycode(4)  # keypress back
                     time.sleep(1)
                     return self.exit_008()
-        #0点增加留存记录
-        if time.localtime().tm_hour == 0:
-            return self.add_remain_data
         return self.do_toolbox_task
 
     #修改数据&定位
@@ -269,6 +277,9 @@ class Machine008(Machine):
                 break
             except TimeoutException:
                 pass
+        #添加留存记录
+        if time.localtime().tm_hour == 0:
+            self.add_remain_data()
         # 激活
         if self.frist_day:
             dr.find_element_by_name("从网络获取数据").click()
@@ -340,9 +351,6 @@ class Machine008(Machine):
                     dr.press_keycode(4)  # keypress back
                     time.sleep(1)
                     return self.exit_008()
-        #添加留存记录
-        if time.localtime().tm_hour == 0:
-            return self.add_remain_data
         return self.do_toolbox_task
 
     #出错处理
@@ -423,6 +431,8 @@ class Machine008(Machine):
                 break
             except TimeoutException:
                 pass
+        if time.localtime().tm_hour == 0:
+            self.add_remain_data()
         #激活
         if self.frist_day:
             dr.find_element_by_name("随机生成").click()
@@ -465,10 +475,6 @@ class Machine008(Machine):
                 dr.press_keycode(4)  # keypress back
                 time.sleep(1)
                 return self.modify_data
-        #0点增加留存记录
-        if time.localtime().tm_hour == 0:
-            return self.add_remain_data
-
         return self.exit
 
     #添加留存记录
@@ -477,35 +483,60 @@ class Machine008(Machine):
         dr.find_element_by_id("com.soft.apk008v:id/menu_remainControl").click()  ## 留存控制按键
         time.sleep(1)
         #清除当前留存记录
-        for x in range(15):
+        for x in range(60):
             try:
                 WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.soft.apk008v:id/remain_item_title"))
                 dr.swipe(400, 200, 410, 200, 50)
                 WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("确定")).click()
-                time.sleep(1)
+                time.sleep(0.5)
             except TimeoutException:
                 break
         #添加留存记录
-        for x in range(10):
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.soft.apk008v:id/menu_remain_addRecord")).click()        #添加记录按钮
-            time.sleep(1)
-            savedata = WebDriverWait(dr, 10).until(lambda d: d.find_elements_by_id("com.soft.apk008v:id/remain_select_item_title")) #获取数据数
-            #从第2天开始添加留存记录
-            if x+1 < savedata.__len__():
-                savedata[x+1].click()
-                time.sleep(1)
-                edt = WebDriverWait(dr, 10).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-                edt.send_keys(self.remain_rate[x])
-                time.sleep(1)
-                dr.find_element_by_name("确定").click()
-                time.sleep(1)
-            else:
-                dr.press_keycode(4)
-                time.sleep(1)
-                dr.press_keycode(4)
-                time.sleep(1)
+        add_end = False
+        for x in range(60):
+            if add_end:
                 break
-        return self.do_toolbox_task
+            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.soft.apk008v:id/menu_remain_addRecord")).click()        #添加记录按钮
+            time.sleep(0.5)
+            # 获取昨天的时间datetime
+            yes_time = datetime.datetime.now() + datetime.timedelta(days=-x-1)
+            #滑动查找
+            for i in range(10):
+                try:
+                    WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(yes_time.strftime('%Y-%m-%d'))).click()
+                    time.sleep(0.5)
+                    edt = WebDriverWait(dr, 10).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
+                    edt.send_keys(self.remain_rate[x])
+                    time.sleep(0.5)
+                    WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("确定")).click()
+                    time.sleep(0.5)
+                    break
+                except TimeoutException:
+                    dr.swipe(300, 800, 300, 500)
+                    time.sleep(1)
+                if i == 9:
+                    dr.press_keycode(4)
+                    time.sleep(1)
+                    add_end = True
+        dr.press_keycode(4)
+        time.sleep(1)
+            #从第2天开始添加留存记录
+            # savedata = WebDriverWait(dr, 10).until(lambda d: d.find_elements_by_id("com.soft.apk008v:id/remain_select_item_title")) #获取数据数
+            # if x+1 < savedata.__len__():
+            #     savedata[x+1].click()
+            #     time.sleep(1)
+            #     edt = WebDriverWait(dr, 10).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
+            #     edt.send_keys(self.remain_rate[x])
+            #     time.sleep(1)
+            #     dr.find_element_by_name("确定").click()
+            #     time.sleep(1)
+            # else:
+            #     dr.press_keycode(4)
+            #     time.sleep(1)
+            #     dr.press_keycode(4)
+            #     time.sleep(1)
+            #     break
+        # return self.do_toolbox_task
 
     #备份程序
     def backup_app(self):
@@ -520,7 +551,7 @@ class Machine008(Machine):
         time.sleep(1)
         #移动备份文件
         copyfile("/sdcard/008backUp/*", "/sdcard/008backUp2/")
-        time.sleep(5)
+        time.sleep(10)
         removefile("/sdcard/008backUp/*")
         time.sleep(5)
         return self.do_toolbox_task
@@ -531,7 +562,7 @@ class Machine008(Machine):
         try:
             #提取备份文件
             copyfile("/sdcard/008backUp2/*__%s" % self.imei, "/sdcard/008backUp/")
-            time.sleep(5)
+            time.sleep(10)
             removefile("/sdcard/008backUp2/*__%s" % self.imei)
             time.sleep(5)
             WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("备份程序数据")).click()
@@ -548,6 +579,23 @@ class Machine008(Machine):
         dr.press_keycode(4)  # keypress back
         time.sleep(1)
         return self.do_toolbox_task
+
+    def asd(self):
+        dr = self.driver
+        for i in range(30):
+            dr.find_element_by_class_name("android.widget.ImageButton").click()
+            time.sleep(0.5)
+            dr.find_element_by_name("新建分类").click()
+            time.sleep(0.5)
+            edts = dr.find_element_by_class_name("android.widget.EditText")
+            if i <= 20:
+                edts.send_keys("2016-08-%s" % (30-i))
+            else:
+                edts.send_keys("2016-08-0%s" % (30-i))
+            time.sleep(0.5)
+            dr.find_element_by_name("确定").click()
+            time.sleep(0.5)
+
 
 
 

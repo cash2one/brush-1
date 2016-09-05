@@ -19,7 +19,7 @@ from appium4droid import webdriver
 from bootstrap import setup_boostrap
 from TotalMachine import WorkMachine
 from appium4droid.support.ui import WebDriverWait
-from machines.machineBanma import Machinex, Machinex2
+from machines.machineWandoujia import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
@@ -38,8 +38,8 @@ class TotalMachine(WorkMachine):
         self.runnum = 0
         self.machine008 = Machine008(dr)
         self.machine008.task_schedule = ["record_file", "clear_data", "modify_data"]    # 007 task list
-        self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
-        self.machine2 = Machinex2(dr, "ailezan", "api-4tuoz9od", "meiriq2014")
+        self.machine1 = Machinex(dr)       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
+        self.machine2 = Machinex2(dr)
 
 
     def main_loop(self):
@@ -57,7 +57,7 @@ class TotalMachine(WorkMachine):
                 dr.press_keycode(3)
                 time.sleep(1)
                 dr.press_keycode(3)
-                time.sleep(1)
+                time.sleep(10)
                 # dr.press_keycode(66)
                 # time.sleep(1)
                 # dr.press_keycode(66)
@@ -68,8 +68,9 @@ class TotalMachine(WorkMachine):
                 # WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
                 # time.sleep(1)
                 # 上传记录文件
+                # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
                 # try:
-                #     self.upload_file(choice['192.168.2.108', '10.0.0.22'], ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
+                #     self.upload_file(choice(['192.168.2.108', '10.0.0.22']), ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
                 # except:
                 #     pass
                 #计数器清0
@@ -126,7 +127,6 @@ class TotalMachine(WorkMachine):
             else:
                 break
             time.sleep(2)
-        time.sleep(5)
 
     #控制激活量
     def ctrl_new(self, filename, num=100, sleep_time=1800):

@@ -18,8 +18,12 @@ code = Ailezan("api-4tuoz9od", "meiriq2014", 22223)
 
 code.login()
 time.sleep(1)
-phone_num = code.getPhone("13151050704")
+phone_num = code.getPhone("13182881940")
 print("手机号码是:" + str(phone_num))
+if phone_num == "系统没有找到此号码":
+    print("没号码")
+    exit(0)
+
 time.sleep(5)
 # captcha = code.waitForMessage(r'验证码(\d+)', phone_num)
 # print("验证码是:" + str(captcha))

@@ -57,16 +57,16 @@ class TotalMachine(WorkMachine):
                 dr.press_keycode(3)
                 time.sleep(1)
                 dr.press_keycode(3)
-                time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(1)
+                time.sleep(10)
+                # dr.press_keycode(66)
+                # time.sleep(1)
+                # dr.press_keycode(66)
+                # time.sleep(1)
                 #清后台
-                dr.press_keycode(82)
-                time.sleep(1)
-                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
-                time.sleep(1)
+                # dr.press_keycode(82)
+                # time.sleep(1)
+                # WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
+                # time.sleep(1)
                 # 上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
                 try:

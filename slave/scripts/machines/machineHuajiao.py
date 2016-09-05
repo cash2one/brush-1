@@ -67,13 +67,13 @@ class Machinex(Machine):
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
         time.sleep(10)
         #检测已进入app
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/enter_tv"))
+        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_layout"))
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         time.sleep(1)
         #注册率
         sign_rate = random.randint(1, 10000)
         if sign_rate <= 2000:
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/enter_tv")).click()
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_layout")).click()
             time.sleep(1)
             return self.login_code_platform
         time.sleep(random.randint(20, 30))
@@ -160,7 +160,7 @@ class Machinex(Machine):
             time.sleep(5)
             WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("填写验证码"))
             #选择接码平台获取验证码
-            #956380（验证码），此验证码仅用于注册花椒；请在20分钟内完成验证。【花椒直播】
+            #【花椒直播】162916（验证码），此验证码仅用于注册花椒；请在20分钟内完成验证。(来自2016-08-29 16:31:10)
             regrex = r'(\d+)（验证码）'
             captcha = self.code.waitForMessage(regrex, self.phone)
             if captcha is None:
@@ -226,7 +226,7 @@ class Machinex(Machine):
             except TimeoutException:
                 pass
             time.sleep(5)
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/enter_tv")).click()
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_layout")).click()
             time.sleep(1)
             return self.begin_signup
 
@@ -280,38 +280,21 @@ class Machinex(Machine):
     def menu1(self):
         dr = self.driver
         try:
-            #选择分类
-            self.select_one_by_id("com.huajiao:id/tab_text")
-            time.sleep(5)
-            #选择视频观看
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 2), 5)
-            try:
-                self.select_one_by_id("com.huajiao:id/cover_image")
-            except:
-                self.select_one_by_id("com.huajiao:id/feed_live_cover_view")
-            time.sleep(random.randint(150, 180))
-            #关注
-            if random.randint(0, 1):
+            for x in range(random.randint(1, 3)):
+                #选择分类
+                self.select_one_by_id("com.huajiao:id/tab_text")
+                time.sleep(5)
+                #选择视频观看
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 2), 5)
                 try:
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.huajiao:id/text_host_follow")).click()
-                    time.sleep(5)
-                except TimeoutException:
-                    pass
-            #转换到其他房间
-            for i in range(random.randint(1, 2)):
-                dr.swipe(300, 500, random.randint(50, 600), 500)
+                    self.select_one_by_id("com.huajiao:id/cover_image")
+                except:
+                    self.select_one_by_id("com.huajiao:id/feed_live_cover_view")
                 time.sleep(random.randint(150, 180))
-                #关注
-                if random.randint(0, 1):
-                    try:
-                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.huajiao:id/text_host_follow")).click()
-                        time.sleep(5)
-                    except TimeoutException:
-                        pass
-            dr.press_keycode(4)
-            time.sleep(1)
-            dr.press_keycode(4)
-            time.sleep(5)
+                dr.press_keycode(4)
+                time.sleep(1)
+                dr.press_keycode(4)
+                time.sleep(5)
             self.readnum -= 1
             self.ismenu1 = False
         except Exception as e:
@@ -377,14 +360,6 @@ class Machinex(Machine):
     def menu5(self):
         dr = self.driver
         try:
-            # liread = ["com.huajiao:id/my_videos_layout", "com.huajiao:id/level_layout", "com.huajiao:id/recharge_layout",
-            #           "com.huajiao:id/recharge_layout", "com.huajiao:id/withdraw_layout", "com.huajiao:id/top_bar_left_btn",
-            #           "com.huajiao:id/top_bar_right_btn", "com.huajiao:id/me_setting_layout", "com.huajiao:id/fans_go_btn",
-            #           "com.huajiao:id/follow_go_btn"]
-            # WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id(choice(liread))).click()
-            # time.sleep(5)
-            # dr.press_keycode(4)
-            # time.sleep(2)
             self.ismenu5 = False
         except Exception as e:
             print("error in menu5")
@@ -392,6 +367,13 @@ class Machinex(Machine):
         return self.do
 
     def ends(self):
+        dr = self.driver
+        dr.press_keycode(3)
+        time.sleep(1)
+        dr.press_keycode(3)
+        time.sleep(30)
+        WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+        time.sleep(1)
         #记录时间
         self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         print(self.begintime)
@@ -488,7 +470,7 @@ class Machinex2(Machine):
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
         time.sleep(10)
         #检测已进入app
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/enter_tv"))
+        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_layout"))
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         time.sleep(1)
         return self.login
@@ -504,7 +486,7 @@ class Machinex2(Machine):
         user = re.search(r'imei:%s,(\d+)' % self.imei, selectuser)
         pwd = re.search(r'imei:%s,\d+,([0-9a-z]+)' % self.imei, selectuser)
         if user and pwd:
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.huajiao:id/enter_tv")).click()
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_layout")).click()
             time.sleep(1)
             edit = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
             edit[0].send_keys(str(user.group(1)))
@@ -592,24 +574,21 @@ class Machinex2(Machine):
     def menu1(self):
         dr = self.driver
         try:
-            #选择分类
-            self.select_one_by_id("com.huajiao:id/tab_text")
-            time.sleep(5)
-            #选择视频观看
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 2), 5)
-            try:
-                self.select_one_by_id("com.huajiao:id/cover_image")
-            except:
-                self.select_one_by_id("com.huajiao:id/feed_live_cover_view")
-            time.sleep(random.randint(150, 180))
-            #转换到其他房间
             for x in range(random.randint(0, 1)):
-                dr.swipe(300, 500, random.randint(50, 600), 500)
+                #选择分类
+                self.select_one_by_id("com.huajiao:id/tab_text")
+                time.sleep(5)
+                #选择视频观看
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 2), 5)
+                try:
+                    self.select_one_by_id("com.huajiao:id/cover_image")
+                except:
+                    self.select_one_by_id("com.huajiao:id/feed_live_cover_view")
                 time.sleep(random.randint(150, 180))
-            dr.press_keycode(4)
-            time.sleep(1)
-            dr.press_keycode(4)
-            time.sleep(5)
+                dr.press_keycode(4)
+                time.sleep(1)
+                dr.press_keycode(4)
+                time.sleep(5)
             self.readnum -= 1
             self.ismenu1 = False
         except Exception as e:
@@ -650,14 +629,6 @@ class Machinex2(Machine):
     def menu5(self):
         dr = self.driver
         try:
-            # liread = ["com.huajiao:id/my_videos_layout", "com.huajiao:id/level_layout", "com.huajiao:id/recharge_layout",
-            #           "com.huajiao:id/recharge_layout", "com.huajiao:id/withdraw_layout", "com.huajiao:id/top_bar_left_btn",
-            #           "com.huajiao:id/top_bar_right_btn", "com.huajiao:id/me_setting_layout", "com.huajiao:id/fans_go_btn",
-            #           "com.huajiao:id/follow_go_btn"]
-            # WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id(choice(liread))).click()
-            # time.sleep(5)
-            # dr.press_keycode(4)
-            # time.sleep(2)
             self.ismenu5 = False
         except Exception as e:
             print("error in menu5")
@@ -665,6 +636,13 @@ class Machinex2(Machine):
         return self.do
 
     def ends(self):
+        dr = self.driver
+        dr.press_keycode(3)
+        time.sleep(1)
+        dr.press_keycode(3)
+        time.sleep(30)
+        WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+        time.sleep(1)
         #记录时间
         self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         print(self.begintime)

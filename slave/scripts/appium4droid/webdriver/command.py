@@ -160,3 +160,4 @@ class Command(object):
     SWIPE = "swipe"
     FLICK = "flick"
     FLICK_ELEMENT = "flickElement"
+    # TOUCH_ACTION = "touchaction"

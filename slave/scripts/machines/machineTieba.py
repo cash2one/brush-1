@@ -18,8 +18,6 @@ from jiema.jimaSDK import Jima
 from jiema.shenhuaSDK import Shenhua
 from jiema.yimaSDK import Yima
 
-
-
 class Machinex(Machine):
     def __init__(self, driver, code_platform, fm_uname, fm_pwd):
         super(Machinex, self).__init__(self.initdata)
@@ -27,8 +25,8 @@ class Machinex(Machine):
         self.code_platform = code_platform      #接码平台
         self.code_user = fm_uname       #接码平台帐号
         self.code_pwd = fm_pwd      #接码平台密码
-        self.appname = "户外助手"       #app名字
-        self.appname_en = "huwaizhushou"     #记录文件用缩写英文名
+        self.appname = ""       #app名字
+        self.appname_en = ""     #记录文件用缩写英文名
         self.imei = None
         self.runnum = None        #记录运行次数
 
@@ -38,7 +36,7 @@ class Machinex(Machine):
         self.begintime = None
         self.endstime = None
         self.try_count = 0      #初始化出错尝试次数
-        self.readnum = random.randint(3, 3)     #初始化阅读次数
+        self.readnum = random.randint(2, 2)     #初始化阅读次数
         #初始化阅读菜单
         self.ismenu1 = True
         self.ismenu2 = True
@@ -52,7 +50,7 @@ class Machinex(Machine):
         elif self.code_platform == "yima":
             self.code = Yima(self.code_user, self.code_pwd, None)
         elif self.code_platform == "ailezan":
-            self.code = Ailezan(self.code_user, self.code_pwd, 22155)
+            self.code = Ailezan(self.code_user, self.code_pwd, None)
         elif self.code_platform == "jima":
             self.code = Jima(self.code_user, self.code_pwd, None)
         elif self.code_platform == "jiuma":
@@ -69,31 +67,18 @@ class Machinex(Machine):
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
         time.sleep(10)
         #检测已进入app
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/ivHelpBg"))
+        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.baidu.tieba:id/guide_item_img"))
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         #新开软件翻页
-        self.swipes(600, 300, 300, 300, 3, 2, 2)
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/btnStart")).click()
-        time.sleep(1)
-        try:
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/btnknow")).click()
-            time.sleep(1)
-        except TimeoutException:
-            pass
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/lyRight")).click()
-        time.sleep(1)
-        try:
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/btnCancel")).click()
-            time.sleep(5)
-        except TimeoutException:
-            pass
-
+        self.swipes(600, 300, 300, 300, 4, 2, 2)
+        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.baidu.tieba:id/unlogin_see")).click()
+        time.sleep(10)
         #注册率
         sign_rate = random.randint(1, 10000)
-        if sign_rate <= 2000:
-            dr.tap(630, 1200)
+        if sign_rate <= 0000:
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("")).click()
             time.sleep(1)
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/tvNickName")).click()
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("")).click()
             time.sleep(1)
             return self.login_code_platform
 
@@ -123,31 +108,22 @@ class Machinex(Machine):
         self.pwd = choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)
         try:
             #进入注册页面
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/btnRegister")).click()
+            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("")).click()
             time.sleep(1)
             #选择接码平台获取手机号码
             self.phone = self.code.getPhone()
-            edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-            for x in range(10):
-                edts.click()
-                time.sleep(0.5)
-                dr.press_keycode(123)
-                time.sleep(0.5)
-                for i in range(40):
-                    dr.press_keycode(67)
-                if edts.text == "手机号码":
-                    break
+            edts = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
             #输入手机号码
-            edts.send_keys(self.phone)
+            edts[0].send_keys(self.phone)
             time.sleep(1)
             #点击获取验证码按钮
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/btnSend")).click()
+            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("")).click()
             time.sleep(5)
             #输入密码
-            # edts[2].send_keys(self.pwd)
-            # time.sleep(1)
+            edts[2].send_keys(self.pwd)
+            time.sleep(1)
             #选择接码平台获取验证码
-            #【户外助手】您的验证码为：165107, 10分钟内有效，感谢您的使用。2016年08月10日  16:28:53。
+            #【友寻】您的临时验证码为：302855，有效时间为30分钟。
             regrex = r'验证码为：(\d+)'
             captcha = self.code.waitForMessage(regrex, self.phone)
             if captcha is None:
@@ -161,37 +137,14 @@ class Machinex(Machine):
                 time.sleep(1)
                 return self.signup
             #输入验证码
-            edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-            edts.send_keys(captcha)
-            time.sleep(1)
-            #点击下一步按钮按钮
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/lyRightContainer")).click()
-            time.sleep(1)
-            #输入密码
-            edts = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
-            edts[1].send_keys(self.pwd)
-            time.sleep(1)
-            edts[2].send_keys(self.pwd)
+            edts[1].send_keys(captcha)
             time.sleep(1)
             #点击完成按钮按钮
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/lyRightContainer")).click()
-            time.sleep(10)
+            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("")).click()
+            time.sleep(1)
             #检测注册成功进入下一步
-            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/lyLeftContainer")).click()
-            time.sleep(1)
-            dr.press_keycode(4)
-            time.sleep(1)
-            dr.press_keycode(4)
-            time.sleep(1)
-            #记录帐号密码
-            try:
-                with open('/sdcard/1/user%s.log' % self.appname_en, 'a') as f:
-                    f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
-            except:
-                with open('D:/brush/slave/scripts/doc/user%s.log' % self.appname_en, 'a') as f:
-                    f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
-            time.sleep(1)
-            return self.do
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id(""))
+            return self.after_signup
         except Exception as e:
             print("error in getPhone,try_count:%s" % self.try_count)
             self.try_count += 1
@@ -201,37 +154,78 @@ class Machinex(Machine):
             time.sleep(2)
             return self.signup
 
+    def after_signup(self):
+        dr = self.driver
+        #选择性别
+        WebDriverWait(dr, 20).until(lambda d: d.find_element_by_id(choice(["", ""]))).click()
+        time.sleep(1)
+        #输入昵称
+        edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
+        edts.send_keys(self.get_filemessage("name.txt"))
+        time.sleep(1)
+        #选择头像
+        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("")).click()
+        time.sleep(1)
+        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("从相册选择")).click()
+        time.sleep(1)
+        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("文件管理")).click()
+        time.sleep(1)
+        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("1")).click()
+        time.sleep(1)
+        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("1touxiang")).click()
+        time.sleep(1)
+        self.swipes(300, random.randint(800, 1000), 300, random.randint(300, 500), random.randint(0, 80))
+        time.sleep(5)
+        self.select_one_by_id("com.android.fileexplorer:id/file_image")
+        time.sleep(1)
+        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("应用")).click()
+        time.sleep(5)
+        #保存信息按钮
+        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("")).click()
+        time.sleep(10)
+        #检测信息保存完毕跳转页面
+        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id(""))
+        #记录帐号密码
+        try:
+            with open('/sdcard/1/user%s.log' % self.appname_en, 'a') as f:
+                f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
+        except:
+            with open('D:/brush/slave/scripts/doc/user%s.log' % self.appname_en, 'a') as f:
+                f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
+        time.sleep(1)
+        return self.do
+
     def do(self):
         dr = self.driver
         try:
             while self.readnum:
                 print("剩下阅读次数:%s" % self.readnum)
-                random_read = random.randint(0, 3)
+                random_read = random.randint(0, 4)
                 if random_read == 0:
                     if self.ismenu1:
                         print("goto menu1")
-                        dr.tap(100, 1220)
+                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("")).click()
                         time.sleep(5)
                         return self.menu1
                     return self.do
                 elif random_read == 1:
                     if self.ismenu2:
                         print("goto menu2")
-                        dr.tap(250, 1220)
+                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("")).click()
                         time.sleep(5)
                         return self.menu2
                     return self.do
                 elif random_read == 2:
                     if self.ismenu3:
                         print("goto menu3")
-                        dr.tap(450, 1220)
+                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("")).click()
                         time.sleep(5)
                         return self.menu3
                     return self.do
                 else:
                     if self.ismenu4:
                         print("goto menu4")
-                        dr.tap(620, 1220)
+                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("")).click()
                         time.sleep(5)
                         return self.menu4
                     return self.do
@@ -244,7 +238,7 @@ class Machinex(Machine):
     def menu1(self):
         dr = self.driver
         try:
-            self.swipes(300, random.randint(600, 800), 300, random.randint(300, 400), random.randint(2, 4), 10, 15)
+
             self.readnum -= 1
             self.ismenu1 = False
         except Exception as e:
@@ -255,7 +249,7 @@ class Machinex(Machine):
     def menu2(self):
         dr = self.driver
         try:
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 4), 10, 15)
+
             self.readnum -= 1
             self.ismenu2 = False
         except Exception as e:
@@ -266,8 +260,7 @@ class Machinex(Machine):
     def menu3(self):
         dr = self.driver
         try:
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 4), 10, 15)
-            self.readnum -= 1
+
             self.ismenu3 = False
         except Exception as e:
             print("error in menu3")
@@ -277,11 +270,28 @@ class Machinex(Machine):
     def menu4(self):
         dr = self.driver
         try:
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(3, 5), 10, 20)
-            self.readnum -= 1
+            liread = [""]
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id(choice(liread))).click()
+            time.sleep(3)
+            dr.press_keycode(4)
+            time.sleep(2)
             self.ismenu4 = False
         except Exception as e:
             print("error in menu4")
+            return self.exception_returnapp()
+        return self.do
+
+    def menu5(self):
+        dr = self.driver
+        try:
+            liread = [""]
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id(choice(liread))).click()
+            time.sleep(3)
+            dr.press_keycode(4)
+            time.sleep(2)
+            self.ismenu5 = False
+        except Exception as e:
+            print("error in menu5")
             return self.exception_returnapp()
         return self.do
 
@@ -356,8 +366,8 @@ class Machinex2(Machine):
     def __init__(self, driver):
         super(Machinex2, self).__init__(self.initdata)
         self.driver = driver
-        self.appname = "户外助手"       #app名字
-        self.appname_en = "huwaizhushou"     #记录文件用缩写英文名
+        self.appname = ""       #app名字
+        self.appname_en = ""     #记录文件用缩写英文名
         self.imei = None        #imei
         self.remain_day = None      #留存天数
 
@@ -365,47 +375,17 @@ class Machinex2(Machine):
         self.begintime = None
         self.endstime = None
         self.try_count = 0      #初始化出错尝试次数
-        self.readnum = random.randint(1, 2)     #初始化阅读次数
+        self.readnum = random.randint(1, 1)     #初始化阅读次数
         #初始化阅读菜单
         self.ismenu1 = True
         self.ismenu2 = True
         self.ismenu3 = True
         self.ismenu4 = True
+        self.ismenu5 = True
 
         return self.begin
 
     def begin(self):
-        dr = self.driver
-        dr.press_keycode(3)
-        time.sleep(1)
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
-        time.sleep(10)
-        #检测已进入app
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/ivHelpBg"))
-        self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
-        #新开软件翻页
-        self.swipes(600, 300, 300, 300, 3, 2, 2)
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/btnStart")).click()
-        time.sleep(1)
-        try:
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/btnknow")).click()
-            time.sleep(1)
-        except TimeoutException:
-            pass
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/lyRight")).click()
-        time.sleep(1)
-        try:
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/btnCancel")).click()
-            time.sleep(5)
-        except TimeoutException:
-            pass
-        #注册率
-        sign_rate = random.randint(1, 10000)
-        if sign_rate <= 10000:
-            dr.tap(630, 1200)
-            time.sleep(1)
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/tvNickName")).click()
-            time.sleep(1)
 
         return self.login
 
@@ -420,104 +400,20 @@ class Machinex2(Machine):
         user = re.search(r'imei:%s,(\d+)' % self.imei, selectuser)
         pwd = re.search(r'imei:%s,\d+,([0-9a-z]+)' % self.imei, selectuser)
         if user and pwd:
-            dr.tap(630, 1200)
-            time.sleep(1)
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/btnLogin")).click()
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("")).click()
             time.sleep(1)
             edit = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
             edit[0].send_keys(str(user.group(1)))
             time.sleep(1)
             edit[1].send_keys(str(pwd.group(1)))
             time.sleep(1)
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/btnLogin")).click()
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("")).click()
             time.sleep(5)
-            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.lolaage.tbulu.tools:id/ivAccount"))
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id(""))
         time.sleep(5)
         return self.do
 
-    def do(self):
-        dr = self.driver
-        try:
-            while self.readnum:
-                print("剩下阅读次数:%s" % self.readnum)
-                random_read = random.randint(0, 3)
-                if random_read == 0:
-                    if self.ismenu1:
-                        print("goto menu1")
-                        dr.tap(100, 1220)
-                        time.sleep(5)
-                        return self.menu1
-                    return self.do
-                elif random_read == 1:
-                    if self.ismenu2:
-                        print("goto menu2")
-                        dr.tap(250, 1220)
-                        time.sleep(5)
-                        return self.menu2
-                    return self.do
-                elif random_read == 2:
-                    if self.ismenu3:
-                        print("goto menu3")
-                        dr.tap(450, 1220)
-                        time.sleep(5)
-                        return self.menu3
-                    return self.do
-                else:
-                    if self.ismenu4:
-                        print("goto menu4")
-                        dr.tap(620, 1220)
-                        time.sleep(5)
-                        return self.menu4
-                    return self.do
-        except TimeoutException:
-            print("查找菜单出错")
-            return self.exception_returnapp()
-        print("阅览完毕")
-        return self.ends
 
-    def menu1(self):
-        dr = self.driver
-        try:
-            self.swipes(300, random.randint(600, 800), 300, random.randint(300, 400), random.randint(2, 4), 10, 15)
-            self.readnum -= 1
-            self.ismenu1 = False
-        except Exception as e:
-            print("error in menu1")
-            return self.exception_returnapp()
-        return self.do
-
-    def menu2(self):
-        dr = self.driver
-        try:
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 4), 10, 15)
-            self.readnum -= 1
-            self.ismenu2 = False
-        except Exception as e:
-            print("error in menu2")
-            return self.exception_returnapp()
-        return self.do
-
-    def menu3(self):
-        dr = self.driver
-        try:
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 4), 10, 15)
-            self.readnum -= 1
-            self.ismenu3 = False
-        except Exception as e:
-            print("error in menu3")
-            return self.exception_returnapp()
-        return self.do
-
-    def menu4(self):
-        dr = self.driver
-        try:
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(3, 5), 10, 20)
-            self.readnum -= 1
-            self.ismenu4 = False
-        except Exception as e:
-            print("error in menu4")
-            return self.exception_returnapp()
-        return self.do
 
     def ends(self):
         #记录时间

@@ -29,11 +29,11 @@ from .file_detector import FileDetector, LocalFileDetector
 from appium4droid.common.exceptions import WebDriverException
 from appium4droid.common.exceptions import InvalidSelectorException
 from .common.by import By
-
 # from appium4droid.webdriver.common.html5.application_cache import ApplicationCache
 
-# from appium.webdriver.common.touch_action import TouchAction
+from appium.webdriver.common.touch_action import TouchAction
 # from appium.webdriver.common.multi_action import MultiAction
+
 
 try:
     str = str
@@ -211,7 +211,7 @@ class WebDriver(object):
         }
         return self.execute(Command.SWIPE, swipeOpts)
 
-    def flick(self,xoffset, yoffset, speed):
+    def flick(self, xoffset, yoffset, speed):
         flickOpts = {
             "xoffset": xoffset,
             "yoffset": yoffset,

@@ -10,16 +10,12 @@ from appium4droid.common.exceptions import *
 from appium4droid.support.ui import WebDriverWait
 from random import choice
 
-
 class Machinex(Machine):
-    def __init__(self, driver, code_platform, fm_uname, fm_pwd):
+    def __init__(self, driver):
         super(Machinex, self).__init__(self.initdata)
         self.driver = driver
-        self.code_platform = code_platform      #接码平台
-        self.code_user = fm_uname       #接码平台帐号
-        self.code_pwd = fm_pwd      #接码平台密码
-        self.appname = "掌上充值"       #app名字
-        self.appname_en = "huafei"     #记录文件用缩写英文名
+        self.appname = "豌豆荚"       #app名字
+        self.appname_en = "wandoujia"     #记录文件用缩写英文名
         self.imei = None
         self.runnum = None        #记录运行次数
 
@@ -29,6 +25,7 @@ class Machinex(Machine):
         self.begintime = None
         self.endstime = None
         self.try_count = 0      #初始化出错尝试次数
+        self.readnum = random.randint(2, 4)     #初始化阅读次数
         return self.begin
 
     def begin(self):
@@ -38,41 +35,37 @@ class Machinex(Machine):
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
         time.sleep(10)
         #检测已进入app
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("xmgwa.xzxjtwg.nuktvi:id/relative"))
+        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.wandoujia.phoenix2:id/check_icon"))
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         time.sleep(1)
+        # 新开软件翻页
+        # self.swipes(600, 300, 300, 300, 4, 2, 2)
+        for x in range(6):
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.wandoujia.phoenix2:id/check_icon")).click()
+            time.sleep(0.5)
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.wandoujia.phoenix2:id/action_button")).click()
+            time.sleep(0.5)
+
         return self.do
 
     def do(self):
         dr = self.driver
         try:
-            liphone = ['130', '131', '132', '155', '156', '186', '185',
-                       '134', '135', '136', '137', '138', '139', '150', '151', '152', '157', '158', '159', '182', '183', '188', '187',
-                       '133', '153', '180', '181', '189']
-            phone = choice(liphone) + str(random.randint(10000000, 99999999))
-            if random.randint(0, 1):
-                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("xmgwa.xzxjtwg.nuktvi:id/mianze")).click()
+            while self.readnum:
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 3), 2, 10)
+                self.select_one_by_id("com.wandoujia.phoenix2:id/model", 30, 1, 0)
                 time.sleep(random.randint(5, 15))
-                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("xmgwa.xzxjtwg.nuktvi:id/button1")).click()
-                time.sleep(1)
-            if random.randint(0, 1):
-                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("xmgwa.xzxjtwg.nuktvi:id/imageView1")).click()
-                time.sleep(random.randint(5, 15))
-                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("xmgwa.xzxjtwg.nuktvi:id/imageView1")).click()
-                time.sleep(1)
-            if random.randint(0, 1):
-                edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-                #输入手机号码
-                edts.send_keys(phone)
-                time.sleep(random.randint(10, 20))
-                limoney = ["xmgwa.xzxjtwg.nuktvi:id/num10", "xmgwa.xzxjtwg.nuktvi:id/num20", "xmgwa.xzxjtwg.nuktvi:id/num30",
-                           "xmgwa.xzxjtwg.nuktvi:id/num50", "xmgwa.xzxjtwg.nuktvi:id/num100", "xmgwa.xzxjtwg.nuktvi:id/num200",
-                           "xmgwa.xzxjtwg.nuktvi:id/num300", "xmgwa.xzxjtwg.nuktvi:id/num500"]
-                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id(choice(limoney)))
-                time.sleep(random.randint(10, 30))
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(3, 5), 2, 10)
+                if random.randint(0, 4) == 0:
+                    try:
+                        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.wandoujia.phoenix2:id/favorited")).click()
+                        time.sleep(1)
+                    except TimeoutException:
+                        pass
                 dr.press_keycode(4)
                 time.sleep(1)
-
+                self.readnum -= 1
+                return self.do
         except TimeoutException:
             print("查找菜单出错")
             return self.exception_returnapp()
@@ -150,8 +143,8 @@ class Machinex2(Machine):
     def __init__(self, driver):
         super(Machinex2, self).__init__(self.initdata)
         self.driver = driver
-        self.appname = "掌上充值"       #app名字
-        self.appname_en = "huafei"     #记录文件用缩写英文名
+        self.appname = "豌豆荚"       #app名字
+        self.appname_en = "wandoujia"     #记录文件用缩写英文名
         self.imei = None        #imei
         self.remain_day = None      #留存天数
 
@@ -159,6 +152,8 @@ class Machinex2(Machine):
         self.begintime = None
         self.endstime = None
         self.try_count = 0      #初始化出错尝试次数
+        self.readnum = random.randint(1, 2)     #初始化阅读次数
+
         return self.begin
 
     def begin(self):
@@ -168,41 +163,34 @@ class Machinex2(Machine):
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
         time.sleep(10)
         #检测已进入app
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("xmgwa.xzxjtwg.nuktvi:id/relative"))
+        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.wandoujia.phoenix2:id/check_icon"))
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         time.sleep(1)
+        for x in range(6):
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.wandoujia.phoenix2:id/check_icon")).click()
+            time.sleep(0.5)
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.wandoujia.phoenix2:id/action_button")).click()
+            time.sleep(0.5)
         return self.do
 
     def do(self):
         dr = self.driver
         try:
-            liphone = ['130', '131', '132', '155', '156', '186', '185',
-                       '134', '135', '136', '137', '138', '139', '150', '151', '152', '157', '158', '159', '182', '183', '188', '187',
-                       '133', '153', '180', '181', '189']
-            phone = choice(liphone) + str(random.randint(10000000, 90000000))
-            if random.randint(0, 1):
-                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("xmgwa.xzxjtwg.nuktvi:id/mianze")).click()
+            while self.readnum:
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 3), 2, 10)
+                self.select_one_by_id("com.wandoujia.phoenix2:id/model", 30, 1, 0)
                 time.sleep(random.randint(5, 15))
-                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("xmgwa.xzxjtwg.nuktvi:id/button1")).click()
-                time.sleep(1)
-            if random.randint(0, 1):
-                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("xmgwa.xzxjtwg.nuktvi:id/imageView1")).click()
-                time.sleep(random.randint(5, 15))
-                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("xmgwa.xzxjtwg.nuktvi:id/imageView1")).click()
-                time.sleep(1)
-            if random.randint(0, 1):
-                edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-                #输入手机号码
-                edts.send_keys(phone)
-                time.sleep(random.randint(10, 20))
-                limoney = ["xmgwa.xzxjtwg.nuktvi:id/num10", "xmgwa.xzxjtwg.nuktvi:id/num20", "xmgwa.xzxjtwg.nuktvi:id/num30",
-                           "xmgwa.xzxjtwg.nuktvi:id/num50", "xmgwa.xzxjtwg.nuktvi:id/num100", "xmgwa.xzxjtwg.nuktvi:id/num200",
-                           "xmgwa.xzxjtwg.nuktvi:id/num300", "xmgwa.xzxjtwg.nuktvi:id/num500"]
-                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id(choice(limoney)))
-                time.sleep(random.randint(10, 30))
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(3, 5), 2, 10)
+                if random.randint(0, 4) == 0:
+                    try:
+                        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.wandoujia.phoenix2:id/favorited")).click()
+                        time.sleep(1)
+                    except TimeoutException:
+                        pass
                 dr.press_keycode(4)
                 time.sleep(1)
-
+                self.readnum -= 1
+                return self.do
         except TimeoutException:
             print("查找菜单出错")
             return self.exception_returnapp()

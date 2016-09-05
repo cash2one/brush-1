@@ -198,17 +198,17 @@ class Machinex(Machine):
             WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("android:id/button1")).click()
             time.sleep(1)
         #选择头像
-        if random.randint(0, 4) == 0:
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/user_info_item_header_img")).click()
-            time.sleep(1)
-            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("从相册")).click()
-            time.sleep(1)
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(300, 500), random.randint(3, 80))
-            time.sleep(5)
-            self.select_one_by_id("com.wenba.bangbang:id/photoselector_photo_thumbnail")
-            time.sleep(1)
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_menu_layout")).click()
-            time.sleep(5)
+        # if random.randint(0, 4) == 0:
+        #     WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/user_info_item_header_img")).click()
+        #     time.sleep(1)
+        #     WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("从相册")).click()
+        #     time.sleep(1)
+        #     self.swipes(300, random.randint(800, 1000), 300, random.randint(300, 500), random.randint(3, 80))
+        #     time.sleep(5)
+        #     self.select_one_by_id("com.wenba.bangbang:id/photoselector_photo_thumbnail")
+        #     time.sleep(1)
+        #     WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_menu_layout")).click()
+        #     time.sleep(5)
         #绑定QQ号
         if random.randint(0, 1):
             WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/user_info_item_bindqq_layout")).click()
@@ -286,36 +286,37 @@ class Machinex(Machine):
     def menu1(self):
         dr = self.driver
         try:
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_fragment_sign")).click()
-            time.sleep(5)
-            dr.press_keycode(4)
-            time.sleep(1)
-            if random.randint(0, 3) == 0:
-                for x in range(random.randint(1, 2)):
-                    #选题
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_fragment_btn_camera")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/camera_control_panel_album")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_back")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/photoselector_album_name")).click()
-                    time.sleep(1)
-                    self.swipes(300, random.randint(800, 1000), 300, random.randint(300, 500), random.randint(0, 5))
-                    time.sleep(1)
-                    self.select_one_by_id("com.wenba.bangbang:id/photoselector_photo_thumbnail")
-                    time.sleep(5)
-                    dr.swipe(300, 530, 300, random.randint(200, 900))
-                    time.sleep(1)
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/camera_image_publish_edit_opt_submit")).click()
-                    time.sleep(random.randint(10, 15))
-                    self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 10, 15)
-                    self.swipes(600, 800, 100, 800, random.randint(0, 3), 5, 10)
-                    if random.randint(0, 1):
-                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_menu2")).click()
-                        time.sleep(1)
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_back")).click()
-                    time.sleep(1)
+            time.sleep(random.randint(5, 30))
+            # WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_fragment_sign")).click()
+            # time.sleep(5)
+            # dr.press_keycode(4)
+            # time.sleep(1)
+            # if random.randint(0, 4) == 0:
+            #     for x in range(random.randint(1, 2)):
+            #         #选题
+            #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_fragment_btn_camera")).click()
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/camera_control_panel_album")).click()
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_back")).click()
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/photoselector_album_name")).click()
+            #         time.sleep(1)
+            #         self.swipes(300, random.randint(800, 1000), 300, random.randint(300, 500), random.randint(0, 5))
+            #         time.sleep(1)
+            #         self.select_one_by_id("com.wenba.bangbang:id/photoselector_photo_thumbnail")
+            #         time.sleep(5)
+            #         dr.swipe(300, 530, 300, random.randint(200, 900))
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/camera_image_publish_edit_opt_submit")).click()
+            #         time.sleep(random.randint(10, 15))
+            #         self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 10, 15)
+            #         self.swipes(600, 800, 100, 800, random.randint(0, 3), 5, 10)
+            #         if random.randint(0, 1):
+            #             WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_menu2")).click()
+            #             time.sleep(1)
+            #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_back")).click()
+            #         time.sleep(1)
             self.readnum -= 1
             self.ismenu1 = False
         except Exception as e:
@@ -498,11 +499,11 @@ class Machinex2(Machine):
         dr.press_keycode(3)
         time.sleep(1)
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
-        time.sleep(10)
+        time.sleep(15)
         #检测已进入app
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/login_guide_submit_btn"))
-        self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
-        time.sleep(1)
+        # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/login_guide_submit_btn"))
+        # self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
+        # time.sleep(1)
         try:
             with open('/sdcard/1/user%s.log' % self.appname_en, 'r') as f:
                 selectuser = f.read()
@@ -512,36 +513,9 @@ class Machinex2(Machine):
         user = re.search(r'imei:%s,(\d+)' % self.imei, selectuser)
         pwd = re.search(r'imei:%s,\d+,([0-9a-z]+)' % self.imei, selectuser)
         if user and pwd:
-            return self.login
+            return self.do
         time.sleep(random.randint(5, 10))
         return self.ends
-
-    def login(self):
-        dr = self.driver
-        try:
-            with open('/sdcard/1/user%s.log' % self.appname_en, 'r') as f:
-                selectuser = f.read()
-        except:
-            with open('D:/brush/slave/scripts/doc/user%s.log' % self.appname_en, 'r') as f:
-                selectuser = f.read()
-        user = re.search(r'imei:%s,(\d+)' % self.imei, selectuser)
-        pwd = re.search(r'imei:%s,\d+,([0-9a-z]+)' % self.imei, selectuser)
-        if user and pwd:
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/login_guide_submit_btn")).click()
-            time.sleep(1)
-            edit = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-            edit.send_keys(str(user.group(1)))
-            time.sleep(1)
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/login_enter_submit_tv")).click()
-            time.sleep(1)
-            edit = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-            edit.send_keys(str(pwd.group(1)))
-            time.sleep(1)
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/login_submit_btn")).click()
-            time.sleep(5)
-            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_fragment_btn_camera"))
-        time.sleep(5)
-        return self.do
 
     def do(self):
         dr = self.driver
@@ -586,36 +560,37 @@ class Machinex2(Machine):
     def menu1(self):
         dr = self.driver
         try:
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_fragment_sign")).click()
-            time.sleep(5)
-            dr.press_keycode(4)
-            time.sleep(1)
-            if random.randint(0, 3) == 0:
-                for x in range(random.randint(1, 2)):
-                    #选题
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_fragment_btn_camera")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/camera_control_panel_album")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_back")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/photoselector_album_name")).click()
-                    time.sleep(1)
-                    self.swipes(300, random.randint(800, 1000), 300, random.randint(300, 500), random.randint(0, 5))
-                    time.sleep(1)
-                    self.select_one_by_id("com.wenba.bangbang:id/photoselector_photo_thumbnail")
-                    time.sleep(5)
-                    dr.swipe(300, 530, 300, random.randint(200, 900))
-                    time.sleep(1)
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/camera_image_publish_edit_opt_submit")).click()
-                    time.sleep(random.randint(10, 15))
-                    self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 10, 15)
-                    self.swipes(600, 800, 100, 800, random.randint(0, 3), 5, 10)
-                    if random.randint(0, 1):
-                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_menu2")).click()
-                        time.sleep(1)
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_back")).click()
-                    time.sleep(1)
+            time.sleep(random.randint(5, 15))
+            # WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_fragment_sign")).click()
+            # time.sleep(5)
+            # dr.press_keycode(4)
+            # time.sleep(1)
+            # if random.randint(0, 4) == 0:
+            #     for x in range(random.randint(1, 2)):
+            #         #选题
+            #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_fragment_btn_camera")).click()
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/camera_control_panel_album")).click()
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_back")).click()
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/photoselector_album_name")).click()
+            #         time.sleep(1)
+            #         self.swipes(300, random.randint(800, 1000), 300, random.randint(300, 500), random.randint(0, 5))
+            #         time.sleep(1)
+            #         self.select_one_by_id("com.wenba.bangbang:id/photoselector_photo_thumbnail")
+            #         time.sleep(5)
+            #         dr.swipe(300, 530, 300, random.randint(200, 900))
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/camera_image_publish_edit_opt_submit")).click()
+            #         time.sleep(random.randint(10, 15))
+            #         self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 10, 15)
+            #         self.swipes(600, 800, 100, 800, random.randint(0, 3), 5, 10)
+            #         if random.randint(0, 1):
+            #             WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_menu2")).click()
+            #             time.sleep(1)
+            #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_back")).click()
+            #         time.sleep(1)
             self.readnum -= 1
             self.ismenu1 = False
         except Exception as e:

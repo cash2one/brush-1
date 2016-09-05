@@ -87,7 +87,7 @@ def reset_wifi():
 def replace_wifi():
     print("replace WiFi")
     droid.toggleWifiState()
-    sleep_countdown(10)
+    sleep_countdown(1)
 
 #截屏
 def screenshot(path):
@@ -145,7 +145,7 @@ def removefile(file):
     print("***************************\n" + cmd)
     su.communicate(cmd.encode())
 
-#输入文字
+#输入文字到剪贴板
 def settext_clipboard(text):
     su = subprocess.Popen("su", stdin=subprocess.PIPE)
     cmd = "/system/bin/am broadcast -a clipper.set -e text %s" % text

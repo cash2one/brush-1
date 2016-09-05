@@ -19,7 +19,7 @@ from appium4droid import webdriver
 from bootstrap import setup_boostrap
 from TotalMachine import WorkMachine
 from appium4droid.support.ui import WebDriverWait
-from machines.machineHuafei import Machinex, Machinex2
+from machines.machine888888 import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
@@ -38,7 +38,7 @@ class TotalMachine(WorkMachine):
         self.runnum = 0
         self.machine008 = Machine008(dr)
         self.machine008.task_schedule = ["record_file", "clear_data", "modify_data"]    # 007 task list
-        self.machine1 = Machinex(dr, "shenhua", "xiaoxiaozhuan", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
+        self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
         self.machine2 = Machinex2(dr)
 
 
@@ -70,7 +70,7 @@ class TotalMachine(WorkMachine):
                 # 上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
                 # try:
-                #     self.upload_file(choice['192.168.2.108', '10.0.0.22'], ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
+                #     self.upload_file(choice(['192.168.2.108', '10.0.0.22']), ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
                 # except:
                 #     pass
                 #计数器清0
@@ -127,7 +127,6 @@ class TotalMachine(WorkMachine):
             else:
                 break
             time.sleep(2)
-        time.sleep(5)
 
     #控制激活量
     def ctrl_new(self, filename, num=100, sleep_time=1800):

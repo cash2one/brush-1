@@ -74,6 +74,7 @@ def flick(params):
     return "action", {"action": "flick", "params": params}
 
 
+
 def flick_element(params):
     print(params)
     elid = params.pop("id")
@@ -114,3 +115,7 @@ def element_tag_name(params):
 
 def get_screenshot_as_file(params):
     return "action", {"action": "element:setText", "params": data}
+
+# def touchaction(params):
+#     print(params)
+#     return "action", {"action": "touchaction", "params": params}

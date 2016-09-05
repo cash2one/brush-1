@@ -58,25 +58,25 @@ class TotalMachine(WorkMachine):
                 time.sleep(1)
                 dr.press_keycode(3)
                 time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(1)
+                # dr.press_keycode(66)
+                # time.sleep(1)
+                # dr.press_keycode(66)
+                # time.sleep(1)
                 #清后台
-                dr.press_keycode(82)
-                time.sleep(1)
-                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
-                time.sleep(1)
+                # dr.press_keycode(82)
+                # time.sleep(1)
+                # WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
+                # time.sleep(1)
                 # 上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
-                # try:
-                #     self.upload_file(choice(['192.168.2.108', '10.0.0.22']), ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
-                # except:
-                #     pass
+                try:
+                    self.upload_file(choice(['192.168.2.108', '10.0.0.22']), ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
+                except:
+                    pass
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
-                # MachineVPN(dr).run()
+                MachineVPN(dr).run()
                 m008.run()
                 #周末控制效率
                 # if m008.remain_day == '1' and (time.localtime().tm_wday == 5 or time.localtime().tm_wday == 6):

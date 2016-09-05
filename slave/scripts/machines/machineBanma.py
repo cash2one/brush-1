@@ -75,11 +75,11 @@ class Machinex(Machine):
         time.sleep(1)
         self.swipes(300, random.randint(800, 1000), 300, random.randint(300, 500), random.randint(0, 5), 2, 2)
         time.sleep(2)
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.zebra.android:id/rl_city")).click()
+        self.select_one_by_id("com.zebra.android:id/rl_city")
         time.sleep(5)
         #注册率
         sign_rate = random.randint(1, 10000)
-        if sign_rate <= 3000:
+        if sign_rate <= 6000:
             WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.zebra.android:id/rb_more")).click()
             time.sleep(1)
             return self.login_code_platform
@@ -234,8 +234,8 @@ class Machinex(Machine):
         dr = self.driver
         try:
             try:
-                for x in range(random.randint(2, 4)):
-                    self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 3, 10)
+                for x in range(random.randint(1, 3)):
+                    self.swipes(random.randint(500, 600), random.randint(800, 1000), random.randint(100, 300), random.randint(400, 700), random.randint(0, 2), 3, 10)
                     WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.zebra.android:id/iv")).click()
                     time.sleep(1)
                     self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 5, 10)
@@ -320,6 +320,13 @@ class Machinex(Machine):
         return self.do
 
     def ends(self):
+        dr = self.driver
+        dr.press_keycode(3)
+        time.sleep(1)
+        dr.press_keycode(3)
+        time.sleep(30)
+        WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+        time.sleep(1)
         #记录时间
         self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         print(self.begintime)
@@ -428,7 +435,6 @@ class Machinex2(Machine):
             self.code = Shenhua(self.code_user, self.code_pwd, None)
         return self.begin
 
-
     def begin(self):
         dr = self.driver
         dr.press_keycode(3)
@@ -472,6 +478,10 @@ class Machinex2(Machine):
         time.sleep(1)
         #选择接码平台获取手机号码
         phone = self.code.getPhone(self.user.group(1))
+        if phone == "系统没有找到此号码":
+            dr.press_keycode(4)
+            time.sleep(1)
+            return self.do
         edts = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
         #输入手机号码
         edts[0].send_keys(phone)
@@ -557,8 +567,8 @@ class Machinex2(Machine):
         dr = self.driver
         try:
             try:
-                for x in range(random.randint(2, 4)):
-                    self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 3, 10)
+                for x in range(random.randint(0, 2)):
+                    self.swipes(random.randint(500, 600), random.randint(800, 1000), random.randint(100, 300), random.randint(400, 700), random.randint(0, 2), 3, 10)
                     WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.zebra.android:id/iv")).click()
                     time.sleep(1)
                     self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 5, 10)
@@ -581,7 +591,7 @@ class Machinex2(Machine):
             WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("全部")).click()
             time.sleep(5)
             if self.issign:
-                for x in range(random.randint(1, 3)):
+                for x in range(random.randint(0, 2)):
                     self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 3, 10)
                     WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.zebra.android:id/tv_name")).click()
                     time.sleep(1)
@@ -619,14 +629,14 @@ class Machinex2(Machine):
     def menu4(self):
         dr = self.driver
         try:
-            if self.issign:
-                try:
-                    self.select_one_by_id("com.zebra.android:id/tv_count")
-                    time.sleep(3)
-                    dr.press_keycode(4)
-                    time.sleep(2)
-                except TimeoutException:
-                    pass
+            # if self.issign:
+            #     try:
+            #         self.select_one_by_id("com.zebra.android:id/tv_count")
+            #         time.sleep(3)
+            #         dr.press_keycode(4)
+            #         time.sleep(2)
+            #     except TimeoutException:
+            #         pass
             self.ismenu4 = False
         except Exception as e:
             print("error in menu4")
@@ -643,6 +653,13 @@ class Machinex2(Machine):
         return self.do
 
     def ends(self):
+        dr = self.driver
+        dr.press_keycode(3)
+        time.sleep(1)
+        dr.press_keycode(3)
+        time.sleep(30)
+        WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+        time.sleep(1)
         #记录时间
         self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         print(self.begintime)

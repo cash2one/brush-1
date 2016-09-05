@@ -36,7 +36,7 @@ class Machinex(Machine):
         self.begintime = None
         self.endstime = None
         self.try_count = 0      #初始化出错尝试次数
-        self.readnum = random.randint(2, 2)     #初始化阅读次数
+        self.readnum = random.randint(1, 1)     #初始化阅读次数
         self.issign = False
         #选择初始化接码平台
         if self.code_platform == "feima":
@@ -73,7 +73,7 @@ class Machinex(Machine):
         time.sleep(1)
         #注册率
         sign_rate = random.randint(1, 10000)
-        if sign_rate <= 10000:
+        if sign_rate <= 1000:
             WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.shwatch.news:id/slideMenu_homepage")).click()
             time.sleep(1)
             WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.shwatch.news:id/homepage_user_headimg")).click()
@@ -244,12 +244,12 @@ class Machinex(Machine):
             while self.readnum:
                 print("剩下阅读次数:%s" % self.readnum)
                 #随机滑动
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 3), 5, 10)
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 3), 2, 5)
                 #随机选择新闻查看
                 self.select_one_by_id(choice(["com.shwatch.news:id/homepage_smallText1", "com.shwatch.news:id/homepage_smallText2", "com.shwatch.news:id/homepage_bigText"]))
-                time.sleep(random.randint(10, 15))
+                time.sleep(random.randint(5, 10))
                 #随机滑动
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(5, 7), 10, 15)
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 3), 5, 10)
                 #收藏
                 if random.randint(0, 4) == 0:
                     try:
@@ -295,6 +295,14 @@ class Machinex(Machine):
         return self.ends
 
     def ends(self):
+        dr = self.driver
+        # if random.randint(0, 1):
+        #     dr.press_keycode(3)
+        #     time.sleep(1)
+        #     dr.press_keycode(3)
+        #     time.sleep(30)
+        #     WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+        #     time.sleep(1)
         #记录时间
         self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         print(self.begintime)
@@ -438,12 +446,12 @@ class Machinex2(Machine):
             while self.readnum:
                 print("剩下阅读次数:%s" % self.readnum)
                 #随机滑动
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 3), 5, 10)
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 3), 2, 5)
                 #随机选择新闻查看
                 self.select_one_by_id(choice(["com.shwatch.news:id/homepage_smallText1", "com.shwatch.news:id/homepage_smallText2", "com.shwatch.news:id/homepage_bigText"]))
-                time.sleep(random.randint(10, 15))
+                time.sleep(random.randint(5, 10))
                 #随机滑动
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(5, 7), 5, 15)
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 3), 5, 10)
                 #收藏
                 if random.randint(0, 4) == 0:
                     try:
@@ -458,28 +466,8 @@ class Machinex2(Machine):
                         time.sleep(1)
                     except TimeoutException:
                         pass
-                #评论
-                if random.randint(0, 9) == 0 and self.issign:
-                    try:
-                        contentnum = WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.shwatch.news:id/comment_account"))
-                        if int(contentnum.text) > 3:
-                            contentnum.click()
-                            time.sleep(5)
-                            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 3), 2, 5)
-                            contenttext = WebDriverWait(dr, 30).until(lambda d: d.find_elements_by_id("com.shwatch.news:id/enter_ticket"))
-                            time.sleep(1)
-                            edit = WebDriverWait(dr, 30).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-                            edit.send_keys(contenttext[random.randint(0, contenttext.__len__()-1)].text)
-                            time.sleep(1)
-                            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.shwatch.news:id/send_message_btn")).click()
-                            time.sleep(1)
-                            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.shwatch.news:id/back_img")).click()
-                            time.sleep(1)
-                    except TimeoutException:
-                        pass
                 dr.press_keycode(4)
                 time.sleep(1)
-
                 self.readnum -= 1
                 return self.do
         except TimeoutException:
@@ -489,6 +477,14 @@ class Machinex2(Machine):
         return self.ends
 
     def ends(self):
+        dr = self.driver
+        # if random.randint(0, 1):
+        #     dr.press_keycode(3)
+        #     time.sleep(1)
+        #     dr.press_keycode(3)
+        #     time.sleep(30)
+        #     WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+        #     time.sleep(1)
         #记录时间
         self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         print(self.begintime)

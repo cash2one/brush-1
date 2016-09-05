@@ -1,15 +1,15 @@
 #! -*- coding=utf-8 -*-
 import os
 import time
+# import logging
 import random
 import re
-# import logging
-
 from machines.StateMachine import Machine
 from appium4droid import webdriver
 from appium4droid.common.exceptions import *
 from appium4droid.support.ui import WebDriverWait
 from random import choice
+
 from jiema.jiumaSDK import Jiuma
 from jiema.feimaSDK import Feima
 from jiema.yamaSDK import Yama
@@ -18,7 +18,6 @@ from jiema.jimaSDK import Jima
 from jiema.shenhuaSDK import Shenhua
 from jiema.yimaSDK import Yima
 
-
 class Machinex(Machine):
     def __init__(self, driver, code_platform, fm_uname, fm_pwd):
         super(Machinex, self).__init__(self.initdata)
@@ -26,8 +25,8 @@ class Machinex(Machine):
         self.code_platform = code_platform      #接码平台
         self.code_user = fm_uname       #接码平台帐号
         self.code_pwd = fm_pwd      #接码平台密码
-        self.appname = "平安WiFi"       #app名字
-        self.appname_en = "wifi"     #记录文件用缩写英文名
+        self.appname = "百大易购"       #app名字
+        self.appname_en = "yigou"     #记录文件用缩写英文名
         self.imei = None
         self.runnum = None        #记录运行次数
 
@@ -45,19 +44,19 @@ class Machinex(Machine):
         self.ismenu4 = True
         #选择初始化接码平台
         if self.code_platform == "feima":
-            self.code = Feima(self.code_user, self.code_pwd, 2055)
+            self.code = Feima(self.code_user, self.code_pwd, None)
         elif self.code_platform == "yama":
-            self.code = Yama(self.code_user, self.code_pwd, 599)
+            self.code = Yama(self.code_user, self.code_pwd, None)
         elif self.code_platform == "yima":
-            self.code = Yima(self.code_user, self.code_pwd, 26)
+            self.code = Yima(self.code_user, self.code_pwd, None)
         elif self.code_platform == "ailezan":
-            self.code = Ailezan(self.code_user, self.code_pwd, 2395)
+            self.code = Ailezan(self.code_user, self.code_pwd, 22482)
         elif self.code_platform == "jima":
-            self.code = Jima(self.code_user, self.code_pwd, 4568)
+            self.code = Jima(self.code_user, self.code_pwd, None)
         elif self.code_platform == "jiuma":
-            self.code = Jiuma(self.code_user, self.code_pwd, 17564)
-        else:
-            self.code = Shenhua(self.code_user, self.code_pwd, 581)
+            self.code = Jiuma(self.code_user, self.code_pwd, None)
+        elif self.code_platform == "shenhua":
+            self.code = Shenhua(self.code_user, self.code_pwd, None)
 
         return self.begin
 
@@ -68,23 +67,15 @@ class Machinex(Machine):
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
         time.sleep(10)
         #检测已进入app
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/guide_now_experience_btn"))
+        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.bdego.android:id/myBtn"))
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
-        #新开软件随机翻页
-        self.swipes(600, 300, 300, 300, random.randint(0, 2), 2)
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/guide_now_experience_btn")).click()
         time.sleep(1)
-        #关闭广告
-        try:
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/img_general_advert_close")).click()
-            time.sleep(1)
-        except TimeoutException:
-            pass
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_self"))
         #注册率
         sign_rate = random.randint(1, 10000)
         if sign_rate <= 10000:
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_self")).click()
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.bdego.android:id/myBtn")).click()
+            time.sleep(1)
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.bdego.android:id/avatorIV")).click()
             time.sleep(1)
             return self.login_code_platform
 
@@ -98,9 +89,8 @@ class Machinex(Machine):
         except Exception as e:
             print("error in login getcodeplatform,try_count:%s" % self.try_count)
             self.try_count += 1
-            if self.try_count > 10:
+            if self.try_count > 5:
                 print("on try_count,exit")
-                self.try_count = 0
                 return self.exit
             return self.login_code_platform
         return self.signup
@@ -115,68 +105,76 @@ class Machinex(Machine):
         self.pwd = choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)
         try:
             #进入注册页面
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/center_login_btn")).click()
+            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.bdego.android:id/registerTV")).click()
             time.sleep(1)
             #选择接码平台获取手机号码
             self.phone = self.code.getPhone()
             edts = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
-            for x in range(5):
-                #输入手机号码
-                edts[0].send_keys(self.phone)
-                time.sleep(1)
-                if edts[0].text.__len__() == 13:
-                    break
-                else:
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/delete")).click()
-                    time.sleep(1)
-            #点击获取验证码按钮
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/reg_getcode_btn")).click()
+            #输入手机号码
+            edts[0].send_keys(self.phone)
+            #运行按键精灵获取图片验证码脚本
             time.sleep(1)
-            #检测是否已注册
-            try:
-                WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/cancel")).click()
-                #释放号码
-                self.code.releasePhone(self.phone)
-                self.code.addblackPhone(self.phone)
-                self.try_count += 1
-                if self.try_count > 10:
-                    self.try_count = 0
-                    return self.exit
-                dr.press_keycode(4)
+            dr.tap(710, 650)
+            time.sleep(1)
+            dr.tap(550, 540)
+            time.sleep(1)
+            for x in range(60):
+                if edts[1].text.__len__() == 5:
+                    time.sleep(2)
+                    dr.press_keycode(63)
+                    time.sleep(1)
+                    dr.find_element_by_name("Appium Android Input Manager for Unicode").click()
+                    time.sleep(1)
+                    #点击获取验证码按钮
+                    WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.bdego.android:id/getCodeBtn")).click()
+                    time.sleep(5)
+                    break
                 time.sleep(1)
-                return self.signup
-            except TimeoutException:
-                pass
-            #获取验证码
-            #平安WiFi验证码0577，祝您使用愉快！【中国平安】
-            regrex = r'验证码(\d+)'
+                if x == 59:
+                    print("getMessage failed,try_count:%s" % self.try_count)
+                    #释放号码
+                    self.code.releasePhone(self.phone)
+                    self.try_count += 1
+                    if self.try_count > 5:
+                        return self.exit
+                    dr.press_keycode(4)
+                    time.sleep(1)
+                    return self.signup
+            edts = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
+            #输入密码
+            edts[3].send_keys(self.pwd)
+            time.sleep(1)
+            #选择接码平台获取验证码
+            #【百大易购】用户注册验证码：637274。请勿将验证码告知他人,并确认该操作是您本人操作!(来自10690366641013)
+            regrex = r'验证码：(\d+)'
             captcha = self.code.waitForMessage(regrex, self.phone)
             if captcha is None:
                 print("getMessage failed,try_count:%s" % self.try_count)
                 #释放号码
                 self.code.releasePhone(self.phone)
                 self.try_count += 1
-                if self.try_count > 10:
-                    self.try_count = 0
+                if self.try_count > 5:
                     return self.exit
                 dr.press_keycode(4)
                 time.sleep(1)
                 return self.signup
             #输入验证码
-            edts[1].send_keys(captcha)
+            edts[2].send_keys(captcha)
             time.sleep(1)
             #点击完成按钮按钮
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/reg_submit_btn")).click()
-            time.sleep(1)
-            edts = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
-            #输入密码
-            edts[1].send_keys(self.pwd)
+            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.bdego.android:id/commitTV")).click()
             time.sleep(1)
             #检测注册成功进入下一步
-            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/pwd_setting_submit_btn")).click()
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.bdego.android:id/loginBtn"))
             time.sleep(1)
-            #检测信息保存完毕跳转页面
-            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_self"))
+            edts = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
+            edts[0].send_keys(self.phone)
+            time.sleep(1)
+            edts[1].send_keys(self.pwd)
+            time.sleep(1)
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.bdego.android:id/loginBtn")).click()
+            time.sleep(5)
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.bdego.android:id/myBtn"))
             #记录帐号密码
             try:
                 with open('/sdcard/1/user%s.log' % self.appname_en, 'a') as f:
@@ -189,8 +187,7 @@ class Machinex(Machine):
         except Exception as e:
             print("error in getPhone,try_count:%s" % self.try_count)
             self.try_count += 1
-            if self.try_count > 10:
-                self.try_count = 0
+            if self.try_count > 5:
                 return self.exit
             dr.press_keycode(4)
             time.sleep(2)
@@ -205,28 +202,28 @@ class Machinex(Machine):
                 if random_read == 0:
                     if self.ismenu1:
                         print("goto menu1")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("连网")).click()
+                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.bdego.android:id/homeBtn")).click()
                         time.sleep(5)
                         return self.menu1
                     return self.do
                 elif random_read == 1:
                     if self.ismenu2:
                         print("goto menu2")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_action")).click()
+                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.bdego.android:id/exemptionBtn")).click()
                         time.sleep(5)
                         return self.menu2
                     return self.do
                 elif random_read == 2:
                     if self.ismenu3:
                         print("goto menu3")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_service")).click()
+                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.bdego.android:id/cartBtn")).click()
                         time.sleep(5)
                         return self.menu3
                     return self.do
                 else:
                     if self.ismenu4:
-                        print("goto menu5")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_self")).click()
+                        print("goto menu4")
+                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.bdego.android:id/myBtn")).click()
                         time.sleep(5)
                         return self.menu4
                     return self.do
@@ -239,13 +236,12 @@ class Machinex(Machine):
     def menu1(self):
         dr = self.driver
         try:
-            #关闭广告
-            try:
-                WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/img_general_advert_close")).click()
-                time.sleep(1)
-            except TimeoutException:
-                pass
-            self.swipes(300, random.randint(800, 900), 300, random.randint(600, 700), random.randint(0, 2), random.randint(10, 15))
+            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 10)
+            self.select_one_by_id("com.bdego.android:id/cateSDV1")
+            time.sleep(random.randint(5, 15))
+            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 4), 5, 15)
+            dr.press_keycode(4)
+            time.sleep(1)
             self.readnum -= 1
             self.ismenu1 = False
         except Exception as e:
@@ -256,17 +252,15 @@ class Machinex(Machine):
     def menu2(self):
         dr = self.driver
         try:
-            self.select_one_by_id("com.pingan.pinganwifi:id/channel_grid_item_iv")
-            time.sleep(random.randint(5, 10))
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.bdego.android:id/sevenDayRB")).click()
+            time.sleep(1)
+            self.select_one_by_id("com.bdego.android:id/typeImage")
+            time.sleep(random.randint(5, 15))
+            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 4), 5, 15)
             dr.press_keycode(4)
             time.sleep(1)
-            for x in range(random.randint(1, 2)):
-                self.swipes(300, random.randint(800, 900), 300, random.randint(600, 700), random.randint(1, 3), random.randint(2, 5))
-                self.select_one_by_id("com.pingan.pinganwifi:id/tv_title")
-                time.sleep(random.randint(5, 10))
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 3), random.randint(5, 10))
-                dr.press_keycode(4)
-                time.sleep(1)
+            dr.press_keycode(4)
+            time.sleep(1)
             self.readnum -= 1
             self.ismenu2 = False
         except Exception as e:
@@ -277,13 +271,7 @@ class Machinex(Machine):
     def menu3(self):
         dr = self.driver
         try:
-            # try:
-            #     WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("")).click()
-            #     time.sleep(0.5)
-            #     WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_self")).click()
-            #     time.sleep(1)
-            # except TimeoutException:
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), random.randint(2, 5))
+            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 5, 10)
             self.ismenu3 = False
         except Exception as e:
             print("error in menu3")
@@ -293,25 +281,21 @@ class Machinex(Machine):
     def menu4(self):
         dr = self.driver
         try:
-            #每日签到
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/self_day_singn_group")).click()
-            time.sleep(5)
-            dr.press_keycode(4)
-            time.sleep(1)
-            # liread = ["com.pingan.pinganwifi:id/my_points",  "com.pingan.pinganwifi:id/task_earm_points",
-            #           "com.pingan.pinganwifi:id/exchange_center", "com.pingan.pinganwifi:id/user_found",
-            #           "com.pingan.pinganwifi:id/international_wifi", "com.pingan.pinganwifi:id/unlogin_center_face_image"]
-            # WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id(choice(liread))).click()
-            # time.sleep(5)
-            # dr.press_keycode(4)
-            # time.sleep(5)
             self.ismenu4 = False
         except Exception as e:
-            print("error in menu5")
+            print("error in menu4")
             return self.exception_returnapp()
         return self.do
 
     def ends(self):
+        dr = self.driver
+        if random.randint(0, 1):
+            dr.press_keycode(3)
+            time.sleep(1)
+            dr.press_keycode(3)
+            time.sleep(30)
+            WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+            time.sleep(1)
         #记录时间
         self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         print(self.begintime)
@@ -344,12 +328,12 @@ class Machinex(Machine):
         time.sleep(1)
         return strname[random.randint(0, strname.__len__()-1)].strip()
 
-    def swipes(self, x1, y1, x2, y2, swipe_num=1, swipe_time=1):
+    def swipes(self, x1, y1, x2, y2, swipe_num=1, swipe_time_a=1, swipe_time_b=1):
         dr = self.driver
         print("swipenum:%s" % swipe_num)
         for x in range(swipe_num):
             dr.swipe(x1, y1, x2, y2)
-            time.sleep(swipe_time)
+            time.sleep(random.randint(swipe_time_a, swipe_time_b))
 
     def select_one_by_id(self, find_id, find_time=30, find_min=0, find_max=0):
         selectone = WebDriverWait(self.driver, find_time).until(lambda d: d.find_elements_by_id(find_id))
@@ -362,7 +346,7 @@ class Machinex(Machine):
         dr = self.driver
         print("try_count:%s" % self.try_count)
         self.try_count += 1
-        if self.try_count > 10:
+        if self.try_count > 5:
             return self.exit
         dr.press_keycode(4)
         time.sleep(1)
@@ -382,10 +366,10 @@ class Machinex2(Machine):
     def __init__(self, driver):
         super(Machinex2, self).__init__(self.initdata)
         self.driver = driver
-        self.appname = "平安WiFi"       #app名字
-        self.appname_en = "wifi"     #记录文件用缩写英文名
-        self.imei = None
-        self.remainday = None
+        self.appname = "百大易购"       #app名字
+        self.appname_en = "yigou"     #记录文件用缩写英文名
+        self.imei = None        #imei
+        self.remain_day = None      #留存天数
 
     def initdata(self):
         self.begintime = None
@@ -407,17 +391,8 @@ class Machinex2(Machine):
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
         time.sleep(10)
         #检测已进入app
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/guide_now_experience_btn"))
+        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.bdego.android:id/myBtn"))
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
-        #新开软件翻页
-        self.swipes(600, 300, 300, 300, random.randint(0, 2), 2)
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/guide_now_experience_btn")).click()
-        time.sleep(1)
-        try:
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/img_general_advert_close")).click()
-            time.sleep(1)
-        except TimeoutException:
-            pass
         return self.login
 
     def login(self):
@@ -431,20 +406,18 @@ class Machinex2(Machine):
         user = re.search(r'imei:%s,(\d+)' % self.imei, selectuser)
         pwd = re.search(r'imei:%s,\d+,([0-9a-z]+)' % self.imei, selectuser)
         if user and pwd:
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_self")).click()
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.bdego.android:id/myBtn")).click()
             time.sleep(1)
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/center_login_btn")).click()
-            time.sleep(1)
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/common_topview_img_right")).click()
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.bdego.android:id/avatorIV")).click()
             time.sleep(1)
             edit = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
             edit[0].send_keys(str(user.group(1)))
             time.sleep(1)
             edit[1].send_keys(str(pwd.group(1)))
             time.sleep(1)
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/btn_login")).click()
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.bdego.android:id/loginBtn")).click()
             time.sleep(5)
-            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_self"))
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.bdego.android:id/myBtn"))
         time.sleep(5)
         return self.do
 
@@ -457,28 +430,28 @@ class Machinex2(Machine):
                 if random_read == 0:
                     if self.ismenu1:
                         print("goto menu1")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("连网")).click()
+                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.bdego.android:id/homeBtn")).click()
                         time.sleep(5)
                         return self.menu1
                     return self.do
                 elif random_read == 1:
                     if self.ismenu2:
                         print("goto menu2")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_action")).click()
+                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.bdego.android:id/exemptionBtn")).click()
                         time.sleep(5)
                         return self.menu2
                     return self.do
                 elif random_read == 2:
                     if self.ismenu3:
                         print("goto menu3")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_service")).click()
+                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.bdego.android:id/cartBtn")).click()
                         time.sleep(5)
                         return self.menu3
                     return self.do
                 else:
                     if self.ismenu4:
-                        print("goto menu5")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_self")).click()
+                        print("goto menu4")
+                        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.bdego.android:id/myBtn")).click()
                         time.sleep(5)
                         return self.menu4
                     return self.do
@@ -491,13 +464,13 @@ class Machinex2(Machine):
     def menu1(self):
         dr = self.driver
         try:
-            #关闭广告
-            try:
-                WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/img_general_advert_close")).click()
-                time.sleep(1)
-            except TimeoutException:
-                pass
-            self.swipes(300, random.randint(800, 900), 300, random.randint(600, 700), random.randint(1, 2), random.randint(5, 10))
+            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 10)
+            self.select_one_by_id("com.bdego.android:id/cateSDV1")
+            time.sleep(random.randint(5, 15))
+            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 4), 5, 15)
+            dr.press_keycode(4)
+            time.sleep(1)
+            self.readnum -= 1
             self.ismenu1 = False
         except Exception as e:
             print("error in menu1")
@@ -507,18 +480,15 @@ class Machinex2(Machine):
     def menu2(self):
         dr = self.driver
         try:
-            # self.select_one_by_id("com.pingan.pinganwifi:id/channel_grid_item_iv")
-            # time.sleep(random.randint(5, 10))
-            # dr.press_keycode(4)
-            # time.sleep(1)
-            for x in range(random.randint(1, 1)):
-                self.swipes(300, random.randint(800, 900), 300, random.randint(600, 700), random.randint(0, 2), random.randint(2, 5))
-                self.select_one_by_id("com.pingan.pinganwifi:id/tv_title")
-                time.sleep(random.randint(5, 10))
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 3), random.randint(5, 10))
-                dr.press_keycode(4)
-                time.sleep(1)
-            self.readnum -= 1
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.bdego.android:id/sevenDayRB")).click()
+            time.sleep(1)
+            self.select_one_by_id("com.bdego.android:id/typeImage")
+            time.sleep(random.randint(5, 10))
+            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 2), 5, 10)
+            dr.press_keycode(4)
+            time.sleep(1)
+            dr.press_keycode(4)
+            time.sleep(1)
             self.ismenu2 = False
         except Exception as e:
             print("error in menu2")
@@ -528,13 +498,7 @@ class Machinex2(Machine):
     def menu3(self):
         dr = self.driver
         try:
-            # try:
-            #     WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("")).click()
-            #     time.sleep(0.5)
-            #     WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/tv_self")).click()
-            #     time.sleep(1)
-            # except TimeoutException:
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), random.randint(2, 5))
+            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 5, 10)
             self.ismenu3 = False
         except Exception as e:
             print("error in menu3")
@@ -544,25 +508,21 @@ class Machinex2(Machine):
     def menu4(self):
         dr = self.driver
         try:
-            #每日签到
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.pingan.pinganwifi:id/self_day_singn_group")).click()
-            time.sleep(5)
-            dr.press_keycode(4)
-            time.sleep(1)
-            # liread = ["com.pingan.pinganwifi:id/my_points",  "com.pingan.pinganwifi:id/task_earm_points",
-            #           "com.pingan.pinganwifi:id/exchange_center", "com.pingan.pinganwifi:id/user_found",
-            #           "com.pingan.pinganwifi:id/international_wifi", "com.pingan.pinganwifi:id/unlogin_center_face_image"]
-            # WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id(choice(liread))).click()
-            # time.sleep(5)
-            # dr.press_keycode(4)
-            # time.sleep(5)
             self.ismenu4 = False
         except Exception as e:
-            print("error in menu5")
+            print("error in menu4")
             return self.exception_returnapp()
         return self.do
 
     def ends(self):
+        dr = self.driver
+        if random.randint(0, 1):
+            dr.press_keycode(3)
+            time.sleep(1)
+            dr.press_keycode(3)
+            time.sleep(30)
+            WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+            time.sleep(1)
         #记录时间
         self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         print(self.begintime)
@@ -570,7 +530,7 @@ class Machinex2(Machine):
         time.sleep(2)
         try:
             with open('/sdcard/1/time%s2.log' % self.appname_en, 'a') as f:
-                f.write('\n留存%s %s.%s, %s, %s' % (self.remainday, time.localtime().tm_mon, time.localtime().tm_mday, self.begintime, self.endstime))
+                f.write('\n留存%s  %s.%s, %s, %s' % (self.remain_day, time.localtime().tm_mon, time.localtime().tm_mday, self.begintime, self.endstime))
         except:
             pass
         time.sleep(3)
@@ -588,12 +548,12 @@ class Machinex2(Machine):
         time.sleep(1)
         return strname[random.randint(0, strname.__len__()-1)].strip()
 
-    def swipes(self, x1, y1, x2, y2, swipe_num=1, swipe_time=1):
+    def swipes(self, x1, y1, x2, y2, swipe_num=1, swipe_time_a=1, swipe_time_b=1):
         dr = self.driver
         print("swipenum:%s" % swipe_num)
         for x in range(swipe_num):
             dr.swipe(x1, y1, x2, y2)
-            time.sleep(swipe_time)
+            time.sleep(random.randint(swipe_time_a, swipe_time_b))
 
     def select_one_by_id(self, find_id, find_time=30, find_min=0, find_max=0):
         selectone = WebDriverWait(self.driver, find_time).until(lambda d: d.find_elements_by_id(find_id))
@@ -606,8 +566,7 @@ class Machinex2(Machine):
         dr = self.driver
         print("try_count:%s" % self.try_count)
         self.try_count += 1
-        if self.try_count > 10:
-            # self.try_count = 0
+        if self.try_count > 5:
             return self.exit
         dr.press_keycode(4)
         time.sleep(1)
@@ -621,6 +580,7 @@ class Machinex2(Machine):
             dr.press_keycode(4)
         time.sleep(5)
         return self.do
+
 
 
 if __name__ == "__main__":

@@ -19,9 +19,10 @@ from appium4droid import webdriver
 from bootstrap import setup_boostrap
 from TotalMachine import WorkMachine
 from appium4droid.support.ui import WebDriverWait
-from machines.machineHuwaizhushou import Machinex, Machinex2
+from machines.machineYigou import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
+from random import choice
 try:
     from util import replace_wifi
 except ImportError:
@@ -57,22 +58,21 @@ class TotalMachine(WorkMachine):
                 time.sleep(1)
                 dr.press_keycode(3)
                 time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(1)
+                # dr.press_keycode(66)
+                # time.sleep(1)
+                # dr.press_keycode(66)
+                # time.sleep(1)
                 #清后台
-                dr.press_keycode(82)
-                time.sleep(1)
-                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
-                time.sleep(1)
+                # dr.press_keycode(82)
+                # time.sleep(1)
+                # WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
+                # time.sleep(1)
                 # 上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
-                # if random.randint(0, 1):
-                #     try:
-                #         self.upload_file('10.0.0.22', ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
-                #     except:
-                #         pass
+                # try:
+                #     self.upload_file(choice(['192.168.2.108', '10.0.0.22']), ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
+                # except:
+                #     pass
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
@@ -127,7 +127,6 @@ class TotalMachine(WorkMachine):
             else:
                 break
             time.sleep(2)
-        time.sleep(5)
 
     #控制激活量
     def ctrl_new(self, filename, num=100, sleep_time=1800):

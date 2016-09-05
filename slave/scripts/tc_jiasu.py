@@ -9,6 +9,7 @@ sys.path.append(os.path.dirname(os.path.dirname(filepath)))
 import threading
 import time
 import re
+import random
 from datetime import datetime
 from multiprocessing import Process
 from machines.machineVPN import MachineVPN
@@ -18,9 +19,10 @@ from appium4droid import webdriver
 from bootstrap import setup_boostrap
 from TotalMachine import WorkMachine
 from appium4droid.support.ui import WebDriverWait
-from machines.machinePinganwifi import Machinex, Machinex2
+from machines.machineTC_jiasu import Machinex, Machinex2
 from machines.StateMachine import Machine
-# from socksend import send_file
+from sock.socksend import send_file
+from random import choice
 try:
     from util import replace_wifi
 except ImportError:
@@ -36,7 +38,7 @@ class TotalMachine(WorkMachine):
         self.runnum = 0
         self.machine008 = Machine008(dr)
         self.machine008.task_schedule = ["record_file", "clear_data", "modify_data"]    # 007 task list
-        self.machine1 = Machinex(dr, "jiuma", "xiaoxiaozhuan", "meiriq2014")       # feima/yama/yima/shenhua/ailezan/jima/jiuma            api-a3t06fpx
+        self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
         self.machine2 = Machinex2(dr)
 
 
@@ -55,24 +57,36 @@ class TotalMachine(WorkMachine):
                 dr.press_keycode(3)
                 time.sleep(1)
                 dr.press_keycode(3)
-                time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(1)
+                time.sleep(10)
+                # dr.press_keycode(66)
+                # time.sleep(1)
+                # dr.press_keycode(66)
+                # time.sleep(1)
                 #清后台
-                dr.press_keycode(82)
-                time.sleep(1)
-                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
-                time.sleep(1)
-                #上传记录文件
+                # dr.press_keycode(82)
+                # time.sleep(1)
+                # WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
+                # time.sleep(1)
+                # 上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
-                #     self.upload_file()
+                # try:
+                #     self.upload_file(choice(['192.168.2.108', '10.0.0.22']), ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
+                # except:
+                #     pass
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
-                # MachineVPN(dr).run()
+                MachineVPN(dr).run()
                 m008.run()
+                # 开启加速
+                dr.press_keycode(3)
+                time.sleep(1)
+                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("GMD Speed Time")).click()
+                time.sleep(1)
+                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.gmd.speedtime:id/buttonStart")).click()
+                time.sleep(2)
+                dr.press_keycode(3)
+                time.sleep(1)
                 #周末控制效率
                 # if m008.remain_day == '1' and (time.localtime().tm_wday == 5 or time.localtime().tm_wday == 6):
                 #     print("周末激活暂停1800s....")
@@ -85,12 +99,21 @@ class TotalMachine(WorkMachine):
                     m1.run()
                     self.runnum += 1
                     #控制激活量
-                    # self.ctrl_new("pinganwifi", 100, 1800)      #filename, num, sleep_time
+                    # self.ctrl_new("", 100, 1800)      #filename, num, sleep_time
                 else:
                     print("留存")
                     m2.imei = m008.imei
-                    m2.remainday = m008.remain_day
+                    m2.remain_day = m008.remain_day
                     m2.run()
+                #关闭加速
+                dr.press_keycode(3)
+                time.sleep(1)
+                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("GMD Speed Time")).click()
+                time.sleep(1)
+                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.gmd.speedtime:id/buttonStop")).click()
+                time.sleep(1)
+                dr.press_keycode(3)
+                time.sleep(1)
             except Exception as e:
                 print("somting wrong")
                 print(e)
@@ -99,33 +122,33 @@ class TotalMachine(WorkMachine):
             print("Again\n")
         return self.exit
 
-    # def upload_file(self):
-    #     replace_wifi()
-    #     time.sleep(1)
-    #     replace_wifi()
-    #     time.sleep(5)
-    #     try:
-    #         with open('/sdcard/device.txt', 'r') as f:
-    #             selectuser = f.read()
-    #     except:
-    #         with open('device.txt', 'r') as f:
-    #             selectuser = f.read()
-    #     device = re.search(r'device:([0-9a-zA-Z\.]+)', selectuser).group(1)
-    #     for num in range(10): #最多可发送文件数量
-    #         filename = re.search(r'filename%s:([0-9a-zA-Z\.]+)' % num, selectuser)
-    #         if filename:
-    #             if os.path.exists(filename.group(1)) or os.path.exists('/sdcard/1/' + filename.group(1)): #检测文件是否存在,不存在不发送
-    #                 send_file(device, filename.group(1))
-    #             else:
-    #                 print("not find the file:%s" % filename.group(1))
-    #         else:
-    #             break
-    #         time.sleep(2)
-    #     time.sleep(5)
+    # 上传记录文件
+    def upload_file(self, addr, file):
+        replace_wifi()
+        time.sleep(1)
+        replace_wifi()
+        time.sleep(5)
+        try:
+            with open('/sdcard/device.txt', 'r') as f:
+                selectuser = f.read()
+        except:
+            with open('device.txt', 'r') as f:
+                selectuser = f.read()
+        device = re.search(r'device:([0-9a-zA-Z\.]+)', selectuser).group(1)
+        for filename in file: #最多可发送文件数量
+            # filename = re.search(r'filename%s:([0-9a-zA-Z\.]+)' % num, selectuser)
+            if filename:
+                if os.path.exists(filename) or os.path.exists('/sdcard/1/' + filename): #检测文件是否存在,不存在不发送
+                    send_file(device, filename, addr)
+                else:
+                    print("not find the file:%s" % filename)
+            else:
+                break
+            time.sleep(2)
 
     #控制激活量
     def ctrl_new(self, filename, num=100, sleep_time=1800):
-        with open("/sdcard/1/time%s.log" % filename, 'r', encoding='utf-8') as f:
+        with open("/sdcard/1/%s.log" % filename, 'r', encoding='utf-8') as f:
             a = f.read()
         match = re.findall(r'激活 %s.%s' % (time.localtime().tm_mon, time.localtime().tm_mday), a)
         if match.__len__() >= num:
@@ -134,7 +157,6 @@ class TotalMachine(WorkMachine):
             return True
         else:
             return False
-
 
 
 

@@ -80,7 +80,13 @@ class TotalMachine(WorkMachine):
                     self.runnum = 0
                 MachineVPN(dr).run()
                 #留存率设置
-                m008.remain_rate = [50, 45, 40, 35, 30, 25, 20, 15, 10, 5]
+                m008.remain_rate = [50, 45, 40, 35, 30, 25, 20, 15, 10, 5,
+                                    5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+                                    5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+                                    5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+                                    5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+                                    5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+                                    ]
                 m008.frist_day = self.st[time.localtime().tm_hour-1]
                 #留存做完是否跳转做激活   True/Fasle
                 m008.change = True
