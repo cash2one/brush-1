@@ -118,4 +118,4 @@ def get_screenshot_as_file(params):
 
 # def touchaction(params):
 #     print(params)
-#     return "action", {"action": "touchaction", "params": params}
+#     return "action", {"action": "touchAction", "params": params}

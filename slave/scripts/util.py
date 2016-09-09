@@ -45,6 +45,7 @@ def run_qpy2_script(script, args=None):
     ret = su.communicate(cmd.encode())
     return ret
 
+
 #后台运行python3文件
 def run_qpy3_script(script, args=None):
     su = subprocess.Popen(["su"], stdin=subprocess.PIPE)
@@ -53,6 +54,7 @@ def run_qpy3_script(script, args=None):
         cmd = cmd + " " + args
     ret = su.communicate(cmd.encode())
     return ret
+
 
 def show_message(msg):
     # print(msg)
@@ -88,6 +90,7 @@ def replace_wifi():
     print("replace WiFi")
     droid.toggleWifiState()
     sleep_countdown(1)
+
 
 #截屏
 def screenshot(path):

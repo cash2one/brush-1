@@ -417,11 +417,32 @@
 # print(pytesseract.image_to_string('caca1.png'))
 # print(pytesseract.image_to_string(image))
 
-import pytesseract
-from PIL import Image
+# import pytesseract
+# from PIL import Image
 
-image = Image.open('caca.png')
+# image = Image.open('caca.png')
+#
+# vcode = pytesseract.image_to_string(image)
+#
+# print(vcode)
 
-vcode = pytesseract.image_to_string(image)
+#########################xlswriter##########################################################################
 
-print(vcode)
+import random
+import os
+import time
+
+def get_filemessage(filename):
+    if os.path.exists("D:/brush/slave/scripts/doc/%s" % filename):
+        with open("D:/brush/slave/scripts/doc/%s" % filename, 'r', encoding='utf-8') as f:
+             strname = f.readlines()
+    elif os.path.exists("/sdcard/1/%s" % filename):
+        with open("/sdcard/1/%s" % filename, 'r', encoding='utf-8') as f:
+             strname = f.readlines()
+    else:
+        strname = ""
+    time.sleep(1)
+    return strname[random.randint(0, strname.__len__()-1)].strip()
+
+a = get_filemessage("name.txt")
+print(a)

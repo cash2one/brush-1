@@ -35,7 +35,7 @@ class Machinex(Machine):
         self.begintime = None
         self.endstime = None
         self.try_count = 0      #初始化出错尝试次数
-        self.readnum = random.randint(2, 2)     #初始化阅读次数
+        self.readnum = random.randint(1, 1)     #初始化阅读次数
         #初始化阅读菜单
         self.ismenu1 = True
         self.ismenu2 = True
@@ -76,7 +76,7 @@ class Machinex(Machine):
             WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_layout")).click()
             time.sleep(1)
             return self.login_code_platform
-        time.sleep(random.randint(10, 20))
+        time.sleep(random.randint(5, 15))
         return self.ends
 
     def login_code_platform(self):
@@ -286,10 +286,10 @@ class Machinex(Machine):
             #选择视频观看
             self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 2), 5)
             try:
-                self.select_one_by_id("com.huajiao:id/cover_image")
+                self.select_one_by_id("com.huajiao:id/cover_image", 10)
             except:
-                self.select_one_by_id("com.huajiao:id/feed_live_cover_view")
-            time.sleep(random.randint(150, 180))
+                self.select_one_by_id("com.huajiao:id/feed_live_cover_view", 10)
+            time.sleep(random.randint(90, 180))
             dr.press_keycode(4)
             time.sleep(1)
             dr.press_keycode(4)
@@ -304,25 +304,25 @@ class Machinex(Machine):
     def menu2(self):
         dr = self.driver
         try:
-            try:
-                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.huajiao:id/jump_follow_btn")).click()
-                time.sleep(5)
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 4), 5)
-                #关注
-                for x in range(random.randint(1, 2)):
-                    self.select_one_by_id("com.huajiao:id/focus_iv")
-                    time.sleep(1)
-                self.select_one_by_id("com.huajiao:id/img_header")
-                time.sleep(5)
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 3), 5)
-                dr.press_keycode(4)
-                time.sleep(1)
-                dr.press_keycode(4)
-                time.sleep(1)
-            except TimeoutException:
-                pass
+            # try:
+            #     WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.huajiao:id/jump_follow_btn")).click()
+            #     time.sleep(5)
+            #     self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 4), 5)
+            #     #关注
+            #     for x in range(random.randint(1, 2)):
+            #         self.select_one_by_id("com.huajiao:id/focus_iv")
+            #         time.sleep(1)
+            #     self.select_one_by_id("com.huajiao:id/img_header")
+            #     time.sleep(5)
+            #     self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 3), 5)
+            #     dr.press_keycode(4)
+            #     time.sleep(1)
+            #     dr.press_keycode(4)
+            #     time.sleep(1)
+            # except TimeoutException:
+            #     pass
             self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 2), 5)
-            self.readnum -= 1
+            # self.readnum -= 1
             self.ismenu2 = False
         except Exception as e:
             print("error in menu2")
@@ -360,12 +360,14 @@ class Machinex(Machine):
 
     def ends(self):
         dr = self.driver
-        dr.press_keycode(3)
-        time.sleep(1)
-        dr.press_keycode(3)
-        time.sleep(30)
-        WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
-        time.sleep(1)
+        #二次打开
+        for x in range(random.randint(0, 1)):
+            dr.press_keycode(3)
+            time.sleep(1)
+            dr.press_keycode(3)
+            time.sleep(30)
+            WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+            time.sleep(1)
         #记录时间
         self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         print(self.begintime)
@@ -445,13 +447,6 @@ class Machinex2(Machine):
         self.begintime = None
         self.endstime = None
         self.try_count = 0      #初始化出错尝试次数
-        self.readnum = random.randint(1, 1)     #初始化阅读次数
-        #初始化阅读菜单
-        self.ismenu1 = True
-        self.ismenu2 = True
-        self.ismenu3 = True
-        self.ismenu4 = True
-        self.ismenu5 = True
 
         return self.begin
 
@@ -460,32 +455,34 @@ class Machinex2(Machine):
         dr.press_keycode(3)
         time.sleep(1)
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
-        time.sleep(5)
+        time.sleep(10)
         #检测已进入app
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.huajiao:id/bottom_layout"))
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
-        time.sleep(random.randint(5, 10))
+        time.sleep(random.randint(5, 15))
         return self.ends
 
     def ends(self):
         dr = self.driver
-        dr.press_keycode(3)
-        time.sleep(1)
-        dr.press_keycode(3)
-        time.sleep(30)
-        WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
-        time.sleep(1)
+        #二次打开
+        for x in range(random.randint(0, 1)):
+            dr.press_keycode(3)
+            time.sleep(1)
+            dr.press_keycode(3)
+            time.sleep(30)
+            WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+            time.sleep(1)
         #记录时间
         self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         print(self.begintime)
         print(self.endstime)
-        time.sleep(1)
+        time.sleep(2)
         try:
             with open('/sdcard/1/time%s2.log' % self.appname_en, 'a') as f:
                 f.write('\n留存%s %s.%s, %s, %s' % (self.remainday, time.localtime().tm_mon, time.localtime().tm_mday, self.begintime, self.endstime))
         except:
             pass
-        time.sleep(1)
+        time.sleep(3)
         return self.exit
 
     def get_filemessage(self, filename):

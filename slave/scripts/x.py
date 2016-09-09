@@ -23,6 +23,7 @@ from machines.machineX import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
+
 try:
     from util import replace_wifi
 except ImportError:
@@ -38,7 +39,7 @@ class TotalMachine(WorkMachine):
         self.runnum = 0
         self.machine008 = Machine008(dr)
         self.machine008.task_schedule = ["record_file", "clear_data", "modify_data"]    # 007 task list
-        self.machine1 = Machinex(dr, "shenhua", "xiaoxiaozhuan", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
+        self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
         self.machine2 = Machinex2(dr)
 
 

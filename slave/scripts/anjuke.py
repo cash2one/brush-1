@@ -19,7 +19,7 @@ from appium4droid import webdriver
 from bootstrap import setup_boostrap
 from TotalMachine import WorkMachine
 from appium4droid.support.ui import WebDriverWait
-from machines.machineTC import Machinex, Machinex2
+from machines.machineAnjuke import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
@@ -57,7 +57,7 @@ class TotalMachine(WorkMachine):
                 dr.press_keycode(3)
                 time.sleep(1)
                 dr.press_keycode(3)
-                time.sleep(10)
+                time.sleep(1)
                 # dr.press_keycode(66)
                 # time.sleep(1)
                 # dr.press_keycode(66)
@@ -76,7 +76,7 @@ class TotalMachine(WorkMachine):
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
-                MachineVPN(dr).run()
+                # MachineVPN(dr).run()
                 m008.run()
                 #周末控制效率
                 # if m008.remain_day == '1' and (time.localtime().tm_wday == 5 or time.localtime().tm_wday == 6):

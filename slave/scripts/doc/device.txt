@@ -1,5 +1,2 @@
 
 device:76
-filename0:usertrj.txt
-filename1:usertrj3.txt
-filename2:usertrj2.txt

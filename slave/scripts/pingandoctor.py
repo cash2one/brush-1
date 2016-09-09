@@ -19,9 +19,11 @@ from appium4droid import webdriver
 from bootstrap import setup_boostrap
 from TotalMachine import WorkMachine
 from appium4droid.support.ui import WebDriverWait
+from machines.machinePingandoctor import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
+
 try:
     from util import replace_wifi
 except ImportError:
@@ -36,12 +38,16 @@ class TotalMachine(WorkMachine):
         dr = self.driver
         self.runnum = 0
         self.machine008 = Machine008(dr)
-        self.machine008.task_schedule = ["record_file", "clear_data", "find_apk", "modify_data"]    # 007 task list
+        self.machine008.task_schedule = ["record_file", "clear_data", "modify_data"]    # 007 task list
+        self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
+        self.machine2 = Machinex2(dr)
 
 
     def main_loop(self):
         dr = self.driver
         m008 = self.machine008
+        m1 = self.machine1
+        m2 = self.machine2
         #切换脚本输入法
         dr.press_keycode(63)
         time.sleep(1)
@@ -53,15 +59,15 @@ class TotalMachine(WorkMachine):
                 time.sleep(1)
                 dr.press_keycode(3)
                 time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(1)
+                # dr.press_keycode(66)
+                # time.sleep(1)
+                # dr.press_keycode(66)
+                # time.sleep(1)
                 #清后台
-                dr.press_keycode(82)
-                time.sleep(1)
-                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
-                time.sleep(1)
+                # dr.press_keycode(82)
+                # time.sleep(1)
+                # WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
+                # time.sleep(1)
                 # 上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
                 # try:
@@ -73,33 +79,24 @@ class TotalMachine(WorkMachine):
                     self.runnum = 0
                 MachineVPN(dr).run()
                 m008.run()
-                ###################################################################################################################
-                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_name("Chrome")).click()
-                time.sleep(1)
-                self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
-                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.android.chrome:id/terms_accept")).click()
-                time.sleep(1)
-                #输入网址
-                edts = WebDriverWait(dr, 60).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-                edts.click()
-                edts.send_keys("http://www.bandaoapp.com/bandao/down.php?code=888888")
-                time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(5)
-                #点击下载
-                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_xpath("//android.view.View[@content-desc='下载应用程序']")).click()
-                time.sleep(1)
-                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.android.chrome:id/button_primary")).click()
-                time.sleep(5)
-                self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
-                time.sleep(2)
-                try:
-                    with open('/sdcard/1/888888_downnum.log', 'a') as f:
-                        f.write('\n激活 %s.%s, %s, %s, count:%s' % (time.localtime().tm_mon, time.localtime().tm_mday, self.begintime, self.endstime, self.runnum))
-                except:
-                    pass
-                time.sleep(3)
-                self.runnum += 1
+                #周末控制效率
+                # if m008.remain_day == '1' and (time.localtime().tm_wday == 5 or time.localtime().tm_wday == 6):
+                #     print("周末激活暂停1800s....")
+                #     time.sleep(1800)
+                #     continue
+                if m008.remain_day == '1':
+                    print("激活")
+                    m1.imei = m008.imei
+                    m1.runnum = self.runnum
+                    m1.run()
+                    self.runnum += 1
+                    #控制激活量
+                    # self.ctrl_new("", 100, 1800)      #filename, num, sleep_time
+                else:
+                    print("留存")
+                    m2.imei = m008.imei
+                    m2.remain_day = m008.remain_day
+                    m2.run()
             except Exception as e:
                 print("somting wrong")
                 print(e)

@@ -19,7 +19,7 @@ from appium4droid import webdriver
 from bootstrap import setup_boostrap
 from TotalMachine import WorkMachine
 from appium4droid.support.ui import WebDriverWait
-from machines.machineQiuou import Machinex, Machinex2
+from machines.machineAnjuke import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
@@ -38,7 +38,7 @@ class TotalMachine(WorkMachine):
         self.runnum = 0
         self.machine008 = Machine008(dr)
         self.machine008.task_schedule = ["record_file", "clear_data", "modify_data"]    # 007 task list
-        self.machine1 = Machinex(dr, "shenhua", "xiaoxiaozhuan", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
+        self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
         self.machine2 = Machinex2(dr)
 
 
@@ -58,15 +58,15 @@ class TotalMachine(WorkMachine):
                 time.sleep(1)
                 dr.press_keycode(3)
                 time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(1)
-                dr.press_keycode(66)
-                time.sleep(1)
+                # dr.press_keycode(66)
+                # time.sleep(1)
+                # dr.press_keycode(66)
+                # time.sleep(1)
                 #清后台
-                dr.press_keycode(82)
-                time.sleep(1)
-                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
-                time.sleep(1)
+                # dr.press_keycode(82)
+                # time.sleep(1)
+                # WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
+                # time.sleep(1)
                 # 上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
                 # try:

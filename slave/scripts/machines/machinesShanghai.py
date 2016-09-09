@@ -36,7 +36,7 @@ class Machinex(Machine):
         self.begintime = None
         self.endstime = None
         self.try_count = 0      #初始化出错尝试次数
-        self.readnum = random.randint(1, 1)     #初始化阅读次数
+        self.readnum = random.randint(2, 3)     #初始化阅读次数
         self.issign = False
         #选择初始化接码平台
         if self.code_platform == "feima":

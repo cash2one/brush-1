@@ -39,7 +39,7 @@ class TotalMachine(WorkMachine):
         self.runnum = 0         #计数器
         self.machine008 = Machine008(dr)
         self.machine008.task_schedule = ["do_all_one_key", "modify_data"]
-        self.machine1 = Machinex(dr, "", "xiaoxiaozhuan", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
+        self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
         self.machine2 = Machinex2(dr)
 
 

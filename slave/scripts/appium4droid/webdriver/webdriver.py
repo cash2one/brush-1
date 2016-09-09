@@ -32,7 +32,7 @@ from .common.by import By
 # from appium4droid.webdriver.common.html5.application_cache import ApplicationCache
 
 from appium.webdriver.common.touch_action import TouchAction
-# from appium.webdriver.common.multi_action import MultiAction
+from appium.webdriver.common.multi_action import MultiAction
 
 
 try:
