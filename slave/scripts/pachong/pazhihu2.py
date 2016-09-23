@@ -16,27 +16,33 @@ else:
     client.login_in_terminal()
     client.save_token(TOKEN_FILE)
 
-# question = client.question(35166763)
-# question = client.from_url('https://www.zhihu.com/question/35166763')
+
+# n = 0
+# num = 30277318
+# question = client.question(num)
+# # question = client.from_url('https://www.zhihu.com/question/35166763')
 # print(question.title)
 # with open("name.txt", 'a', encoding='utf-8') as f:
 #     for answer in question.answers:
-#         if answer.author.name != "匿名用户" and answer.author.name != "[已重置]":
+#         n += 1
+#         try:
+#             if answer.author.name != "匿名用户" and answer.author.name != "[已重置]":
 #                 print(answer.author.name)
 #                 f.write(answer.author.name+'\n')
-
-
-
+#         except:
+#             pass
+#         print(n)
+#初始登录
 me = client.me()
-
+#
 print('name', me.name)
 print('headline', me.headline)
 print('description', me.description)
-
+#
 print('following topic count', me.following_topic_count)
 print('following people count', me.following_topic_count)
 print('followers count', me.follower_count)
-
+#
 print('voteup count', me.voteup_count)
 print('get thanks count', me.thanked_count)
 

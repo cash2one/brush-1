@@ -36,7 +36,7 @@ class TotalMachine(WorkMachine):
         self.runnum = 0
         # self.machine008 = Machine008(dr)
         # self.machine008.task_schedule = ["record_file", "clear_data", "modify_data"]    # 007 task list
-        self.machine1 = Machinex(dr, "", "xiaoxiaozhuan", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx
+        self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx
         self.machine2 = Machinex2(dr)
 
 

@@ -23,6 +23,7 @@ from machines.machineX import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
+# from machines.machineLocation import MachineLocation
 
 try:
     from util import replace_wifi
@@ -41,13 +42,14 @@ class TotalMachine(WorkMachine):
         self.machine008.task_schedule = ["record_file", "clear_data", "modify_data"]    # 007 task list
         self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
         self.machine2 = Machinex2(dr)
-
+        # self.machinelocation = MachineLocation(dr, "")
 
     def main_loop(self):
         dr = self.driver
         m008 = self.machine008
         m1 = self.machine1
         m2 = self.machine2
+        # mlocation = self.machinelocation
         #切换脚本输入法
         dr.press_keycode(63)
         time.sleep(1)
@@ -64,10 +66,10 @@ class TotalMachine(WorkMachine):
                 dr.press_keycode(66)
                 time.sleep(1)
                 #清后台
-                dr.press_keycode(82)
-                time.sleep(1)
-                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
-                time.sleep(1)
+                # dr.press_keycode(82)
+                # time.sleep(1)
+                # WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
+                # time.sleep(1)
                 # 上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
                 # try:
@@ -79,6 +81,7 @@ class TotalMachine(WorkMachine):
                     self.runnum = 0
                 # MachineVPN(dr).run()
                 m008.run()
+                # mlocation.run()
                 #周末控制效率
                 # if m008.remain_day == '1' and (time.localtime().tm_wday == 5 or time.localtime().tm_wday == 6):
                 #     print("周末激活暂停1800s....")

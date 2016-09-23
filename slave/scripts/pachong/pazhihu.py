@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+import time
+import re
 from zhihu import ZhihuClient
 
 Cookies_File = 'cookies.json'
@@ -35,19 +36,20 @@ client = ZhihuClient(Cookies_File)
 #               act.answer.upvote_num))
 
 
-url = 'http://www.zhihu.com/question/%s' % 26613082
+url = 'http://www.zhihu.com/question/%s' % 31969621
 question = client.question(url)
 
 print(question.title)
-print(question.answer_num)
-print(question.follower_num)
-print(question.topics)
+# print(question.answer_num)
+# print(question.follower_num)
+# print(question.topics)
 
 n = 0
-with open("D:/brush/slave/scripts/doc/name.txt", 'a', encoding='utf-8') as f:
+with open("D:/brush/slave/scripts/doc/name2.txt", 'a', encoding='utf-8') as f:
     for answer in question.answers:
         n += 1
         if answer.author.name != "匿名用户" and answer.author.name != "[已重置]":
             print(answer.author.name)
             f.write(answer.author.name+'\n')
+        time.sleep(0.01)
     print(n)

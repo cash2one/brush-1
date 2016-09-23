@@ -396,7 +396,7 @@
 #     logger.info("手势密码设置完毕");
 # }
 
-#########################xlswriter##########################################################################
+#########################日期##########################################################################
 
 # import time
 # time.strftime('%Y%m%d')
@@ -409,7 +409,7 @@
 # yes_time = now_time + datetime.timedelta(days=-1)
 # a = yes_time.strftime('%Y-%m-%d')
 
-#########################xlswriter##########################################################################
+#########################图片验证码##########################################################################
 # from PIL import Image
 # import pytesseract
 # image = Image.open('caca.png')
@@ -426,23 +426,68 @@
 #
 # print(vcode)
 
-#########################xlswriter##########################################################################
+#########################文件移动##########################################################################
+# import androidhelper
+# import time
+# import json
+# import logging
+# import subprocess
+# from datetime import datetime
+#
+#
+# def copyfile(file1, file2):
+#     su = subprocess.Popen("su", stdin=subprocess.PIPE)
+#     cmd = "/system/bin/cp -r %s %s" % (file1, file2)
+#     print("***************************\n" + cmd)
+#     su.communicate(cmd.encode())
+#
+# #删除文件
+# def removefile(file):
+#     su = subprocess.Popen("su", stdin=subprocess.PIPE)
+#     cmd = "/system/bin/rm -r %s" % file
+#     print("***************************\n" + cmd)
+#     su.communicate(cmd.encode())
+#
+# # removefile("/sdcard/008backUp/*/*/lib")
+# # copyfile("data/data/com.huajiao/", "/sdcard/")
+# removefile("data/data/com.huajiao/")
+# copyfile("sdcard/com.huajiao/", "data/data/")
+# time.sleep(2)
 
-import random
-import os
-import time
+#########################服务器##########################################################################
 
-def get_filemessage(filename):
-    if os.path.exists("D:/brush/slave/scripts/doc/%s" % filename):
-        with open("D:/brush/slave/scripts/doc/%s" % filename, 'r', encoding='utf-8') as f:
-             strname = f.readlines()
-    elif os.path.exists("/sdcard/1/%s" % filename):
-        with open("/sdcard/1/%s" % filename, 'r', encoding='utf-8') as f:
-             strname = f.readlines()
-    else:
-        strname = ""
-    time.sleep(1)
-    return strname[random.randint(0, strname.__len__()-1)].strip()
+# from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+# import requests
+# r = requests.get('http://m008.meiriq.com/phone')
+# r.json()
 
-a = get_filemessage("name.txt")
+#########################文件数量统计##########################################################################
+# import os
+#
+# count = 0
+# path = r'/sdcard/1/1touxiang/'
+# for root, dirs, files in os.walk(path):
+#     fileLength = len(files)
+#     if fileLength != 0:
+#         count = count + fileLength
+#
+# print("File number is: %d" % count)
+try:
+    from util import find_file_num
+except ImportError:
+    find_file_num = lambda: 1
+
+a = find_file_num("/sdcard/1/1touxiang")
 print(a)
+#########################文件数量统计##########################################################################
+
+
+
+
+
+
+
+
+
+
+

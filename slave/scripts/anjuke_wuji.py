@@ -79,7 +79,12 @@ class TotalMachine(WorkMachine):
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
-                MachineVPN(dr).run()
+                #无极VPN
+                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("无极VPN")).click()
+                time.sleep(1)
+                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("org.wuji:id/exit_vpn")).click()
+                time.sleep(5)
+                # MachineVPN(dr).run()
                 m008.run()
                 mlocation.run()
                 #周末控制效率

@@ -33,7 +33,7 @@ class Machine008(Machine):
                             50, 45, 40, 35, 30, 25, 20, 15, 10, 5,
                             ]
         self.change = True
-
+        self.again = False
     #进入008
     def enter_008(self):
         print("enter 008")
@@ -53,9 +53,19 @@ class Machine008(Machine):
             return self.onEnterException
         except TimeoutException:
             pass
+        try:
+            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("注意"))
+            time.sleep(1)
+            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("确定")).click()
+            time.sleep(1)
+            self.again = True
+            return self.exit
+        except TimeoutException:
+            pass
         #检测已进入008首页
         try:
             WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("工具箱"))
+            self.again = False
         except TimeoutException:
             return self.onEnterException
 
@@ -580,23 +590,54 @@ class Machine008(Machine):
         time.sleep(1)
         return self.do_toolbox_task
 
-    def asd(self):
+    #备份程序
+    def backup_app_lib(self):
         dr = self.driver
-        for i in range(30):
-            dr.find_element_by_class_name("android.widget.ImageButton").click()
-            time.sleep(0.5)
-            dr.find_element_by_name("新建分类").click()
-            time.sleep(0.5)
-            edts = dr.find_element_by_class_name("android.widget.EditText")
-            if i <= 20:
-                edts.send_keys("2016-08-%s" % (30-i))
-            else:
-                edts.send_keys("2016-08-0%s" % (30-i))
-            time.sleep(0.5)
-            dr.find_element_by_name("确定").click()
-            time.sleep(0.5)
+        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("备份程序数据")).click()
+        time.sleep(1)
+        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("备份")).click()
+        time.sleep(5)
+        #检测备份完成
+        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("备份"))
+        dr.press_keycode(4)  # keypress back
+        time.sleep(1)
+        #删除lib文件
+        removefile("/sdcard/008backUp/*/*/lib")
+        time.sleep(2)
+        #移动备份文件
+        copyfile("/sdcard/008backUp/*", "/sdcard/008backUp2/")
+        time.sleep(2)
+        removefile("/sdcard/008backUp/*")
+        time.sleep(5)
+        return self.do_toolbox_task
 
+    #还原程序
+    def recovery_app_lib(self):
+        dr = self.driver
+        try:
+            #提取备份文件
+            copyfile("/sdcard/008backUp2/*__%s" % self.imei, "/sdcard/008backUp/")
+            time.sleep(2)
+            copyfile("/sdcard/lib", "/sdcard/008backUp/*/*/")
+            time.sleep(2)
+            removefile("/sdcard/008backUp2/*__%s" % self.imei)
+            time.sleep(5)
+            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("备份程序数据")).click()
+            time.sleep(1)
+            dr.find_element_by_name(self.imei).click()
+            time.sleep(1)
+            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("还原")).click()
+            time.sleep(5)
+            #检测还原成功
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.imei))
+        except:
+            dr.press_keycode(4)
+            time.sleep(1)
+        dr.press_keycode(4)  # keypress back
+        time.sleep(1)
+        return self.do_toolbox_task
 
+    #
 
 
 if __name__ == "__main__":

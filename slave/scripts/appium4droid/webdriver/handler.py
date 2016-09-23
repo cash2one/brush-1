@@ -116,6 +116,3 @@ def element_tag_name(params):
 def get_screenshot_as_file(params):
     return "action", {"action": "element:setText", "params": data}
 
-# def touchaction(params):
-#     print(params)
-#     return "action", {"action": "touchAction", "params": params}

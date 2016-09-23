@@ -2,6 +2,7 @@
 import androidhelper
 import time
 import json
+import os
 import logging
 import subprocess
 from datetime import datetime
@@ -155,6 +156,16 @@ def settext_clipboard(text):
     print("***************************\n" + cmd)
     su.communicate(cmd.encode())
 
+#查找文件数量
+def find_file_num(path):
+    count = 0
+    # path = r'/sdcard/1/1touxiang/'
+    for root, dirs, files in os.walk(path):
+        fileLength = len(files)
+        if fileLength != 0:
+            count = count + fileLength
+    print("File number is: %d" % count)
+    return count
 
 
 if __name__ == "__main__":

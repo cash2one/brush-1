@@ -286,7 +286,12 @@ class Machinex(Machine):
     def menu1(self):
         dr = self.driver
         try:
-            time.sleep(random.randint(5, 30))
+            try:
+                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_main_fragment_flow_close")).click()
+                time.sleep(1)
+            except TimeoutException:
+                pass
+            time.sleep(random.randint(5, 10))
             # WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_fragment_sign")).click()
             # time.sleep(5)
             # dr.press_keycode(4)
@@ -351,7 +356,7 @@ class Machinex(Machine):
             if random.randint(0, 1) == 0:
                 WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("轻松学古文")).click()
                 time.sleep(1)
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 5), 2, 5)
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 5), 2, 5)
                 WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/guwen_arc_switch_layout")).click()
                 time.sleep(1)
                 self.select_one_by_id("com.wenba.bangbang:id/guwen_arc_bg")
@@ -394,6 +399,17 @@ class Machinex(Machine):
     def menu4(self):
         dr = self.driver
         try:
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("积分商城")).click()
+            time.sleep(1)
+            try:
+                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/act_no_sign_txt")).click()
+                time.sleep(1)
+                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_pic_dialog_right_btn")).click()
+                time.sleep(1)
+            except TimeoutException:
+                pass
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_back")).click()
+            time.sleep(1)
             self.ismenu4 = False
         except Exception as e:
             print("error in menu4")
@@ -560,7 +576,11 @@ class Machinex2(Machine):
     def menu1(self):
         dr = self.driver
         try:
-            time.sleep(random.randint(5, 15))
+            try:
+                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_main_fragment_flow_close")).click()
+                time.sleep(1)
+            except TimeoutException:
+                pass
             # WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/home_fragment_sign")).click()
             # time.sleep(5)
             # dr.press_keycode(4)
@@ -625,7 +645,7 @@ class Machinex2(Machine):
             if random.randint(0, 2) == 0:
                 WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("轻松学古文")).click()
                 time.sleep(1)
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 5), 2, 5)
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 5), 2, 5)
                 WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/guwen_arc_switch_layout")).click()
                 time.sleep(1)
                 self.select_one_by_id("com.wenba.bangbang:id/guwen_arc_bg")
@@ -668,6 +688,22 @@ class Machinex2(Machine):
     def menu4(self):
         dr = self.driver
         try:
+            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("取消")).click()
+            time.sleep(1)
+        except TimeoutException:
+            pass
+        try:
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("积分商城")).click()
+            time.sleep(1)
+            try:
+                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/act_no_sign_txt")).click()
+                time.sleep(1)
+                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_pic_dialog_right_btn")).click()
+                time.sleep(1)
+            except TimeoutException:
+                pass
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.wenba.bangbang:id/comm_titlebar_back")).click()
+            time.sleep(1)
             self.ismenu4 = False
         except Exception as e:
             print("error in menu4")

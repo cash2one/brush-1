@@ -58,10 +58,10 @@ class TotalMachine(WorkMachine):
                 time.sleep(1)
                 dr.press_keycode(3)
                 time.sleep(1)
-                # dr.press_keycode(66)
-                # time.sleep(1)
-                # dr.press_keycode(66)
-                # time.sleep(1)
+                dr.press_keycode(66)
+                time.sleep(1)
+                dr.press_keycode(66)
+                time.sleep(1)
                 #清后台
                 # dr.press_keycode(82)
                 # time.sleep(1)
@@ -75,7 +75,7 @@ class TotalMachine(WorkMachine):
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
-                MachineVPN(dr).run()
+                # MachineVPN(dr).run()
                 m008.run()
                 #周末控制效率
                 # if m008.remain_day == '1' and (time.localtime().tm_wday == 5 or time.localtime().tm_wday == 6):

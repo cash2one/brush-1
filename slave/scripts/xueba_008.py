@@ -64,10 +64,10 @@ class TotalMachine(WorkMachine):
                 dr.press_keycode(66)
                 time.sleep(1)
                 #清后台
-                dr.press_keycode(82)
-                time.sleep(1)
-                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
-                time.sleep(1)
+                # dr.press_keycode(82)
+                # time.sleep(1)
+                # WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
+                # time.sleep(1)
                 #上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
                 #     self.upload_file()
@@ -98,7 +98,7 @@ class TotalMachine(WorkMachine):
                     m1.runnum = self.runnum
                     m1.run()
                     self.runnum += 1
-                    m008.task_schedule = ["backup_app"]
+                    m008.task_schedule = ["backup_app_lib"]
                     m008.run()
                     #控制激活量
                     # self.ctrl_new("", 100, 1800)      #filename, num, sleep_time
@@ -108,10 +108,10 @@ class TotalMachine(WorkMachine):
                 else:
                     print("留存")
                     m2.imei = m008.imei
-                    m008.task_schedule = ["recovery_app"]
+                    m008.task_schedule = ["recovery_app_lib"]
                     m008.run()
                     m2.run()
-                    m008.task_schedule = ["backup_app"]
+                    m008.task_schedule = ["backup_app_lib"]
                     m008.run()
             except Exception as e:
                 print("somting wrong")

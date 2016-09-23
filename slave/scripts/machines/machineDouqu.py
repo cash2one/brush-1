@@ -18,6 +18,7 @@ from jiema.jimaSDK import Jima
 from jiema.shenhuaSDK import Shenhua
 from jiema.yimaSDK import Yima
 
+
 class Machinex(Machine):
     def __init__(self, driver, code_platform, fm_uname, fm_pwd):
         super(Machinex, self).__init__(self.initdata)
@@ -25,8 +26,8 @@ class Machinex(Machine):
         self.code_platform = code_platform      #接码平台
         self.code_user = fm_uname       #接码平台帐号
         self.code_pwd = fm_pwd      #接码平台密码
-        self.appname = "安居客"       #app名字
-        self.appname_en = "anjuke"     #记录文件用缩写英文名
+        self.appname = "逗趣直播"       #app名字
+        self.appname_en = "douqu"     #记录文件用缩写英文名
         self.imei = None
         self.runnum = None        #记录运行次数
 
@@ -41,7 +42,6 @@ class Machinex(Machine):
         self.ismenu1 = True
         self.ismenu2 = True
         self.ismenu3 = True
-        self.ismenu4 = True
         #选择初始化接码平台
         if self.code_platform == "feima":
             self.code = Feima(self.code_user, self.code_pwd, None)
@@ -50,13 +50,14 @@ class Machinex(Machine):
         elif self.code_platform == "yima":
             self.code = Yima(self.code_user, self.code_pwd, None)
         elif self.code_platform == "ailezan":
-            self.code = Ailezan(self.code_user, self.code_pwd, 1327)
+            self.code = Ailezan(self.code_user, self.code_pwd, 26000)
         elif self.code_platform == "jima":
             self.code = Jima(self.code_user, self.code_pwd, None)
         elif self.code_platform == "jiuma":
             self.code = Jiuma(self.code_user, self.code_pwd, None)
         elif self.code_platform == "shenhua":
             self.code = Shenhua(self.code_user, self.code_pwd, None)
+
         return self.begin
 
     def begin(self):
@@ -66,33 +67,15 @@ class Machinex(Machine):
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
         time.sleep(10)
         #检测已进入app
-        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/viewGroup"))
+        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/guide_skip")).click()
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         time.sleep(1)
-        #新开软件翻页
-        self.swipes(600, 300, 300, 300, 4, 2, 2)
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/guidePages")).click()
-        try:
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("定位失败，请检查网络"))
-            self.select_one_by_id("com.anjuke.android.app:id/select_city_tv_item", find_min=1)
-            time.sleep(5)
-        except TimeoutException:
-            pass
-        try:
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/autoupdate_no")).click()
-            time.sleep(1)
-        except TimeoutException:
-            pass
         #注册率
         sign_rate = random.randint(1, 10000)
-        if sign_rate <= 3000:
-            WebDriverWait(dr, 30).until(lambda d: d.find_elements_by_id("com.anjuke.android.app:id/view_maintab_model_icon"))[3].click()
-            time.sleep(1)
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/user_photo_civ")).click()
-            time.sleep(1)
+        if sign_rate <= 50000:
             return self.login_code_platform
-        time.sleep(5)
-        return self.do
+        time.sleep(random.randint(5, 15))
+        return self.ends
 
     def login_code_platform(self):
         #登录接码平台
@@ -118,7 +101,9 @@ class Machinex(Machine):
         self.pwd = choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)+choice(pwd_li)
         try:
             #进入注册页面
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/login_by_phone")).click()
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/otherLogin")).click()
+            time.sleep(1)
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("注册")).click()
             time.sleep(1)
             #选择接码平台获取手机号码
             self.phone = self.code.getPhone()
@@ -127,14 +112,14 @@ class Machinex(Machine):
             edts[0].send_keys(self.phone)
             time.sleep(1)
             #点击获取验证码按钮
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/send_sms_button")).click()
+            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/sendBtn")).click()
             time.sleep(5)
             #输入密码
-            # edts[2].send_keys(self.pwd)
-            # time.sleep(1)
+            edts[2].send_keys(self.pwd)
+            time.sleep(1)
             #选择接码平台获取验证码
-            #【安居客】亲爱的安居客用户您好，您的验证码为6045，验证码30分钟内有效。(来自106575681095585)
-            regrex = r'验证码为(\d+)'
+            #【逗趣直播】验证码979683，您正在注册成为逗趣直播用户，感谢您的支持！(来自10690501517651974957)
+            regrex = r'验证码(\d+)'
             captcha = self.code.waitForMessage(regrex, self.phone)
             if captcha is None:
                 print("getMessage failed,try_count:%s" % self.try_count)
@@ -150,10 +135,32 @@ class Machinex(Machine):
             edts[1].send_keys(captcha)
             time.sleep(1)
             #点击完成按钮按钮
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/btn_login")).click()
-            time.sleep(1)
+            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/next")).click()
+            time.sleep(5)
             #检测注册成功进入下一步
-            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/user_name_tv"))
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/linear_bar_left")).click()
+            time.sleep(1)
+            #注册成功登录
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_name("登录")).click()
+            time.sleep(1)
+            edts = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
+            #输入登录信息
+            edts[0].send_keys(self.phone)
+            time.sleep(1)
+            edts[1].send_keys(self.pwd)
+            time.sleep(1)
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/login")).click()
+            time.sleep(5)
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/iv_image"))
+            time.sleep(1)
+            #记录帐号密码
+            try:
+                with open('/sdcard/1/user%s.log' % self.appname_en, 'a') as f:
+                    f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
+            except:
+                with open('D:/brush/slave/scripts/doc/user%s.log' % self.appname_en, 'a') as f:
+                    f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
+            time.sleep(1)
             return self.after_signup
         except Exception as e:
             print("error in getPhone,try_count:%s" % self.try_count)
@@ -166,43 +173,62 @@ class Machinex(Machine):
 
     def after_signup(self):
         dr = self.driver
-        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/user_name_tv")).click()
+        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.douquhd.xiaotu:id/iv_image"))[2].click()
         time.sleep(1)
-        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/personal_info_name_view")).click()
-        time.sleep(1)
-        #输入昵称
-        edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-        edts.send_keys(self.get_filemessage("name.txt"))
+        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/rl_me_iconArea")).click()
         time.sleep(1)
         #选择性别
-        WebDriverWait(dr, 20).until(lambda d: d.find_element_by_id(choice(["com.anjuke.android.app:id/gender_male_rb", "com.anjuke.android.app:id/gender_female_rb"]))).click()
+        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("性别")).click()
         time.sleep(1)
-        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/btnright")).click()
+        WebDriverWait(dr, 20).until(lambda d: d.find_element_by_name(choice(["男", "女"]))).click()
         time.sleep(1)
+        #输入昵称
+        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("昵称")).click()
+        time.sleep(1)
+        edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
+        edts.click()
+        dr.press_keycode(123)
+        for x in range(20):
+            dr.press_keycode(67)
+        edts.send_keys(self.get_filemessage("name.txt"))
+        time.sleep(1)
+        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/linear_bar_right")).click()
+        time.sleep(1)
+        #输入年龄
+        # if random.randint(0, 4) == 0:
+        #     WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("年龄")).click()
+        #     time.sleep(1)
+        #     self.swipes(90, 1000, 90, 1050, random.randint(15, 30), 1, 2)
+        #     self.swipes(300, random.randint(900, 1100), 300, random.randint(900, 1100), random.randint(4, 6), 1, 2)
+        #     self.swipes(550, random.randint(900, 1100), 550, random.randint(900, 1100), random.randint(8, 10), 1, 2)
+        #     time.sleep(1)
+        #     dr.tap(650, 800)
+        #     time.sleep(1)
+        #输入所在地
+        # WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("所在地")).click()
+        # time.sleep(1)
+        #选择头像
         if random.randint(0, 9) == 0:
-            #选择头像
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/personal_info_portrait_view")).click()
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/userIcon")).click()
             time.sleep(1)
-            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("从相册选择")).click()
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/getFromAlbum")).click()
+            time.sleep(1)
+            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("文件管理")).click()
+            time.sleep(1)
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("1")).click()
             time.sleep(1)
             WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("1touxiang")).click()
             time.sleep(1)
             self.swipes(300, random.randint(800, 1000), 300, random.randint(300, 500), random.randint(0, 80))
             time.sleep(5)
-            self.select_one_by_id("com.anjuke.android.app:id/imgQueue")
+            self.select_one_by_id("com.android.fileexplorer:id/file_image")
             time.sleep(1)
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/btnright")).click()
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("应用")).click()
             time.sleep(5)
-        #保存信息按钮
-        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/imagebtnleft")).click()
-        time.sleep(5)
-        #记录帐号密码
-        try:
-            with open('/sdcard/1/user%s.log' % self.appname_en, 'a') as f:
-                f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
-        except:
-            with open('D:/brush/slave/scripts/doc/user%s.log' % self.appname_en, 'a') as f:
-                f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/linear_bar_left")).click()
+            time.sleep(1)
+        #保存信息
+        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/linear_bar_left")).click()
         time.sleep(1)
         return self.do
 
@@ -211,34 +237,27 @@ class Machinex(Machine):
         try:
             while self.readnum:
                 print("剩下阅读次数:%s" % self.readnum)
-                random_read = random.randint(0, 3)
+                random_read = random.randint(0, 2)
                 if random_read == 0:
                     if self.ismenu1:
                         print("goto menu1")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.anjuke.android.app:id/view_maintab_model_icon"))[0].click()
+                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.douquhd.xiaotu:id/iv_image"))[0].click()
                         time.sleep(5)
                         return self.menu1
                     return self.do
                 elif random_read == 1:
                     if self.ismenu2:
                         print("goto menu2")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.anjuke.android.app:id/view_maintab_model_icon"))[1].click()
+                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.douquhd.xiaotu:id/iv_image"))[1].click()
                         time.sleep(5)
                         return self.menu2
                     return self.do
-                elif random_read == 2:
+                else:
                     if self.ismenu3:
                         print("goto menu3")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.anjuke.android.app:id/view_maintab_model_icon"))[2].click()
+                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.douquhd.xiaotu:id/iv_image"))[2].click()
                         time.sleep(5)
                         return self.menu3
-                    return self.do
-                else:
-                    if self.ismenu4:
-                        print("goto menu4")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.anjuke.android.app:id/view_maintab_model_icon"))[3].click()
-                        time.sleep(5)
-                        return self.menu4
                     return self.do
         except TimeoutException:
             print("查找菜单出错")
@@ -249,63 +268,31 @@ class Machinex(Machine):
     def menu1(self):
         dr = self.driver
         try:
-            #进入搜索
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/home_title_search_view")).click()
+            liread = choice(["推荐", "最新"])
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name(liread)).click()
+            time.sleep(3)
+            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
             time.sleep(1)
-            try:
-                self.select_one_by_id("com.anjuke.android.app:id/searchtype_item_tv")
-                time.sleep(1)
-            except TimeoutException:
-                pass
-            search_ci = ["刚需房", "精装修", "不限购", "低首付", "低总价", "南北通透", "婚房", "地铁房", "学区房", "满五唯一",
-                         "交通便利", "配套成熟", "小户型", "大户型", "景区", "公园", "改善房", "大客厅", "学校", "银行",
-                         "医院", "市场", "广场", "商场", "投资", "大平层", "大主卧", "养老房", "品牌", "公交", "社区",
-                         "小区", "洋房", "环境", "得房率高", "安全", "停车", "电梯", "安静", "繁华"]
-            #选择分类
-            # self.select_one_by_id("com.anjuke.android.app:id/tag_btn")
-            edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-            edts.send_keys(choice(search_ci))
-            time.sleep(1)
-            dr.press_keycode(66)
-            time.sleep(5)
-            #随机搜索房源
-            randomnum = random.randint(1, 10000)
-            if randomnum < 2000:
-                read_house_num = random.randint(1, 3)
-            elif 2000 <= randomnum <= 8000:
-                read_house_num = random.randint(4, 6)
+            if liread == "推荐":
+                self.select_one_by_id("com.douquhd.xiaotu:id/cover")
             else:
-                read_house_num = random.randint(7, 10)
-            #选房源查看
-            for x in range(read_house_num):
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
-                self.select_one_by_id("com.anjuke.android.app:id/title", find_min=1)
-                time.sleep(random.randint(5, 10))
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 3), 2, 5)
-                dr.press_keycode(4)
-                time.sleep(2)
-                if random.randint(0, 9) == 0:
-                    try:
-                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/imagebtnright")).click()
-                        time.sleep(1)
-                    except TimeoutException:
-                        pass
+                self.select_one_by_id("com.douquhd.xiaotu:id/leftImage")
+            time.sleep(random.randint(60, 90))
             dr.press_keycode(4)
+            time.sleep(5)
+            #关注
+            if random.randint(0, 4) == 0:
+                try:
+                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/btnFollow")).click()
+                    time.sleep(1)
+                except TimeoutException:
+                    pass
+            time.sleep(random.randint(60, 90))
+            #退出
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/btnMore")).click()
             time.sleep(1)
             dr.press_keycode(4)
-            time.sleep(1)
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 2, 5)
-            # self.select_one_by_id("com.anjuke.android.app:id/title")
-            # time.sleep(random.randint(5, 10))
-            # self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 2), 2, 10)
-            # if random.randint(0, 9) == 0:
-            #     try:
-            #         WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/favorite")).click()
-            #         time.sleep(1)
-            #     except TimeoutException:
-            #         pass
-            # dr.press_keycode(4)
-            # time.sleep(1)
+            time.sleep(2)
             self.readnum -= 1
             self.ismenu1 = False
         except Exception as e:
@@ -316,6 +303,8 @@ class Machinex(Machine):
     def menu2(self):
         dr = self.driver
         try:
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/btnClose")).click()
+            time.sleep(1)
             self.ismenu2 = False
         except Exception as e:
             print("error in menu2")
@@ -325,36 +314,9 @@ class Machinex(Machine):
     def menu3(self):
         dr = self.driver
         try:
-            liread = ["com.anjuke.android.app:id/second_text", "com.anjuke.android.app:id/rent_text", "com.anjuke.android.app:id/new_text"]
-            try:
-                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id(choice(liread))).click()
-                time.sleep(5)
-            except TimeoutException:
-                pass
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 2, 5)
-            # self.select_one_by_id("com.anjuke.android.app:id/title")
-            # time.sleep(random.randint(5, 10))
-            # self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 4), 2, 10)
-            # if random.randint(0, 19) == 0:
-            #     try:
-            #         WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/favorite")).click()
-            #         time.sleep(1)
-            #     except TimeoutException:
-            #         pass
-            # dr.press_keycode(4)
-            # time.sleep(1)
             self.ismenu3 = False
         except Exception as e:
             print("error in menu3")
-            return self.exception_returnapp()
-        return self.do
-
-    def menu4(self):
-        dr = self.driver
-        try:
-            self.ismenu4 = False
-        except Exception as e:
-            print("error in menu4")
             return self.exception_returnapp()
         return self.do
 
@@ -424,12 +386,10 @@ class Machinex(Machine):
         time.sleep(1)
         dr.press_keycode(4)
         time.sleep(1)
-        dr.press_keycode(82)
-        time.sleep(2)
         try:
-            WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+            WebDriverWait(dr, 2).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/btn_right")).click()
         except TimeoutException:
-            dr.press_keycode(4)
+            pass
         time.sleep(5)
         return self.do
 
@@ -438,8 +398,8 @@ class Machinex2(Machine):
     def __init__(self, driver):
         super(Machinex2, self).__init__(self.initdata)
         self.driver = driver
-        self.appname = "安居客"       #app名字
-        self.appname_en = "anjuke"     #记录文件用缩写英文名
+        self.appname = "逗趣直播"       #app名字
+        self.appname_en = "douqu"     #记录文件用缩写英文名
         self.imei = None        #imei
         self.remain_day = None      #留存天数
 
@@ -452,7 +412,7 @@ class Machinex2(Machine):
         self.ismenu1 = True
         self.ismenu2 = True
         self.ismenu3 = True
-        self.ismenu4 = True
+
         return self.begin
 
     def begin(self):
@@ -462,59 +422,70 @@ class Machinex2(Machine):
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
         time.sleep(10)
         #检测已进入app
-        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/viewGroup"))
+        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/guide_skip")).click()
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         time.sleep(1)
-        #新开软件翻页
-        self.swipes(600, 300, 300, 300, 4, 2, 2)
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/guidePages")).click()
+        return self.login
+
+    def login(self):
+        dr = self.driver
         try:
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("定位失败，请检查网络"))
-            self.select_one_by_id("com.anjuke.android.app:id/select_city_tv_item", find_min=1)
-            time.sleep(5)
-        except TimeoutException:
-            pass
-        try:
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/autoupdate_no")).click()
+            with open('/sdcard/1/user%s.log' % self.appname_en, 'r') as f:
+                selectuser = f.read()
+        except:
+            with open('D:/brush/slave/scripts/doc/user%s.log' % self.appname_en, 'r') as f:
+                selectuser = f.read()
+        user = re.search(r'imei:%s,(\d+)' % self.imei, selectuser)
+        pwd = re.search(r'imei:%s,\d+,([0-9a-z]+)' % self.imei, selectuser)
+        if user and pwd:
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/otherLogin")).click()
             time.sleep(1)
-        except TimeoutException:
-            pass
-        time.sleep(5)
-        return self.do
+            edit = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
+            edit[0].send_keys(str(user.group(1)))
+            time.sleep(1)
+            edit[1].send_keys(str(pwd.group(1)))
+            time.sleep(1)
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/login")).click()
+            time.sleep(1)
+            try:
+                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/linear_bar_left")).click()
+                time.sleep(1)
+                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/login")).click()
+                time.sleep(5)
+            except TimeoutException:
+                pass
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/iv_image"))
+            time.sleep(1)
+            return self.do
+        time.sleep(random.randint(5, 15))
+        return self.ends
 
     def do(self):
         dr = self.driver
         try:
             while self.readnum:
                 print("剩下阅读次数:%s" % self.readnum)
-                random_read = random.randint(0, 3)
+                random_read = random.randint(0, 2)
                 if random_read == 0:
                     if self.ismenu1:
                         print("goto menu1")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.anjuke.android.app:id/view_maintab_model_icon"))[0].click()
+                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.douquhd.xiaotu:id/iv_image"))[0].click()
                         time.sleep(5)
                         return self.menu1
                     return self.do
                 elif random_read == 1:
                     if self.ismenu2:
                         print("goto menu2")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.anjuke.android.app:id/view_maintab_model_icon"))[1].click()
+                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.douquhd.xiaotu:id/iv_image"))[1].click()
                         time.sleep(5)
                         return self.menu2
                     return self.do
-                elif random_read == 2:
+                else:
                     if self.ismenu3:
                         print("goto menu3")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.anjuke.android.app:id/view_maintab_model_icon"))[2].click()
+                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.douquhd.xiaotu:id/iv_image"))[2].click()
                         time.sleep(5)
                         return self.menu3
-                    return self.do
-                else:
-                    if self.ismenu4:
-                        print("goto menu4")
-                        WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id("com.anjuke.android.app:id/view_maintab_model_icon"))[3].click()
-                        time.sleep(5)
-                        return self.menu4
                     return self.do
         except TimeoutException:
             print("查找菜单出错")
@@ -525,55 +496,31 @@ class Machinex2(Machine):
     def menu1(self):
         dr = self.driver
         try:
-            #进入搜索
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/home_title_search_view")).click()
+            liread = choice(["推荐", "最新"])
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name(liread)).click()
+            time.sleep(3)
+            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
             time.sleep(1)
-            try:
-                self.select_one_by_id("com.anjuke.android.app:id/searchtype_item_tv")
-                time.sleep(1)
-            except TimeoutException:
-                pass
-            search_ci = ["刚需房", "精装修", "不限购", "低首付", "低总价", "南北通透", "婚房", "地铁房", "学区房", "满五唯一",
-                         "交通便利", "配套成熟", "小户型", "大户型", "景区", "公园", "改善房", "大客厅", "学校", "银行",
-                         "医院", "市场", "广场", "商场", "投资", "大平层", "大主卧", "养老房", "品牌", "公交", "社区",
-                         "小区", "洋房", "环境", "得房率高", "安全", "停车", "电梯", "安静", "繁华"]
-            #选择分类
-            # self.select_one_by_id("com.anjuke.android.app:id/tag_btn")
-            edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-            edts.send_keys(choice(search_ci))
-            time.sleep(1)
-            dr.press_keycode(66)
+            if liread == "推荐":
+                self.select_one_by_id("com.douquhd.xiaotu:id/cover")
+            else:
+                self.select_one_by_id("com.douquhd.xiaotu:id/leftImage")
+            time.sleep(random.randint(60, 90))
+            dr.press_keycode(4)
             time.sleep(5)
-            #选房源查看
-            for x in range(random.randint(1, 3)):
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
-                self.select_one_by_id("com.anjuke.android.app:id/title", find_min=1)
-                time.sleep(random.randint(5, 10))
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 4), 2, 10)
-                if random.randint(0, 9) == 0:
-                    try:
-                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/imagebtnright")).click()
-                        time.sleep(1)
-                    except TimeoutException:
-                        pass
-                dr.press_keycode(4)
-                time.sleep(2)
-            dr.press_keycode(4)
+            #关注
+            if random.randint(0, 4) == 0:
+                try:
+                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/btnFollow")).click()
+                    time.sleep(1)
+                except TimeoutException:
+                    pass
+            time.sleep(random.randint(60, 90))
+            #退出
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/btnMore")).click()
             time.sleep(1)
             dr.press_keycode(4)
-            time.sleep(1)
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 2, 5)
-            # self.select_one_by_id("com.anjuke.android.app:id/title")
-            # time.sleep(random.randint(5, 10))
-            # self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 2), 2, 10)
-            # if random.randint(0, 9) == 0:
-            #     try:
-            #         WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/favorite")).click()
-            #         time.sleep(1)
-            #     except TimeoutException:
-            #         pass
-            # dr.press_keycode(4)
-            # time.sleep(1)
+            time.sleep(2)
             self.readnum -= 1
             self.ismenu1 = False
         except Exception as e:
@@ -584,6 +531,8 @@ class Machinex2(Machine):
     def menu2(self):
         dr = self.driver
         try:
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/btnClose")).click()
+            time.sleep(1)
             self.ismenu2 = False
         except Exception as e:
             print("error in menu2")
@@ -593,36 +542,9 @@ class Machinex2(Machine):
     def menu3(self):
         dr = self.driver
         try:
-            liread = ["com.anjuke.android.app:id/second_text", "com.anjuke.android.app:id/rent_text", "com.anjuke.android.app:id/new_text"]
-            try:
-                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id(choice(liread))).click()
-                time.sleep(5)
-            except TimeoutException:
-                pass
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 2, 5)
-            # self.select_one_by_id("com.anjuke.android.app:id/title")
-            # time.sleep(random.randint(5, 10))
-            # self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 4), 2, 10)
-            # if random.randint(0, 19) == 0:
-            #     try:
-            #         WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.anjuke.android.app:id/favorite")).click()
-            #         time.sleep(1)
-            #     except TimeoutException:
-            #         pass
-            # dr.press_keycode(4)
-            # time.sleep(1)
             self.ismenu3 = False
         except Exception as e:
             print("error in menu3")
-            return self.exception_returnapp()
-        return self.do
-
-    def menu4(self):
-        dr = self.driver
-        try:
-            self.ismenu4 = False
-        except Exception as e:
-            print("error in menu4")
             return self.exception_returnapp()
         return self.do
 
@@ -685,12 +607,10 @@ class Machinex2(Machine):
         time.sleep(1)
         dr.press_keycode(4)
         time.sleep(1)
-        dr.press_keycode(82)
-        time.sleep(2)
         try:
-            WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name(self.appname)).click()
+            WebDriverWait(dr, 2).until(lambda d: d.find_element_by_id("com.douquhd.xiaotu:id/btn_right")).click()
         except TimeoutException:
-            dr.press_keycode(4)
+            pass
         time.sleep(5)
         return self.do
 

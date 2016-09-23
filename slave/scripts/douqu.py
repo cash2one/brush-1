@@ -19,11 +19,12 @@ from appium4droid import webdriver
 from bootstrap import setup_boostrap
 from TotalMachine import WorkMachine
 from appium4droid.support.ui import WebDriverWait
-from machines.machineAnjuke import Machinex, Machinex2
+from machines.machineDouqu import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
-from machines.machineLocation import MachineLocation
+# from machines.machineLocation import MachineLocation
+
 try:
     from util import replace_wifi
 except ImportError:
@@ -38,18 +39,17 @@ class TotalMachine(WorkMachine):
         dr = self.driver
         self.runnum = 0
         self.machine008 = Machine008(dr)
-        self.machine008.task_schedule = ["record_file", "clear_data", "modify_data_suiji"]    # 007 task list
+        self.machine008.task_schedule = ["record_file", "clear_data", "modify_data"]    # 007 task list
         self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
         self.machine2 = Machinex2(dr)
-        self.machinelocation = MachineLocation(dr, "安居客")
-
+        # self.machinelocation = MachineLocation(dr, "")
 
     def main_loop(self):
         dr = self.driver
         m008 = self.machine008
         m1 = self.machine1
         m2 = self.machine2
-        mlocation = self.machinelocation
+        # mlocation = self.machinelocation
         #切换脚本输入法
         dr.press_keycode(63)
         time.sleep(1)
@@ -79,9 +79,9 @@ class TotalMachine(WorkMachine):
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
-                MachineVPN(dr).run()
+                # MachineVPN(dr).run()
                 m008.run()
-                mlocation.run()
+                # mlocation.run()
                 #周末控制效率
                 # if m008.remain_day == '1' and (time.localtime().tm_wday == 5 or time.localtime().tm_wday == 6):
                 #     print("周末激活暂停1800s....")

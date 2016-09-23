@@ -20,6 +20,7 @@ from appium4droid.support.ui import WebDriverWait
 from machines.machineX import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
+# from machines.machineLocation import MachineLocation
 try:
     from util import replace_wifi
 except ImportError:
@@ -41,13 +42,14 @@ class TotalMachine(WorkMachine):
         self.machine008.task_schedule = ["do_all_one_key", "modify_data"]
         self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
         self.machine2 = Machinex2(dr)
-
+        # self.machinelocation = MachineLocation(dr, "")
 
     def main_loop(self):
         dr = self.driver
         m008 = self.machine008
         m1 = self.machine1
         m2 = self.machine2
+        # mlocation = self.machinelocation
         #切换脚本输入法
         dr.press_keycode(63)
         time.sleep(1)
@@ -64,10 +66,10 @@ class TotalMachine(WorkMachine):
                 dr.press_keycode(66)
                 time.sleep(1)
                 #清后台
-                dr.press_keycode(82)
-                time.sleep(1)
-                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
-                time.sleep(1)
+                # dr.press_keycode(82)
+                # time.sleep(1)
+                # WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
+                # time.sleep(1)
                 #上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
                 #     self.upload_file()
@@ -91,6 +93,7 @@ class TotalMachine(WorkMachine):
                 #留存做完是否跳转做激活   True/Fasle
                 m008.change = True
                 m008.run()
+                # mlocation.run()
                 if m008.frist_day == 1:
                     print("激活")
                     m1.imei = m008.imei

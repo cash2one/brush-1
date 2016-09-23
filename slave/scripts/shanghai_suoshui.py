@@ -19,11 +19,10 @@ from appium4droid import webdriver
 from bootstrap import setup_boostrap
 from TotalMachine import WorkMachine
 from appium4droid.support.ui import WebDriverWait
-from machines.machineAnjuke import Machinex, Machinex2
+from machines.machinesShanghai_suoshui import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
-from machines.machineLocation import MachineLocation
 try:
     from util import replace_wifi
 except ImportError:
@@ -38,10 +37,9 @@ class TotalMachine(WorkMachine):
         dr = self.driver
         self.runnum = 0
         self.machine008 = Machine008(dr)
-        self.machine008.task_schedule = ["record_file", "clear_data", "modify_data_suiji"]    # 007 task list
-        self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
+        self.machine008.task_schedule = ["record_file", "clear_data", "modify_data"]    # 007 task list
+        self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx
         self.machine2 = Machinex2(dr)
-        self.machinelocation = MachineLocation(dr, "安居客")
 
 
     def main_loop(self):
@@ -49,7 +47,6 @@ class TotalMachine(WorkMachine):
         m008 = self.machine008
         m1 = self.machine1
         m2 = self.machine2
-        mlocation = self.machinelocation
         #切换脚本输入法
         dr.press_keycode(63)
         time.sleep(1)
@@ -73,15 +70,15 @@ class TotalMachine(WorkMachine):
                 # 上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
                 # try:
-                #     self.upload_file(choice(['192.168.2.108', '10.0.0.22']), ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
+                #     self.upload_file(choice(['192.168.2.108', '10.0.0.22']), ["usershanghai.log", "timeshanghai.log", "timeshanghai2.log"])
                 # except:
                 #     pass
+
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
                 MachineVPN(dr).run()
                 m008.run()
-                mlocation.run()
                 #周末控制效率
                 # if m008.remain_day == '1' and (time.localtime().tm_wday == 5 or time.localtime().tm_wday == 6):
                 #     print("周末激活暂停1800s....")
@@ -131,6 +128,7 @@ class TotalMachine(WorkMachine):
             else:
                 break
             time.sleep(2)
+        time.sleep(5)
 
     #控制激活量
     def ctrl_new(self, filename, num=100, sleep_time=1800):

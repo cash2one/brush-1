@@ -46,13 +46,13 @@ class Machinex(Machine):
         elif self.code_platform == "yima":
             self.code = Yima(self.code_user, self.code_pwd, None)
         elif self.code_platform == "ailezan":
-            self.code = Ailezan(self.code_user, self.code_pwd, 20951)
+            self.code = Ailezan(self.code_user, self.code_pwd, 26320)
         elif self.code_platform == "jima":
             self.code = Jima(self.code_user, self.code_pwd, None)
         elif self.code_platform == "jiuma":
             self.code = Jiuma(self.code_user, self.code_pwd, None)
         else:
-            self.code = Shenhua(self.code_user, self.code_pwd, 62960)
+            self.code = Shenhua(self.code_user, self.code_pwd, 82914)
 
         return self.begin
 

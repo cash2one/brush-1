@@ -26,8 +26,6 @@ class command_executor(object):
             Command.FIND_CHILD_ELEMENT: handler.find_child_element,
             Command.FIND_CHILD_ELEMENTS: handler.find_child_elements,
             Command.ELEMENT_SCREENSHOT: handler.get_screenshot_as_file,
-            # Command.TOUCH_ACTION: handler.touchaction,
-
 
             # 下列指令未实现
             Command.STATUS: ('GET', '/status'),
