@@ -398,6 +398,7 @@ class Machinex(Machine):
         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name(self.appname)).click()
         return captcha
 
+    #指定文档中随机获取数据
     def get_filemessage(self, filename):
         if os.path.exists("D:/brush/slave/scripts/doc/%s" % filename):
             with open("D:/brush/slave/scripts/doc/%s" % filename, 'r', encoding='utf-8') as f:
@@ -410,20 +411,22 @@ class Machinex(Machine):
         time.sleep(1)
         return strname[random.randint(0, strname.__len__()-1)].strip()
 
-    def swipes(self, x1, y1, x2, y2, swipe_num=1, swipe_time_a=1, swipe_time_b=1):
+    #随机滑动
+    def swipes(self, x1, y1, x2, y2, swipe_num=1, swipe_time_min=1, swipe_time_max=1):
         dr = self.driver
         print("swipenum:%s" % swipe_num)
         for x in range(swipe_num):
             dr.swipe(x1, y1, x2, y2)
-            time.sleep(random.randint(swipe_time_a, swipe_time_b))
+            time.sleep(random.randint(swipe_time_min, swipe_time_max))
 
+    #随机选择
     def select_one_by_id(self, find_id, find_time=30, find_min=0, find_max=0):
         selectone = WebDriverWait(self.driver, find_time).until(lambda d: d.find_elements_by_id(find_id))
         if find_max == 0:
-            selectone[random.randint(find_min, selectone.__len__()-1)].click()
-        else:
-            selectone[random.randint(find_min, find_max)].click()
+            find_max = selectone.__len__()-1
+        selectone[random.randint(find_min, find_max)].click()
 
+    #出错处理
     def exception_returnapp(self):
         dr = self.driver
         print("try_count:%s" % self.try_count)
@@ -520,6 +523,7 @@ class Machinex2(Machine):
         time.sleep(3)
         return self.exit
 
+    #指定文档中随机获取数据
     def get_filemessage(self, filename):
         if os.path.exists("D:/brush/slave/scripts/doc/%s" % filename):
             with open("D:/brush/slave/scripts/doc/%s" % filename, 'r', encoding='utf-8') as f:
@@ -532,20 +536,22 @@ class Machinex2(Machine):
         time.sleep(1)
         return strname[random.randint(0, strname.__len__()-1)].strip()
 
-    def swipes(self, x1, y1, x2, y2, swipe_num=1, swipe_time_a=1, swipe_time_b=1):
+    #随机滑动
+    def swipes(self, x1, y1, x2, y2, swipe_num=1, swipe_time_min=1, swipe_time_max=1):
         dr = self.driver
         print("swipenum:%s" % swipe_num)
         for x in range(swipe_num):
             dr.swipe(x1, y1, x2, y2)
-            time.sleep(random.randint(swipe_time_a, swipe_time_b))
+            time.sleep(random.randint(swipe_time_min, swipe_time_max))
 
+    #随机选择
     def select_one_by_id(self, find_id, find_time=30, find_min=0, find_max=0):
         selectone = WebDriverWait(self.driver, find_time).until(lambda d: d.find_elements_by_id(find_id))
         if find_max == 0:
-            selectone[random.randint(find_min, selectone.__len__()-1)].click()
-        else:
-            selectone[random.randint(find_min, find_max)].click()
+            find_max = selectone.__len__()-1
+        selectone[random.randint(find_min, find_max)].click()
 
+    #出错处理
     def exception_returnapp(self):
         dr = self.driver
         print("try_count:%s" % self.try_count)

@@ -19,10 +19,12 @@ from appium4droid import webdriver
 from bootstrap import setup_boostrap
 from TotalMachine import WorkMachine
 from appium4droid.support.ui import WebDriverWait
-from machines.machineHuajiao_liaotian import Machinex, Machinex2
+from machines.machineQQdongman import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
+# from machines.machineLocation import MachineLocation
+
 try:
     from util import replace_wifi
 except ImportError:
@@ -38,46 +40,55 @@ class TotalMachine(WorkMachine):
         self.runnum = 0
         self.machine008 = Machine008(dr)
         self.machine008.task_schedule = ["record_file", "clear_data", "modify_data"]    # 007 task list
-        self.machine1 = Machinex(dr, "shenhua", "xiaoxiaozhuan", "meiriq2014")       # feima/yama/shenhua
+        self.machine1 = Machinex(dr)       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
         self.machine2 = Machinex2(dr)
-
+        # self.machinelocation = MachineLocation(dr, "")
 
     def main_loop(self):
         dr = self.driver
         m008 = self.machine008
         m1 = self.machine1
         m2 = self.machine2
+        # mlocation = self.machinelocation
+        #切换脚本输入法
+        dr.press_keycode(63)
+        time.sleep(1)
+        dr.find_element_by_name("Appium Android Input Manager for Unicode").click()
+        time.sleep(1)
         while True:
             try:
                 dr.press_keycode(3)
                 time.sleep(1)
                 dr.press_keycode(3)
-                time.sleep(10)
-                dr.press_keycode(66)
                 time.sleep(1)
                 dr.press_keycode(66)
                 time.sleep(1)
-                #切换脚本输入法
-                # dr.press_keycode(63)
-                # time.sleep(1)
-                # dr.find_element_by_name("Appium Android Input Manager for Unicode").click()
-                # time.sleep(1)
+                dr.press_keycode(66)
+                time.sleep(1)
                 #清后台
-                dr.press_keycode(82)
-                time.sleep(1)
-                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
-                time.sleep(1)
+                # dr.press_keycode(82)
+                # time.sleep(1)
+                # WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
+                # time.sleep(1)
                 # 上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
-                try:
-                    self.upload_file(choice(['192.168.2.108', '10.0.0.22']), ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
-                except:
-                    pass
+                # try:
+                #     self.upload_file(choice(['192.168.2.108', '10.0.0.22']), ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
+                # except:
+                #     pass
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
-                MachineVPN(dr).run()
+                #无极VPN
+                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("无极VPN")).click()
+                # time.sleep(1)
+                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("org.wuji:id/exit_vpn")).click()
+                # time.sleep(5)
+                # dr.press_keycode(3)
+                # time.sleep(1)
+                # MachineVPN(dr).run()
                 m008.run()
+                # mlocation.run()
                 #周末控制效率
                 # if m008.remain_day == '1' and (time.localtime().tm_wday == 5 or time.localtime().tm_wday == 6):
                 #     print("周末激活暂停1800s....")
@@ -90,11 +101,11 @@ class TotalMachine(WorkMachine):
                     m1.run()
                     self.runnum += 1
                     #控制激活量
-                    # self.ctrl_new("timehuajiao.log", 100, 1800)      #filename, num, sleep_time
+                    # self.ctrl_new("", 100, 1800)      #filename, num, sleep_time
                 else:
                     print("留存")
                     m2.imei = m008.imei
-                    m2.remainday = m008.remain_day
+                    m2.remain_day = m008.remain_day
                     m2.run()
             except Exception as e:
                 print("somting wrong")
@@ -127,7 +138,6 @@ class TotalMachine(WorkMachine):
             else:
                 break
             time.sleep(2)
-        time.sleep(5)
 
     #控制激活量
     def ctrl_new(self, filename, num=100, sleep_time=1800):
@@ -140,6 +150,7 @@ class TotalMachine(WorkMachine):
             return True
         else:
             return False
+
 
 
 if __name__ == "__main__":

@@ -404,10 +404,16 @@
 
 # 获取昨天的时间datetime
 
-# import datetime
+import datetime
 # now_time = datetime.datetime.now()
 # yes_time = now_time + datetime.timedelta(days=-1)
-# a = yes_time.strftime('%Y-%m-%d')
+# a = yes_time.strftime('%h-%m-%s')
+
+begin_time = datetime.datetime.now()
+end_time = datetime.datetime.now()
+end_time2 = begin_time + datetime.timedelta(hours=8, minutes=45)
+end_time3 = begin_time + datetime.timedelta(hours=8, minutes=46)
+a = (end_time - begin_time).seconds
 
 #########################图片验证码##########################################################################
 # from PIL import Image

@@ -93,7 +93,9 @@ class TotalMachine(WorkMachine):
                 m008.frist_day = self.st[time.localtime().tm_hour-1]
                 #留存做完是否跳转做激活   True/Fasle
                 m008.change = True
+                #运行008
                 m008.run()
+                #定位
                 mlocation.run()
                 if m008.frist_day == 1:
                     print("激活")

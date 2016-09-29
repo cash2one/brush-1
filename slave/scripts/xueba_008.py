@@ -21,10 +21,10 @@ from machines.machineXueba008 import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 try:
-    from util import replace_wifi
+    from util import replace_wifi, removefile
 except ImportError:
     replace_wifi = lambda: 1
-
+    removefile = lambda: 1
 
 class TotalMachine(WorkMachine):
     def load_task_info(self):
@@ -90,6 +90,10 @@ class TotalMachine(WorkMachine):
                 m008.frist_day = self.st[time.localtime().tm_hour-1]
                 #留存做完是否跳转做激活   True/Fasle
                 m008.change = False
+                #添加留存从什么时候开始
+                m008.begin_time_month = 9
+                m008.begin_time_day = 29
+                #重设008执行任务
                 m008.task_schedule = ["do_all_one_key", "modify_data"]
                 m008.run()
                 if m008.frist_day == 1:
@@ -113,6 +117,8 @@ class TotalMachine(WorkMachine):
                     m2.run()
                     m008.task_schedule = ["backup_app_lib"]
                     m008.run()
+                #删除文件
+                removefile("/sdcard/008backUp2/*/*/plugins")
             except Exception as e:
                 print("somting wrong")
                 print(e)

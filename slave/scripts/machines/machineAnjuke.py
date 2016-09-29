@@ -270,9 +270,9 @@ class Machinex(Machine):
             time.sleep(5)
             #随机搜索房源
             randomnum = random.randint(1, 10000)
-            if randomnum < 2000:
+            if randomnum < 500:
                 read_house_num = random.randint(1, 3)
-            elif 2000 <= randomnum <= 8000:
+            elif 500 <= randomnum <= 8000:
                 read_house_num = random.randint(4, 6)
             else:
                 read_house_num = random.randint(7, 10)
@@ -545,7 +545,7 @@ class Machinex2(Machine):
             dr.press_keycode(66)
             time.sleep(5)
             #选房源查看
-            for x in range(random.randint(1, 3)):
+            for x in range(random.randint(3, 5)):
                 self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
                 self.select_one_by_id("com.anjuke.android.app:id/title", find_min=1)
                 time.sleep(random.randint(5, 10))
