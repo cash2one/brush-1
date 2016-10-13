@@ -33,10 +33,11 @@ class Machine008(Machine):
                             50, 45, 40, 35, 30, 25, 20, 15, 10, 5,
                             ]
         self.change = True
-        self.again = False
         self.NO_NEW_DAY = 2
         self.begin_time_month = 0
         self.begin_time_day = 0
+
+
     #进入008
     def enter_008(self):
         print("enter 008")
@@ -47,29 +48,26 @@ class Machine008(Machine):
         time.sleep(1)
         WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("008神器0727")).click()
         time.sleep(1)
-        #检测网络是否正常
-        try:
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("请检查当前网络是否可用"))
-            time.sleep(1)
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("确定")).click()
-            time.sleep(1)
-            return self.onEnterException
-        except TimeoutException:
-            pass
-        try:
-            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("注意"))
-            time.sleep(1)
-            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("确定")).click()
-            time.sleep(1)
-            self.again = True
-            return self.exit
-        except TimeoutException:
-            pass
         #检测已进入008首页
         try:
             WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("工具箱"))
-            self.again = False
         except TimeoutException:
+            #检测网络是否正常
+            try:
+                WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("请检查当前网络是否可用"))
+                time.sleep(1)
+                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("确定")).click()
+                time.sleep(1)
+            except TimeoutException:
+                pass
+            #出错
+            try:
+                WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("注意"))
+                time.sleep(1)
+                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("确定")).click()
+                time.sleep(1)
+            except TimeoutException:
+                pass
             return self.onEnterException
 
         return self.enter_toolbox

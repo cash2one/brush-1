@@ -12,19 +12,17 @@ import re
 import random
 from datetime import datetime
 from multiprocessing import Process
-from machines.machineVPN import MachineVPN
+# from machines.machineVPN import MachineVPN
+from machines.machineWujiVPN import MachineVPN
 # from machines.machine008 import Machine008
 from machines.machineXposeHook import MachineXHook as Machine008
 from appium4droid import webdriver
 from bootstrap import setup_boostrap
 from TotalMachine import WorkMachine
 from appium4droid.support.ui import WebDriverWait
-from machines.machinenewPinganpuhui_2 import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
-# from machines.machineLocation import MachineLocation
-
 try:
     from util import replace_wifi
 except ImportError:
@@ -39,17 +37,11 @@ class TotalMachine(WorkMachine):
         dr = self.driver
         self.runnum = 0
         self.machine008 = Machine008(dr)
-        self.machine008.task_schedule = ["record_file", "clear_data", "modify_data_suiji"]    # 007 task list
-        self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
-        self.machine2 = Machinex2(dr)
-        # self.machinelocation = MachineLocation(dr, "")
+        self.machine008.task_schedule = ["record_file", "clear_data", "uninstall_apk", "find_apk", "modify_data"]    # 007 task list
 
     def main_loop(self):
         dr = self.driver
         m008 = self.machine008
-        m1 = self.machine1
-        m2 = self.machine2
-        # mlocation = self.machinelocation
         #切换脚本输入法
         dr.press_keycode(63)
         time.sleep(1)
@@ -66,10 +58,10 @@ class TotalMachine(WorkMachine):
                 dr.press_keycode(66)
                 time.sleep(1)
                 #清后台
-                # dr.press_keycode(82)
-                # time.sleep(1)
-                # WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
-                # time.sleep(1)
+                dr.press_keycode(82)
+                time.sleep(1)
+                WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.android.systemui:id/clearButton")).click()
+                time.sleep(1)
                 # 上传记录文件
                 # if time.localtime().tm_hour == 8 and time.localtime().tm_min >= 30:
                 # try:
@@ -79,34 +71,62 @@ class TotalMachine(WorkMachine):
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
-                #无极VPN
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("无极VPN")).click()
-                # time.sleep(1)
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("org.wuji:id/exit_vpn")).click()
-                # time.sleep(5)
-                # dr.press_keycode(3)
-                # time.sleep(1)
-                # MachineVPN(dr).run()
+                MachineVPN(dr).run()
                 m008.run()
-                # mlocation.run()
-                #周末控制效率
-                # if m008.remain_day == '1' and (time.localtime().tm_wday == 5 or time.localtime().tm_wday == 6):
-                #     print("周末激活暂停1800s....")
-                #     time.sleep(1800)
-                #     continue
-                if m008.remain_day == '1':
-                    print("激活")
-                    m1.imei = m008.imei
-                    m1.runnum = self.runnum
-                    m1.run()
-                    self.runnum += 1
-                    #控制激活量
-                    # self.ctrl_new("", 100, 1800)      #filename, num, sleep_time
-                else:
-                    print("留存")
-                    m2.imei = m008.imei
-                    m2.remain_day = m008.remain_day
-                    m2.run()
+                ###################################################################################################################
+                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_name("UC")).click()
+                time.sleep(1)
+                try:
+                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("跳 过")).click()
+                    time.sleep(1)
+                except TimeoutError:
+                    pass
+                try:
+                    WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("不, 谢谢")).click()
+                    time.sleep(1)
+                except TimeoutError:
+                    pass
+                time.sleep(5)
+                self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
+                #二维码扫码
+                dr.tap(650, 250)
+                time.sleep(1)
+                #选择相册
+                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.uc.module.barcode:id/button_local")).click()
+                time.sleep(1)
+                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_name("文件管理")).click()
+                time.sleep(1)
+                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_name("1")).click()
+                time.sleep(1)
+                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_name("二维码.jpg")).click()
+                time.sleep(60)
+                dr.tap(350, 1070)
+                time.sleep(1)
+                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_name("立即下载")).click()
+                time.sleep(1)
+                try:
+                    WebDriverWait(dr, 300).until(lambda d: d.find_element_by_name("放弃")).click()
+                    time.sleep(1)
+                except TimeoutError:
+                    pass
+                try:
+                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("确定")).click()
+                    time.sleep(1)
+                except TimeoutError:
+                    pass
+                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("安装")).click()
+                time.sleep(1)
+                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_name("完成")).click()
+                time.sleep(1)
+                self.endstime = "结束:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
+                time.sleep(2)
+                try:
+                    with open('/sdcard/1/down_miguyuedu.log', 'a') as f:
+                        f.write('\n激活 %s.%s, %s, %s, count:%s' % (time.localtime().tm_mon, time.localtime().tm_mday, self.begintime, self.endstime, self.runnum))
+                except:
+                    pass
+                time.sleep(3)
+                self.runnum += 1
             except Exception as e:
                 print("somting wrong")
                 print(e)

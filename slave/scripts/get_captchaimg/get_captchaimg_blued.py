@@ -16,7 +16,7 @@ def getcaptchaim(imgfile, captchafile, box):
 
 if __name__ == '__main__':
     #QQ动漫
-    box = (230, 174, 490, 280)
+    box = (46, 495, 224, 599)
     getcaptchaim("/sdcard/screenshot.png", "/sdcard/captcha.png", box)
 
 

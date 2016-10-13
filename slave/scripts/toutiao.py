@@ -13,13 +13,14 @@ import random
 from datetime import datetime
 from multiprocessing import Process
 from machines.machineVPN import MachineVPN
+# from machines.machineWujiVPN import MachineVPN
 # from machines.machine008 import Machine008
 from machines.machineXposeHook import MachineXHook as Machine008
 from appium4droid import webdriver
 from bootstrap import setup_boostrap
 from TotalMachine import WorkMachine
 from appium4droid.support.ui import WebDriverWait
-from machines.machineLianwuji import Machinex, Machinex2
+from machines.machineToutiao import Machinex, Machinex2
 from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
@@ -40,7 +41,7 @@ class TotalMachine(WorkMachine):
         self.runnum = 0
         self.machine008 = Machine008(dr)
         self.machine008.task_schedule = ["record_file", "clear_data", "modify_data"]    # 007 task list
-        self.machine1 = Machinex(dr, "ailezan", "api-4tuoz9od", "meiriq2014")       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
+        self.machine1 = Machinex(dr)       # feima/yama/yima/ailezan/shenhua            api-a3t06fpx/api-4tuoz9od
         self.machine2 = Machinex2(dr)
         # self.machinelocation = MachineLocation(dr, "")
 
@@ -81,6 +82,7 @@ class TotalMachine(WorkMachine):
                     self.runnum = 0
                 MachineVPN(dr).run()
                 m008.run()
+                #定位
                 # mlocation.run()
                 #周末控制效率
                 # if m008.remain_day == '1' and (time.localtime().tm_wday == 5 or time.localtime().tm_wday == 6):

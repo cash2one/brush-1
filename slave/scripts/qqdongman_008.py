@@ -11,7 +11,8 @@ import time
 import re
 from datetime import datetime
 from multiprocessing import Process
-from machines.machineVPN import MachineVPN
+# from machines.machineVPN import MachineVPN
+from machines.machineWujiVPN import MachineVPN
 from machines.machinenew008 import Machine008
 from appium4droid import webdriver
 from bootstrap import setup_boostrap
@@ -22,10 +23,11 @@ from machines.StateMachine import Machine
 from sock.socksend import send_file
 # from machines.machineLocation import MachineLocation
 try:
-    from util import replace_wifi, removefile
+    from util import replace_wifi, removefile, reset_wifi
 except ImportError:
     replace_wifi = lambda: 1
     removefile = lambda: 1
+    reset_wifi = lambda : 1
 
 class TotalMachine(WorkMachine):
     def load_task_info(self):
@@ -36,7 +38,7 @@ class TotalMachine(WorkMachine):
        #  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
        #   13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0]
         self.st = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                   0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.runnum = 0         #计数器
         self.machine008 = Machine008(dr)
         self.machine008.task_schedule = ["do_all_one_key", "modify_data"]
@@ -80,14 +82,7 @@ class TotalMachine(WorkMachine):
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
-                #无极VPN
-                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("无极VPN")).click()
-                time.sleep(1)
-                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("org.wuji:id/exit_vpn")).click()
-                time.sleep(5)
-                dr.press_keycode(3)
-                time.sleep(1)
-                # MachineVPN(dr).run()
+                MachineVPN(dr).run()
                 #留存率设置
                 m008.remain_rate = [50, 45, 40, 35, 30, 25, 20, 15, 10, 5,
                                     5, 5, 5, 5, 5, 5, 5, 5, 5, 5,

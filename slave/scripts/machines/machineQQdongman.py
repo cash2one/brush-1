@@ -56,7 +56,7 @@ class Machinex(Machine):
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/rel_main")).click()
         #注册率
         sign_rate = random.randint(1, 10000)
-        if sign_rate <= 0000:
+        if sign_rate <= 1000:
             WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tab_icon_center")).click()
             time.sleep(1)
             WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_setting")).click()
@@ -67,26 +67,57 @@ class Machinex(Machine):
 
     def signup(self):
         dr = self.driver
-        try:
-            with open('/sdcard/1/user%s.log' % self.appname_en, 'r') as f:
-                selectuser = f.read()
-        except:
-            with open('D:/brush/slave/scripts/doc/user%s.log' % self.appname_en, 'r') as f:
-                selectuser = f.read()
-        user = re.search(r'imei:%s,(\d+)' % self.imei, selectuser)
-        pwd = re.search(r'imei:%s,\d+,([0-9a-z]+)' % self.imei, selectuser)
         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/container_header")).click()
         time.sleep(1)
-        edit = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
-        edit[0].send_keys(str(user.group(1)))
-        time.sleep(1)
-        edit[1].send_keys(str(pwd.group(1)))
-        time.sleep(1)
-        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/btnSubmit")).click()
+        #QQ登录
+        try:
+            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/qq_login")).click()
+            time.sleep(1)
+        except TimeoutException:
+            pass
+        #进入QQ登录界面
+        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.tencent.mobileqq:id/name"))
         time.sleep(1)
         try:
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/ivVerifyCode"))
+            with open('/sdcard/1/qq.txt', 'r', encoding='utf-8') as f:
+                tfile = "/sdcard/1/qq.txt"
+                strqq = f.read()
+        except:
+            with open('D:/brush/slave/scripts/doc/qq.txt', 'r', encoding='utf-8') as f:
+                tfile = "D:/brush/slave/scripts/doc/qq.txt"
+                strqq = f.read()
+        match = re.search(r'notuse,(\d+,[0-9a-zA-Z\_\@]+)', strqq)
+        if match:
+            self.phone = re.search(r'notuse,(\d+)', match.group(0)).group(1)
+            self.pwd = re.search(r'notuse,\d+,([0-9a-zA-Z\_\@]+)', match.group(0)).group(1)
+            #修改标志QQ已使用
+            try:
+                lines = open(tfile, 'r').readlines()
+                flen = len(lines)
+                for i in range(flen):
+                    if match.group(0) in lines[i]:
+                        lines[i] = lines[i].replace(match.group(0), 'use,' + match.group(1))
+                        break
+                open(tfile, 'w').writelines(lines)
+                print("ok")
+            except Exception as e:
+                print(e)
+        else:
+            dr.press_keycode(4)
             time.sleep(1)
+            dr.press_keycode(4)
+            time.sleep(1)
+            return self.do
+        edit = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
+        edit[0].send_keys(self.phone)
+        time.sleep(1)
+        edit[1].send_keys(self.pwd)
+        time.sleep(1)
+        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("登 录")).click()
+        time.sleep(5)
+        try:
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("看不清？换一张"))
+            time.sleep(5)
             screenshot("/sdcard/screenshot.png")
             run_qpy2_script("get_captchaimg_qqdongman.py")
             imgcaptcha = self.uuwise()
@@ -99,13 +130,25 @@ class Machinex(Machine):
                 dr.press_keycode(4)
                 time.sleep(1)
                 return self.signup
-            edts = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
-            edts[2].send_keys(imgcaptcha)
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/btnSubmit")).click()
+            dr.press_keycode(4)
+            time.sleep(5)
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("登 录")).click()
+            time.sleep(1)
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("看不清？换一张"))
+            time.sleep(1)
+            edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
+            edts.send_keys(imgcaptcha)
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.tencent.mobileqq:id/ivTitleBtnRightText")).click()
             time.sleep(5)
         except TimeoutException:
             pass
-        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tab_icon_recommend"))
+        #允许登录
+        try:
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.tencent.mobileqq:id/name")).click()
+            time.sleep(1)
+        except TimeoutException:
+            pass
+        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tab_icon_recommend"))
         time.sleep(1)
         #记录帐号密码
         try:
@@ -164,44 +207,53 @@ class Machinex(Machine):
             WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("分类")).click()
             time.sleep(1)
             #选择分类
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
+            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 1), 2, 5)
             self.select_one_by_id(choice(["com.qq.ac.android:id/class_img_left", "com.qq.ac.android:id/class_img_right"]))
             time.sleep(5)
             #选择动漫
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
-            try:
-                self.select_one_by_id("com.qq.ac.android:id/top_title", find_time=5)
-                time.sleep(5)
-                #开始阅读
-                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tv_start_read")).click()
-                time.sleep(5)
-                #初次阅读教程
+            for i in range(random.randint(2, 4)):
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
                 try:
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_comment")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more_list")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_download")).click()
-                    time.sleep(1)
-                except TimeoutException:
-                    pass
-                for x in range(random.randint(10, 15)):
-                    dr.swipe(300, random.randint(800, 1000), 300, random.randint(400, 600))
-                    time.sleep(random.randint(5, 10))
-                dr.press_keycode(4)
-                time.sleep(1)
-                #收藏
-                if random.randint(0, 9) == 0:
+                    self.select_one_by_id("com.qq.ac.android:id/top_title", find_time=5)
+                    time.sleep(5)
+                    #开始阅读
+                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tv_start_read")).click()
+                    time.sleep(5)
+                    #初次阅读教程
                     try:
-                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/lin_favorite")).click()
+                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_comment")).click()
+                        time.sleep(1)
+                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more")).click()
+                        time.sleep(1)
+                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more_list")).click()
+                        time.sleep(1)
+                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_download")).click()
                         time.sleep(1)
                     except TimeoutException:
                         pass
-            except TimeoutException:
-                self.select_one_by_id("com.qq.ac.android:id/animation_cover", find_time=5)
-                time.sleep(random.randint(60, 120))
+                    for x in range(random.randint(10, 15)):
+                        dr.swipe(300, random.randint(800, 1000), 300, random.randint(400, 600))
+                        time.sleep(random.randint(2, 5))
+                    dr.press_keycode(4)
+                    time.sleep(1)
+                    try:
+                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/btn_cancel")).click()
+                        time.sleep(1)
+                    except TimeoutException:
+                        pass
+                    #收藏
+                    if random.randint(0, 9) == 0:
+                        try:
+                            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/lin_favorite")).click()
+                            time.sleep(1)
+                        except TimeoutException:
+                            pass
+                except TimeoutException:
+                    self.select_one_by_id("com.qq.ac.android:id/animation_cover", find_time=5)
+                    time.sleep(random.randint(120, 180))
+                    break
+                dr.press_keycode(4)
+                time.sleep(1)
             dr.press_keycode(4)
             time.sleep(1)
             dr.press_keycode(4)
@@ -291,6 +343,16 @@ class Machinex(Machine):
                 time.sleep(1)
             except TimeoutException:
                 pass
+            if random.randint(0, 1):
+                try:
+                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("签到")).click()
+                    time.sleep(5)
+                    dr.tap(360, 1000)
+                    time.sleep(5)
+                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/btn_actionbar_back")).click()
+                    time.sleep(1)
+                except TimeoutException:
+                    pass
             self.ismenu4 = False
         except Exception as e:
             print("error in menu4")
@@ -574,40 +636,49 @@ class Machinex2(Machine):
             self.select_one_by_id(choice(["com.qq.ac.android:id/class_img_left", "com.qq.ac.android:id/class_img_right"]))
             time.sleep(5)
             #选择动漫
-            self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
-            try:
-                self.select_one_by_id("com.qq.ac.android:id/top_title", find_time=5)
-                time.sleep(5)
-                #开始阅读
-                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tv_start_read")).click()
-                time.sleep(5)
-                #初次阅读教程
+            for i in range(random.randint(1, 2)):
+                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 1), 2, 5)
                 try:
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_comment")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more_list")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_download")).click()
-                    time.sleep(1)
-                except TimeoutException:
-                    pass
-                for x in range(random.randint(10, 15)):
-                    dr.swipe(300, random.randint(800, 1000), 300, random.randint(400, 600))
-                    time.sleep(random.randint(5, 10))
-                dr.press_keycode(4)
-                time.sleep(1)
-                #收藏
-                if random.randint(0, 9) == 0:
+                    self.select_one_by_id("com.qq.ac.android:id/top_title", find_time=5)
+                    time.sleep(5)
+                    #开始阅读
+                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tv_start_read")).click()
+                    time.sleep(5)
+                    #初次阅读教程
                     try:
-                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/lin_favorite")).click()
+                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_comment")).click()
+                        time.sleep(1)
+                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more")).click()
+                        time.sleep(1)
+                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more_list")).click()
+                        time.sleep(1)
+                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_download")).click()
                         time.sleep(1)
                     except TimeoutException:
                         pass
-            except TimeoutException:
-                self.select_one_by_id("com.qq.ac.android:id/animation_cover", find_time=5)
-                time.sleep(random.randint(60, 120))
+                    for x in range(random.randint(10, 15)):
+                        dr.swipe(300, random.randint(800, 1000), 300, random.randint(400, 600))
+                        time.sleep(random.randint(5, 10))
+                    dr.press_keycode(4)
+                    time.sleep(1)
+                    try:
+                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/btn_cancel")).click()
+                        time.sleep(1)
+                    except TimeoutException:
+                        pass
+                    #收藏
+                    if random.randint(0, 9) == 0:
+                        try:
+                            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/lin_favorite")).click()
+                            time.sleep(1)
+                        except TimeoutException:
+                            pass
+                except TimeoutException:
+                    self.select_one_by_id("com.qq.ac.android:id/animation_cover", find_time=5)
+                    time.sleep(random.randint(60, 120))
+                    break
+                dr.press_keycode(4)
+                time.sleep(1)
             dr.press_keycode(4)
             time.sleep(1)
             dr.press_keycode(4)
@@ -697,6 +768,16 @@ class Machinex2(Machine):
                 time.sleep(1)
             except TimeoutException:
                 pass
+            if random.randint(0, 1):
+                try:
+                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("签到")).click()
+                    time.sleep(5)
+                    dr.tap(360, 1000)
+                    time.sleep(5)
+                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/btn_actionbar_back")).click()
+                    time.sleep(1)
+                except TimeoutException:
+                    pass
             self.ismenu4 = False
         except Exception as e:
             print("error in menu4")

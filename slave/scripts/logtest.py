@@ -396,24 +396,25 @@
 #     logger.info("手势密码设置完毕");
 # }
 
-#########################日期##########################################################################
 
+#########################日期##########################################################################
 # import time
 # time.strftime('%Y%m%d')
 # 获取了当前时间的年月日
 
 # 获取昨天的时间datetime
 
-import datetime
+# import datetime
 # now_time = datetime.datetime.now()
 # yes_time = now_time + datetime.timedelta(days=-1)
 # a = yes_time.strftime('%h-%m-%s')
 
-begin_time = datetime.datetime.now()
-end_time = datetime.datetime.now()
-end_time2 = begin_time + datetime.timedelta(hours=8, minutes=45)
-end_time3 = begin_time + datetime.timedelta(hours=8, minutes=46)
-a = (end_time - begin_time).seconds
+# begin_time = datetime.datetime.now()
+# end_time = datetime.datetime.now()
+# end_time2 = begin_time + datetime.timedelta(hours=8, minutes=45)
+# end_time3 = begin_time + datetime.timedelta(hours=8, minutes=46)
+# a = (end_time - begin_time).seconds
+
 
 #########################图片验证码##########################################################################
 # from PIL import Image
@@ -431,6 +432,7 @@ a = (end_time - begin_time).seconds
 # vcode = pytesseract.image_to_string(image)
 #
 # print(vcode)
+
 
 #########################文件移动##########################################################################
 # import androidhelper
@@ -460,12 +462,14 @@ a = (end_time - begin_time).seconds
 # copyfile("sdcard/com.huajiao/", "data/data/")
 # time.sleep(2)
 
+
 #########################服务器##########################################################################
 
 # from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 # import requests
 # r = requests.get('http://m008.meiriq.com/phone')
 # r.json()
+
 
 #########################文件数量统计##########################################################################
 # import os
@@ -478,19 +482,92 @@ a = (end_time - begin_time).seconds
 #         count = count + fileLength
 #
 # print("File number is: %d" % count)
-try:
-    from util import find_file_num
-except ImportError:
-    find_file_num = lambda: 1
+# try:
+#     from util import find_file_num
+# except ImportError:
+#     find_file_num = lambda: 1
+#
+# a = find_file_num("/sdcard/1/1touxiang")
+# print(a)
 
-a = find_file_num("/sdcard/1/1touxiang")
-print(a)
+
+#########################修改文本内容##########################################################################
+# try:
+#     with open('/sdcard/1/qq.txt', 'r', encoding='utf-8') as f:
+#         tfile = "/sdcard/1/qq.txt"
+#         strqq = f.read()
+# except:
+#     with open('D:/brush/slave/scripts/doc/qq.txt', 'r', encoding='utf-8') as f:
+#         tfile = "D:/brush/slave/scripts/doc/qq.txt"
+#         strqq = f.read()
+# match = re.search(r'notuse,(\d+,[0-9a-zA-Z\_\@]+)', strqq)
+# if match:
+#     user = re.search(r'notuse,(\d+)', match.group(0))
+#     pwd = re.search(r'notuse,\d+,([0-9a-zA-Z\_\@]+)', match.group(0))
+#     try:
+#         lines = open(tfile, 'r').readlines()
+#         flen = len(lines)
+#         for i in range(flen):
+#             if match.group(0) in lines[i]:
+#                 lines[i] = lines[i].replace(match.group(0), 'use,' + match.group(1))
+#                 break
+#         open(tfile, 'w').writelines(lines)
+#         print("ok")
+#     except Exception as e:
+#         print(e)
+# print(user.group(1))
+# print(pwd.group(1))
+# modify_txt("D:/brush/slave/scripts/doc/useranjuke2.log", a.group(0), 'use,' + a.group(1))
+
+
 #########################文件数量统计##########################################################################
+# class FoundException(Exception):
+#     pass
+# class aException(Exception):
+#     pass
+#
+# try:
+#     for i in range(5):
+#         for j in range(5):
+#             for k in range(5):
+#                 print("i=%s, j=%s, k=%s" % (i, j, k))
+#                 if i == 4 and j == 2 and k == 2:
+#                     raise FoundException()
+#                 if i == 2 and j == 2 and k == 2:
+#                     raise aException()
+# except FoundException:
+#     print("exit")
+# except aException:
+#     print("b")
+# else:
+#     print ('not found')
+#########################IP地址##########################################################################
+import requests
+import re
+import os
+WEB_URL = 'http://ip.chinaz.com/getip.aspx'
+# http://www.net.cn/static/customercare/yourip.asp
+
+r = requests.get(WEB_URL)
+print(r.text)
+regrex = r'ip:\'([0-9\.]+)\''
+match = re.search(r'ip:\'(.+)\'\,address:\'(.+)\'', r.text)
+if match:
+    print(match.group(1))
+    print(match.group(2))
+    ip = match.group(1)
+    addr = match.group(2)
+    if os.path.exists("/sdcard/1/ip.log"):
+        with open('/sdcard/1/ip.log', 'a') as f:
+            f.write('\n%s  %s' % (ip, addr))
 
 
-
-
-
+#########################获取手机信息##########################################################################
+# from uiautomator import Device ,AutomatorServer,Adb
+#
+# d = Device('设备的名称')        //用adb devices获取
+# d.info
+# d.dump('111.xml') //生产的文件名称
 
 
 

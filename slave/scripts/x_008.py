@@ -12,6 +12,7 @@ import re
 from datetime import datetime
 from multiprocessing import Process
 from machines.machineVPN import MachineVPN
+# from machines.machineWujiVPN import MachineVPN
 from machines.machinenew008 import Machine008
 from appium4droid import webdriver
 from bootstrap import setup_boostrap
@@ -80,14 +81,7 @@ class TotalMachine(WorkMachine):
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
-                #无极VPN
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("无极VPN")).click()
-                # time.sleep(1)
-                # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("org.wuji:id/exit_vpn")).click()
-                # time.sleep(5)
-                # dr.press_keycode(3)
-                # time.sleep(1)
-                # MachineVPN(dr).run()
+                MachineVPN(dr).run()
                 #留存率设置
                 m008.remain_rate = [50, 45, 40, 35, 30, 25, 20, 15, 10, 5,
                                     5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
@@ -103,6 +97,7 @@ class TotalMachine(WorkMachine):
                 # m008.begin_time_month = 9
                 # m008.begin_time_day = 29
                 m008.run()
+                #定位
                 # mlocation.run()
                 if m008.frist_day == 1:
                     print("激活")
