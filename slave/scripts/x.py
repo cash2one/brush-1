@@ -83,6 +83,8 @@ class TotalMachine(WorkMachine):
                 # MachineVPN(dr).run()
                 m008.run()
                 #定位
+                # mlocation.latnum = random.randint(35, 37)+random.randint(50000, 450000)/1000000
+                # mlocation.lotnum = random.randint(116, 118)+random.randint(300000, 350000)/1000000
                 # mlocation.run()
                 #周末控制效率
                 # if m008.remain_day == '1' and (time.localtime().tm_wday == 5 or time.localtime().tm_wday == 6):

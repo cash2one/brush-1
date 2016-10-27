@@ -1,0 +1,2 @@
+python Installer.py
+pause.

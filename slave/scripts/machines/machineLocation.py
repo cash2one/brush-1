@@ -7,11 +7,13 @@ from appium4droid.support.ui import WebDriverWait
 import random
 
 class MachineLocation(Machine):
-    def __init__(self, driver, appname):
+    def __init__(self, driver, appname, latnum=None, lotnum=None):
         super(MachineLocation, self).__init__(self.enter_location)
         self.driver = driver
         self.appname = appname
         self.reenter_num = 0
+        self.latnum = latnum
+        self.lotnum = lotnum
 
     def enter_location(self):
         dr = self.driver
@@ -53,7 +55,7 @@ class MachineLocation(Machine):
                 dr.press_keycode(67)
             if lat.text == "":
                 break
-        lat.send_keys(random.randint(27, 38)+random.randint(0, 1000000)/1000000)
+        lat.send_keys(self.latnum)
         time.sleep(0.5)
 
         #输入纬度
@@ -67,7 +69,7 @@ class MachineLocation(Machine):
                 dr.press_keycode(67)
             if lot.text == "":
                 break
-        lot.send_keys(random.randint(107, 117)+random.randint(0, 1000000)/1000000)
+        lot.send_keys(self.lotnum)
         time.sleep(1)
         #即时更新
         dr.find_element_by_id("com.rong.xposed.fakelocation:id/chk_instant_update").click()

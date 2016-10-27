@@ -182,7 +182,9 @@ class Machinex(Machine):
         time.sleep(1)
         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("1touxiang")).click()
         time.sleep(1)
-        self.swipes(300, random.randint(800, 1000), 300, random.randint(300, 500), random.randint(0, 80))
+        for i in range(random.randint(0, 80)):
+            dr.swipe(300, random.randint(800, 1000), 300, random.randint(300, 600))
+            time.sleep(1)
         time.sleep(5)
         self.select_one_by_id("com.android.fileexplorer:id/file_image")
         time.sleep(1)
@@ -347,14 +349,12 @@ class Machinex(Machine):
         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("UUWiseDemo")).click()
         time.sleep(1)
         try:
-            btlogin = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/btn_login"))
-        except TimeoutException:
-            self.try_count += 1
-            if self.try_count > 5:
-                return self.exit
+            dr.find_element_by_name("查分")
             dr.press_keycode(4)
             time.sleep(1)
-            return self.uuwise
+        except NoSuchElementException:
+            pass
+        btlogin = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/btn_login"))
         edtsuser = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/et_loginname"))
         edtspwd = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/et_loginpwd"))
         uuuser = 'xiaoxiaozhuan'

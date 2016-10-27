@@ -542,32 +542,122 @@
 # else:
 #     print ('not found')
 #########################IP地址##########################################################################
-import requests
-import re
-import os
-WEB_URL = 'http://ip.chinaz.com/getip.aspx'
-# http://www.net.cn/static/customercare/yourip.asp
-
-r = requests.get(WEB_URL)
-print(r.text)
-regrex = r'ip:\'([0-9\.]+)\''
-match = re.search(r'ip:\'(.+)\'\,address:\'(.+)\'', r.text)
-if match:
-    print(match.group(1))
-    print(match.group(2))
-    ip = match.group(1)
-    addr = match.group(2)
-    if os.path.exists("/sdcard/1/ip.log"):
-        with open('/sdcard/1/ip.log', 'a') as f:
-            f.write('\n%s  %s' % (ip, addr))
-
-
-#########################获取手机信息##########################################################################
-# from uiautomator import Device ,AutomatorServer,Adb
+# import requests
+# import re
+# import os
+# WEB_URL = 'http://ip.chinaz.com/getip.aspx'
+# # http://www.net.cn/static/customercare/yourip.asp
 #
-# d = Device('设备的名称')        //用adb devices获取
-# d.info
-# d.dump('111.xml') //生产的文件名称
+# r = requests.get(WEB_URL)
+# print(r.text)
+# regrex = r'ip:\'([0-9\.]+)\''
+# match = re.search(r'ip:\'(.+)\'\,address:\'(.+)\'', r.text)
+# if match:
+#     print(match.group(1))
+#     print(match.group(2))
+#     ip = match.group(1)
+#     addr = match.group(2)
+#     if os.path.exists("/sdcard/1/ip.log"):
+#         with open('/sdcard/1/ip.log', 'a') as f:
+#             f.write('\n%s  %s' % (ip, addr))
+
+
+#########################文本去重##########################################################################
+# obuff = []
+# for ln in open('D:/brush/slave/scripts/doc/gongsi.txt', encoding='utf-8'):
+#     if ln in obuff:
+#         continue
+#     obuff.append(ln)
+# with open('D:/brush/slave/scripts/doc/gongsi2.txt', 'w', encoding='utf-8') as handle:
+#     handle.writelines(obuff)
+
+#########################xpath##########################################################################
+
+# from appium4droid import webdriver
+# dr = webdriver.Remote()
+# imei = dr.find_element_by_xpath("//android.widget.LinearLayout[@resource-id='com.meiriq.xposehook:id/til_device_id']/android.widget.EditText")
+# print("imei:" + imei.text)
+
+#########################修改QQ##########################################################################
+# import time
+# import re
+# with open('D:/brush/slave/scripts/doc/qq.txt', 'r', encoding='utf-8') as f:
+#     tfile = "D:/brush/slave/scripts/doc/qq.txt"
+#     strqq = f.read()
+# modify = "use,13108706974,92ar5j (time 10.25  11:15:23)"
+# #修改标志QQ使用失败
+# try:
+#     lines = open(tfile, 'r').readlines()
+#     flen = len(lines)
+#     for i in range(flen):
+#         if modify in lines[i]:
+#             lines[i] = lines[i].replace(modify, modify + ',false')
+#             break
+#     open(tfile, 'w').writelines(lines)
+#     print("ok")
+# except Exception as e:
+#     print(e)
+
+#########################提取文档内容##########################################################################
+# import re
+# with open("D:/brush/slave/scripts/doc/ailezan.txt", 'r', encoding='utf-8') as f:
+#     a = f.read()
+# regrex = r'山东24小时----([0-9]+)'
+# match = re.findall(regrex, a)
+# if match:
+#     print(match)
+#     with open("D:/brush/slave/scripts/doc/211.txt", 'a', encoding='utf-8') as f:
+#         for x in match:
+#             f.write(x+'\n')
+
+#########################手机号码归属地##########################################################################
+# import re
+# import requests
+# a = ['15552692074']
+# for phone in a:
+#     print(phone)
+#     WEB_URL = 'http://www.ip138.com:8080/search.asp?mobile=%s&action=mobile' %phone
+#     # WEB_URL = 'http://haoma.baidu.com/search?m=%s&mobile=%s' % (phone, phone)
+#     r = requests.get(WEB_URL)  # 发送请求
+#     # print(r.text.encode('utf-8'))
+#     with open("D:/brush/slave/scripts/doc/pachong.txt", 'w', encoding='utf-8') as fd:
+#         fd.write(r.text)
+    # r.text
+    ######################################################################
+    # regrex = r'target="_blank">(.{1,100}) </a></span>'
+    # match = re.findall(regrex, r.text)
+    # if match:
+    #     print(match)
+    #     with open("D:/brush/slave/scripts/doc/gongsi.txt", 'a', encoding='utf-8') as f:
+    #         for x in match:
+    #             f.write(x+'\n')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

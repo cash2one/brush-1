@@ -1,3 +1,125 @@
-<html><body><h1>500 Server Error</h1>
-An internal server error occured.
-</body></html>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<meta http-equiv="content-type" content="text/html; charset=gb2312">
+<meta http-equiv="mobile-agent" content="format=html5; url=http://m.ip138.com/mobile.html"/>
+<TITLE>¡¾IP138¡¿¡ª 138²é£¡ http://www.IP138.Com/</TITLE>
+<META content="IP138,IPµØÖ·²éÑ¯,ÊÖ»úºÅÂë¹éÊôµØ,ÓÊÕþ±àÂë,³¤Í¾µç»°ÇøºÅ,Éí·ÝÖ¤ºÅÂëÑéÖ¤×¨Òµ²éÑ¯Íø" name="description">
+<META content="IP138,IPµØÖ·²éÑ¯,ÊÖ»úºÅÂë¹éÊôµØ,ÓÊÕþ±àÂë,³¤Í¾µç»°ÇøºÅ,Éí·ÝÖ¤ºÅÂëÑéÖ¤²éÑ¯,ÓòÃû²éÑ¯,whois²éÑ¯" name="keywords">
+<STYLE type=text/css>A:link {
+	COLOR: #1c5f82; TEXT-DECORATION: none
+}
+A:visited {
+	COLOR: #1c5f82; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: #cc5533; TEXT-DECORATION: underline
+}
+A.red:link {
+	COLOR: #ff0000; TEXT-DECORATION: none
+}
+A.red:visited {
+	COLOR: #ff0000; TEXT-DECORATION: none
+}
+A.red:hover {
+	COLOR: #ff0000; TEXT-DECORATION: underline
+}
+.subt {
+	COLOR: #aa3333; FONT-FAMILY: "ËÎÌå"; FONT-SIZE: 9pt
+}
+.tdc {
+	COLOR: #333333; FONT-FAMILY: "ËÎÌå"; FONT-SIZE: 9pt
+}
+.tdc1 {
+	COLOR: #ffffff; FONT-FAMILY: "ËÎÌå"; FONT-SIZE: 9pt
+}
+.tdc2 {
+	COLOR: #008000; FONT-FAMILY: "ËÎÌå"; FONT-SIZE: 9pt
+}
+.bdtj {
+	BACKGROUND: #6699cc; BORDER-BOTTOM: #6699cc 1px solid; BORDER-LEFT: #6699cc 1px solid; BORDER-RIGHT: #6699cc 1px solid; BORDER-TOP: #6699cc 1px solid; COLOR: #ffffff; FONT-SIZE: 9pt; HEIGHT: 18px
+}
+BODY {
+	SCROLLBAR-HIGHLIGHT-COLOR: #f7f7f7; SCROLLBAR-SHADOW-COLOR: #f7f7f7; SCROLLBAR-ARROW-COLOR: #EFF1F3; SCROLLBAR-TRACK-COLOR: #EFF1F3; SCROLLBAR-BASE-COLOR: #f7f7f7
+}
+</STYLE>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+	function resizeMe(){
+		window.focus();
+	}
+//-->
+</script>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function checkMobile(){
+	var sMobile = document.mobileform.mobile.value
+	if(!(/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(sMobile))){
+		alert("²»ÊÇÍêÕûµÄ11Î»ÊÖ»úºÅ»òÕßÕýÈ·µÄÊÖ»úºÅÇ°ÆßÎ»");
+		document.mobileform.mobile.focus();
+		return false;
+	}
+}
+
+//-->
+</SCRIPT>
+</HEAD>
+<BODY leftmargin="1" topmargin="1" onload="javascript:resizeMe()">
+<CENTER><a href="http://www.ip138.com" target="_blank"><FONT class=tdc>ÊÖ»úºÅÂë¹éÊôµØ×¨ÒµÔÚÏß²éÑ¯Íø</FONT></a>
+</CENTER>
+<HR SIZE=1 width=320>
+<TABLE width="360" border=1 align="center" cellPadding=4 borderColor=#3366cc style="BORDER-COLLAPSE: collapse">
+	<FORM action="" method="get" name="mobileform" onsubmit="return checkMobile();">
+	<TR bgColor=#eff1f3 class=tdc>
+		<TD align=middle width=130 noswap>ÊÖ»úºÅÂë(¶Î) </TD>
+		<TD align=middle width=*><INPUT class=tdc name="mobile" maxLength="11">
+		<INPUT name="action" type="hidden" value="mobile">&nbsp;<INPUT class="bdtj" type="submit" value="²é Ñ¯">
+		</TD>
+	</TR>
+	</FORM>
+</TABLE>
+<BR>
+
+<TABLE width="360" border="1" align="center" cellpadding="4" bordercolor=#3366cc style="border-collapse: collapse">
+	<TR>
+		<TD colspan=2 class=tdc1 align=center height=24 bgcolor=#6699cc>++ ip138.com²éÑ¯½á¹û ++</TD>
+	</TR>
+	<TR class=tdc bgcolor=#EFF1F3>
+		<TD width="138" align="center" noswap>Äú²éÑ¯µÄÊÖ»úºÅÂë¶Î</TD>
+		<TD width=* align="center" class=tdc2>15552692074 <a href="http://jx.ip138.com/15552692074/" target="_blank">²â¼ªÐ×(<font color="red">ÐÂ</font>)</a></TD>
+	</TR>
+	<TR class=tdc bgcolor=#EFF1F3>
+		<TD width="138" align="center" noswap>¿¨ºÅ¹éÊôµØ</TD>
+		<TD width=* align="center" class=tdc2>É½¶«&nbsp;×Í²©ÊÐ</TD>
+	</TR>
+	<TR class=tdc bgcolor=#EFF1F3>
+		<TD width="138" align="center" noswap>¿¨&nbsp;Àà&nbsp;ÐÍ</TD>
+		<TD width=* align="center" class=tdc2>É½¶«ÁªÍ¨GSM¿¨</TD>
+	</TR>
+	<TR class=tdc bgcolor=#EFF1F3>
+		<TD align="center">Çø ºÅ</TD>
+		<TD align="center" class=tdc2>0533</TD>
+	</TR>
+	<TR class=tdc bgcolor=#EFF1F3>
+		<TD align="center">ÓÊ ±à</TD>
+		<TD align="center" class=tdc2>255000 <a href="http://alexa.ip138.com/post/" target="_blank">¸üÏêÏ¸µÄ..</a></TD></TR>
+</TABLE>
+<br/>
+<div align="center">
+<script type="text/javascript">
+var cpro_id = "u2299786";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>
+
+</div>
+<p align="center">
+<a href="http://www.yy138.com/" target="_blank"><font color="#008000">Ó¦ÓÃÏÂÔØ</font></a>.<a href="http://game.3533.com/game/" target="_blank"><strong><font color="#008000">ÊÖ»úÓÎÏ·</font></strong></a>.<a href="http://game.3533.com/bizhi/" target="_blank"><font color="#008000">ÊÖ»ú±ÚÖ½</font></a>.<a href="http://www.haolingsheng.com/" target="_blank"><font color="#008000">ÊÖ»úÁåÉù</font></a>.<a href="http://game.3533.com/ruanjian/" target="_blank"><font color="#008000">ÊÖ»úÈí¼þ</font></a>
+</p>
+<p align="center"><a href="http://qq.3533.com:8080/book.asp?siteid=9&no=15552692074" rel="nofollow" target="_blank">Èç·¢ÏÖÊÖ»úºÅÂëËùÔÚµØÊý¾Ý²»¶Ô.Çë°´´ËÁôÑÔ.Ð»Ð»</a></p>
+
+<p align="center">ÊÖ»úWAPÉÏÍø²éÑ¯ÊÖ»úºÅµØÖ· wap.ip138.com ÓÃÊÖ»úËæÊ±¿ÉÒÔ²é</p>
+
+<p align="center"><a href="http://www.ip138.com/sjlink.htm" rel="nofollow" target="_blank">»¶Ó­¸÷ÍøÕ¾Ãâ·ÑÁ´½Ó±¾Õ¾ÊÖ»úºÅÂë²éÑ¯ÏµÍ³,»ñÈ¡´úÂë°´´Ë</a></p>
+
+<div style="display:none"><script type="text/javascript" src="http://tajs.qq.com/stats?sId=36241650" charset="UTF-8"></script></div>
+</BODY></HTML>

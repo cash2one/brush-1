@@ -16,24 +16,22 @@ except ImportError:
 
 
 class MachineXHook(Machine):
-    def __init__(self, driver, tasks=None, chanel='zy', remain_day=1):
+    def __init__(self, driver, tasks=None, remain_day=1):
         super(MachineXHook, self).__init__(self.setup_task)
         self.driver = driver
-        self.second_day = False
-        self.enter_excetption_count = 0
-        # self.task_schedule = ["uninstall_apk", "clear_data", "find_apk", "record_file", "modify_data"]
         self.task_schedule = [] if tasks is None else tasks
         self.tasks = iter([])
-        self.chanel = chanel
         self.remain_day = remain_day
         self.imei = None
         self.try_count = 0
+        self.operator_name = None     #46000中国移动/46001中国联通/46002中国移动/46003中国电信
+        self.operator_num = None
+
 
     def setup_task(self):
         tasks = []
         for task in self.task_schedule:
             try:
-
                 method = getattr(self, task)
                 tasks.append(method)
             except AttributeError:
@@ -41,12 +39,13 @@ class MachineXHook(Machine):
             self.tasks = iter(tasks)
         return self.enter_xposehook
 
+    #进入007
     def enter_xposehook(self):
         print("enter xpose hook")
         dr = self.driver
-        dr.press_keycode(3)  # back to Home
+        dr.press_keycode(3)
         time.sleep(1)
-        dr.press_keycode(3)  # back to Home
+        dr.press_keycode(3)
         time.sleep(1)
         dr.find_element_by_name("XposeHook").click()
         time.sleep(1)
@@ -58,10 +57,29 @@ class MachineXHook(Machine):
             return self.reenter
         return self.do_task
 
+    #重进007
     def reenter(self):
-        self.exit_xposehook()
+        dr = self.driver
+        xpath = "//android.view.View[@package='com.miui.home']"
+        Home = dr.find_elements_by_xpath(xpath)  # 寻找miui home界面
+        while Home == []:
+            dr.press_keycode(4)
+            time.sleep(1)
+            Home = dr.find_elements_by_xpath(xpath)  # 寻找miui home界面
         return self.enter_xposehook
 
+    #退出007
+    def exit_xposehook(self):
+        dr = self.driver
+        xpath = "//android.view.View[@package='com.miui.home']"
+        Home = dr.find_elements_by_xpath(xpath)  # 寻找miui home界面
+        while Home == []:
+            dr.press_keycode(4)
+            time.sleep(1)
+            Home = dr.find_elements_by_xpath(xpath)  # 寻找miui home界面
+        return self.exit
+
+    #开始做任务
     def do_task(self):
         try:
             method = next(self.tasks)
@@ -99,9 +117,14 @@ class MachineXHook(Machine):
         dr.find_element_by_name("查找apk").click()
         time.sleep(1)
         dr.find_element_by_class_name("android.widget.ImageView").click()
-        time.sleep(5)
-        dr.find_element_by_name("删除").click()
-        time.sleep(5)
+        time.sleep(1)
+        try:
+            WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.meiriq.xposehook:id/actv_appname")).click()
+            time.sleep(1)
+            dr.find_element_by_name("删除").click()
+            time.sleep(5)
+        except TimeoutException:
+            pass
         dr.press_keycode(4)
         time.sleep(1)
         return self.do_task
@@ -151,28 +174,18 @@ class MachineXHook(Machine):
 
     #修改数据
     def modify_data(self):
-        # chanel_map = {
-        #     'zy': 0,
-        #     'gm': 1,
-        #     'qd': 2,
-        # }
         dr = self.driver
         dr.find_element_by_name("修改数据").click()
         time.sleep(1)
         xpath = "//android.widget.Spinner/android.widget.TextView"
         spinners = dr.find_elements_by_xpath(xpath)
-        self.chanel = spinners[0].text
         self.remain_day = spinners[1].text.split(":")[1]
-        #获取imei
-        edts = dr.find_elements_by_class_name("android.widget.EditText")
-        if edts.__len__() > 6:
-            oldimei = edts[9].text
-        else:
-            oldimei = edts[0].text
-
+        #获取旧imei
+        imei_xpath = "//android.widget.LinearLayout[@resource-id='com.meiriq.xposehook:id/til_device_id']/android.widget.EditText"
+        imei = dr.find_element_by_xpath(imei_xpath)
+        oldimei = imei.text
         if self.remain_day == '1':
             dr.find_element_by_name("网络获取").click()
-            # dr.find_element_by_name("随机数据").click()
         elif self.remain_day == '0':
             dr.press_keycode(4)
             time.sleep(60)
@@ -195,20 +208,17 @@ class MachineXHook(Machine):
             time.sleep(1)
             dr.press_keycode(4)
             time.sleep(1)
-            dr.find_element_by_name("网络获取失败,退出重新调VPN")
+            raise Exception("网络获取数据失败重新开始")
         time.sleep(1)
-        #获取imei
-        edts = dr.find_elements_by_class_name("android.widget.EditText")
-        if edts.__len__() > 6:
-            self.imei = edts[9].text
-        else:
-            self.imei = edts[0].text
+        #获取新imei
+        self.imei = imei.text
         print('imei:' + self.imei)
-        # if oldimei == self.imei:
-        #     dr.press_keycode(4)
-        #     print("留存已跑完挂机300s")
-        #     time.sleep(300)
-        #     return self.modify_data
+        #检测留存是否已做完
+        if oldimei == self.imei:
+            dr.press_keycode(4)
+            print("留存已跑完挂机300s")
+            time.sleep(300)
+            raise Exception("挂机完成重新开始")
         dr.press_keycode(4)
         time.sleep(1)
         return self.do_task
@@ -220,22 +230,17 @@ class MachineXHook(Machine):
         time.sleep(1)
         xpath = "//android.widget.Spinner/android.widget.TextView"
         spinners = dr.find_elements_by_xpath(xpath)
-        self.chanel = spinners[0].text
         self.remain_day = spinners[1].text.split(":")[1]
-        #获取imei
-        edts = dr.find_elements_by_class_name("android.widget.EditText")
-        if edts.__len__() > 6:
-            oldimei = edts[9].text
-        else:
-            oldimei = edts[0].text
-
+        #获取旧imei
+        imei_xpath = "//android.widget.LinearLayout[@resource-id='com.meiriq.xposehook:id/til_device_id']/android.widget.EditText"
+        imei = dr.find_element_by_xpath(imei_xpath)
+        oldimei = imei.text
         if self.remain_day == '1':
-            # dr.find_element_by_name("网络获取").click()
             dr.find_element_by_name("随机数据").click()
         elif self.remain_day == '0':
             dr.press_keycode(4)
             time.sleep(60)
-            return self.modify_data
+            return self.modify_data_suiji
         else:
             dr.find_element_by_name("本地获取").click()
         try:
@@ -248,26 +253,22 @@ class MachineXHook(Machine):
                 time.sleep(1)
                 dr.press_keycode(4)
                 time.sleep(1)
-                return self.modify_data
+                return self.modify_data_suiji
             self.try_count = 0
             dr.press_keycode(4)
             time.sleep(1)
             dr.press_keycode(4)
             time.sleep(1)
-            dr.find_element_by_name("网络获取失败,退出重新调VPN")
+            raise Exception("随机获取数据失败重新开始")
         time.sleep(1)
-        #获取imei
-        edts = dr.find_elements_by_class_name("android.widget.EditText")
-        if edts.__len__() > 6:
-            self.imei = edts[9].text
-        else:
-            self.imei = edts[0].text
+        #获取新imei
+        self.imei = imei.text
         print('imei:' + self.imei)
-        # if oldimei == self.imei:
-        #     dr.press_keycode(4)
-        #     print("留存已跑完挂机300s")
-        #     time.sleep(300)
-        #     return self.modify_data
+        if oldimei == self.imei:
+            dr.press_keycode(4)
+            print("留存已跑完挂机300s")
+            time.sleep(300)
+            raise Exception("挂机完成重新开始")
         dr.press_keycode(4)
         time.sleep(1)
         return self.do_task
@@ -329,12 +330,9 @@ class MachineXHook(Machine):
             WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("保存")).click()
             time.sleep(1)
             #获取imei
-            edts = dr.find_elements_by_class_name("android.widget.EditText")
-            if edts.__len__() > 6:
-                self.imei = edts[9].text
-            else:
-                self.imei = edts[0].text
-
+            imei_xpath = "//android.widget.LinearLayout[@resource-id='com.meiriq.xposehook:id/til_device_id']/android.widget.EditText"
+            imei = dr.find_element_by_xpath(imei_xpath)
+            self.imei = imei.text
             print('imei:' + self.imei)
             dr.press_keycode(4)
             time.sleep(1)
@@ -350,51 +348,45 @@ class MachineXHook(Machine):
         time.sleep(2)
         dr.swipe(200, 1000, 200, 850)
         time.sleep(1)
-        edts = WebDriverWait(dr, 10).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
         #修改isim
-        oldisim = edts[3].text
-        newisim = '46003'+oldisim[5: 15]
-        for x in range(5):
-            edts[3].click()
-            for i in range(5):
-                dr.press_keycode(67)
-            if not edts[3].text:
-                edts[3].send_keys(newisim)
-                break
+        isim_xpath = "//android.widget.LinearLayout[@resource-id='com.meiriq.xposehook:id/til_isim']/android.widget.EditText"
+        edt_isim = dr.find_element_by_xpath(isim_xpath)
+        oldisim = edt_isim.text
+        newisim = self.operator_num+oldisim[5: 15]
+        edt_isim.click()
+        time.sleep(0.5)
+        dr.press_keycode(123)
+        time.sleep(0.5)
+        for i in range(40):
+            dr.press_keycode(67)
+        if not edt_isim.text:
+            edt_isim.send_keys(newisim)
         #修改运营商
-        for x in range(5):
-            edts[4].click()
-            for i in range(5):
-                dr.press_keycode(67)
-            if not edts[4].text:
-                edts[4].send_keys(46003)
-                break
+        operator_num_xpath = "//android.widget.LinearLayout[@resource-id='com.meiriq.xposehook:id/til_operator']/android.widget.EditText"
+        edt_operator_num = dr.find_element_by_xpath(operator_num_xpath)
+        edt_operator_num.click()
+        time.sleep(0.5)
+        dr.press_keycode(123)
+        time.sleep(0.5)
+        for i in range(10):
+            dr.press_keycode(67)
+        if not edt_operator_num.text:
+            edt_operator_num.send_keys(self.operator_num)
         #修改网络类型名
-        for x in range(5):
-            edts[5].click()
-            for i in range(10):
-                dr.press_keycode(67)
-            if not edts[5].text:
-                edts[5].send_keys("中国电信")
-                break
+        operator_name_xpath = "//android.widget.LinearLayout[@resource-id='com.meiriq.xposehook:id/til_net_type_name']/android.widget.EditText"
+        edt_operator_name = dr.find_element_by_xpath(operator_name_xpath)
+        edt_operator_name.click()
+        time.sleep(0.5)
+        dr.press_keycode(123)
+        time.sleep(0.5)
+        for i in range(10):
+            dr.press_keycode(67)
+        if not edt_operator_name.text:
+            edt_operator_name.send_keys(self.operator_name)
         time.sleep(1)
         dr.press_keycode(4)
         time.sleep(1)
         return self.do_task
-
-    #退出007
-    def exit_xposehook(self):
-        dr = self.driver
-        # for _ in range(5):
-        #     dr.press_keycode(4)
-        #     time.sleep(1)
-        xpath = "//android.view.View[@package='com.miui.home']"
-        Home = dr.find_elements_by_xpath(xpath)  # 寻找miui home界面
-        while Home == []:
-            dr.press_keycode(4)
-            time.sleep(1)
-            Home = dr.find_elements_by_xpath(xpath)  # 寻找miui home界面
-        return self.exit
 
 
 if __name__ == "__main__":

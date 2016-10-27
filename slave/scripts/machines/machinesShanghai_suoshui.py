@@ -458,7 +458,7 @@ class Machinex2(Machine):
                         time.sleep(1)
                     except TimeoutException:
                         pass
-                # #喜欢
+                #喜欢
                 if random.randint(0, 4) == 0:
                     try:
                         WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.shwatch.news:id/news_praise")).click()

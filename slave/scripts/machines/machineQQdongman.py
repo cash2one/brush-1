@@ -47,6 +47,11 @@ class Machinex(Machine):
         time.sleep(1)
         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.appname)).click()
         time.sleep(10)
+        #检测更新
+        try:
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/btn_cancel")).click()
+        except TimeoutException:
+            pass
         #检测已进入app
         WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/rel_main"))
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
@@ -96,13 +101,15 @@ class Machinex(Machine):
                 flen = len(lines)
                 for i in range(flen):
                     if match.group(0) in lines[i]:
-                        lines[i] = lines[i].replace(match.group(0), 'use,' + match.group(1))
+                        usetime = '(time %s.%s  %s:%s:%s)' % (time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
+                        modify = 'use,' + match.group(1) + " " + usetime
+                        lines[i] = lines[i].replace(match.group(0), modify)
                         break
                 open(tfile, 'w').writelines(lines)
-                print("ok")
             except Exception as e:
                 print(e)
         else:
+            #帐号已用完
             dr.press_keycode(4)
             time.sleep(1)
             dr.press_keycode(4)
@@ -116,7 +123,7 @@ class Machinex(Machine):
         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("登 录")).click()
         time.sleep(5)
         try:
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("看不清？换一张"))
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_name("看不清？换一张"))
             time.sleep(5)
             screenshot("/sdcard/screenshot.png")
             run_qpy2_script("get_captchaimg_qqdongman.py")
@@ -127,6 +134,8 @@ class Machinex(Machine):
                 if self.try_count > 5:
                     self.try_count = 0
                     return self.exit
+                dr.press_keycode(4)
+                time.sleep(1)
                 dr.press_keycode(4)
                 time.sleep(1)
                 return self.signup
@@ -140,25 +149,44 @@ class Machinex(Machine):
             edts.send_keys(imgcaptcha)
             WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.tencent.mobileqq:id/ivTitleBtnRightText")).click()
             time.sleep(5)
-        except TimeoutException:
-            pass
-        #允许登录
-        try:
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.tencent.mobileqq:id/name")).click()
+            #允许登录
+            # try:
+            #     WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.tencent.mobileqq:id/name")).click()
+            #     time.sleep(1)
+            # except TimeoutException:
+            #     pass
+            #注册成功页面检测
+            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tab_icon_recommend"))
+            time.sleep(1)
+            #记录帐号密码
+            try:
+                with open('/sdcard/1/user%s.log' % self.appname_en, 'a') as f:
+                    f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
+            except:
+                with open('D:/brush/slave/scripts/doc/user%s.log' % self.appname_en, 'a') as f:
+                    f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
             time.sleep(1)
         except TimeoutException:
-            pass
-        WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tab_icon_recommend"))
-        time.sleep(1)
-        #记录帐号密码
-        try:
-            with open('/sdcard/1/user%s.log' % self.appname_en, 'a') as f:
-                f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
-        except:
-            with open('D:/brush/slave/scripts/doc/user%s.log' % self.appname_en, 'a') as f:
-                f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
-        time.sleep(1)
-
+            #修改标志QQ使用失败
+            try:
+                lines = open(tfile, 'r').readlines()
+                flen = len(lines)
+                for i in range(flen):
+                    if modify in lines[i]:
+                        lines[i] = lines[i].replace(modify, modify + ',false')
+                        break
+                open(tfile, 'w').writelines(lines)
+            except Exception as e:
+                print(e)
+            self.try_count += 1
+            if self.try_count > 5:
+                self.try_count = 0
+                return self.exit
+            dr.press_keycode(4)
+            time.sleep(1)
+            dr.press_keycode(4)
+            time.sleep(1)
+            return self.signup
         return self.do
 
     def do(self):
@@ -396,14 +424,12 @@ class Machinex(Machine):
         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("UUWiseDemo")).click()
         time.sleep(1)
         try:
-            btlogin = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/btn_login"))
-        except TimeoutException:
-            self.try_count += 1
-            if self.try_count > 5:
-                return self.exit
+            dr.find_element_by_name("查分")
             dr.press_keycode(4)
             time.sleep(1)
-            return self.uuwise
+        except NoSuchElementException:
+            pass
+        btlogin = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/btn_login"))
         edtsuser = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/et_loginname"))
         edtspwd = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/et_loginpwd"))
         uuuser = 'xiaoxiaozhuan'
@@ -528,63 +554,12 @@ class Machinex2(Machine):
         # WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/rel_main"))
         self.begintime = "开始:%s:%s:%s" % (time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec)
         time.sleep(1)
-        #新开软件翻页
-        # self.swipes(600, 300, 300, 300, 3, 2, 2)
-        # WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/rel_main")).click()
+        #检测更新
+        try:
+            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/btn_cancel")).click()
+        except TimeoutException:
+            pass
         return self.do
-
-    # def login(self):
-    #     dr = self.driver
-    #     try:
-    #         with open('/sdcard/1/user%s.log' % self.appname_en, 'r') as f:
-    #             selectuser = f.read()
-    #     except:
-    #         with open('D:/brush/slave/scripts/doc/user%s.log' % self.appname_en, 'r') as f:
-    #             selectuser = f.read()
-    #     user = re.search(r'imei:%s,(\d+)' % self.imei, selectuser)
-    #     pwd = re.search(r'imei:%s,\d+,([0-9a-z]+)' % self.imei, selectuser)
-    #     if user and pwd:
-    #         WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tab_icon_center")).click()
-    #         time.sleep(1)
-    #         try:
-    #             WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_setting")).click()
-    #             time.sleep(1)
-    #         except TimeoutException:
-    #             pass
-    #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/container_header")).click()
-    #         time.sleep(1)
-    #         edit = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
-    #         edit[0].send_keys(str(user.group(1)))
-    #         time.sleep(1)
-    #         edit[1].send_keys(str(pwd.group(1)))
-    #         time.sleep(1)
-    #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/btnSubmit")).click()
-    #         time.sleep(1)
-    #         try:
-    #             WebDriverWait(dr, 30).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/ivVerifyCode"))
-    #             time.sleep(1)
-    #             screenshot("/sdcard/screenshot.png")
-    #             run_qpy2_script("get_captchaimg_qqdongman.py")
-    #             imgcaptcha = self.uuwise()
-    #             if imgcaptcha is None:
-    #                 print("getimgcaptcha failed")
-    #                 self.try_count += 1
-    #                 if self.try_count > 5:
-    #                     self.try_count = 0
-    #                     return self.exit
-    #                 dr.press_keycode(4)
-    #                 time.sleep(1)
-    #                 return self.login
-    #             edts = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_class_name("android.widget.EditText"))
-    #             edts[2].send_keys(imgcaptcha)
-    #             WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/btnSubmit")).click()
-    #             time.sleep(5)
-    #         except TimeoutException:
-    #             pass
-    #         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tab_icon_recommend"))
-    #         time.sleep(1)
-    #     time.sleep(5)
-    #     return self.do
 
     def do(self):
         dr = self.driver

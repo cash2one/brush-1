@@ -96,8 +96,12 @@ class TotalMachine(WorkMachine):
                 #添加留存从什么时候开始
                 # m008.begin_time_month = 9
                 # m008.begin_time_day = 29
+                #备份还原
+                # m008.task_schedule = ["do_all_one_key", "modify_data"]
                 m008.run()
                 #定位
+                # mlocation.latnum = random.randint(35, 37)+random.randint(50000, 450000)/1000000
+                # mlocation.lotnum = random.randint(116, 118)+random.randint(300000, 350000)/1000000
                 # mlocation.run()
                 if m008.frist_day == 1:
                     print("激活")
@@ -105,6 +109,9 @@ class TotalMachine(WorkMachine):
                     m1.runnum = self.runnum
                     m1.run()
                     self.runnum += 1
+                    #备份还原
+                    # m008.task_schedule = ["backup_app_lib"]
+                    # m008.run()
                     #控制激活量
                     # self.ctrl_new("", 100, 1800)      #filename, num, sleep_time
                 elif m008.frist_day == 2:
@@ -113,7 +120,13 @@ class TotalMachine(WorkMachine):
                 else:
                     print("留存")
                     m2.imei = m008.imei
+                    #备份还原
+                    # m008.task_schedule = ["recovery_app_lib"]
+                    # m008.run()
                     m2.run()
+                    #备份还原
+                    # m008.task_schedule = ["backup_app_lib"]
+                    # m008.run()
             except Exception as e:
                 print("somting wrong")
                 print(e)

@@ -11,19 +11,19 @@ from jiema.yimaSDK import Yima
 # code = Jiuma("xiaoxiaozhuan", "meiriq2014", 17564)
 # code = Feima("xiaoxiaozhuan", "meiriq2014", 2055)
 # code = Yama("xiaoxiaozhuan", "meiriq2014", 599)
-code = Ailezan("api-4tuoz9od", "meiriq2014", 22223)
+code = Ailezan("api-4tuoz9od", "meiriq2014", 8048)
 # code = Jima("xiaoxiaozhuan", "meiriq2014", 170)
 # code = Shenhua("xiaoxiaozhuan", "meiriq2014", 45947)
 # code = Yima("xiaoxiaozhuan", "meiriq2014", 26)
 
 code.login()
 time.sleep(1)
-phone_num = code.getPhone("13182881940")
-print("手机号码是:" + str(phone_num))
-if phone_num == "系统没有找到此号码":
-    print("没号码")
-    exit(0)
-
+phone_num = code.getPhone(locationMatching='include', locationLevel='p', location="山东")
+# print("手机号码是:" + str(phone_num))
+# if phone_num == "系统没有找到此号码":
+#     print("没号码")
+#     exit(0)
+15634877475
 time.sleep(5)
 # captcha = code.waitForMessage(r'验证码(\d+)', phone_num)
 # print("验证码是:" + str(captcha))
