@@ -24,7 +24,7 @@ class Ailezan(object):
         print("login succeed!")
         # print(self.token)
 
-    def getPhone(self, phone=None, phoneType=None, locationMatching=None, locationLevel=None, location=None):
+    def getPhone(self, phone=None, phoneType=None, locationMatching=None, locationLevel=None, location=None, vno=None):
         print("获取号码")
         params = {"action": "getPhone", "sid": self.item_id, "token": self.token}
         if phone:
@@ -37,6 +37,8 @@ class Ailezan(object):
             params["locationLevel"] = locationLevel
         if location:
             params["location"] = location
+        if vno:
+            params["vno"] = vno
         #CMCC是指移动，UNICOM是指联通，TELECOM是指电信
         res = self.session.get(AILEZAN_URL, params=params, timeout=10)
         if res.content.startswith('False'.encode()):

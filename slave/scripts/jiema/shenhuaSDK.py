@@ -24,11 +24,13 @@ class Shenhua(object):
         self.token = res.text.split('&')[0]
         print("login succeed!")
 
-    def getPhone(self, count=1, phone=None):
+    def getPhone(self, count=1, phone=None, Area=None):
         print("获取号码")
         params = {"ItemId": self.item_id, "token": self.token, "Count": count}
         if phone:
             params["Phone"] = phone
+        if Area:
+            params["Area"] = Area
         res = self.session.get(SHENHUA_URL + '/pubApi/GetPhone', params=params, timeout=10)
         if res.content.startswith('False'.encode()):
             self.raise_api_exception(res)

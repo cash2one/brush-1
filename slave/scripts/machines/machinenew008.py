@@ -30,6 +30,7 @@ class Machine008(Machine):
         self.NO_NEW_DAY = 2
         self.begin_time_month = 0
         self.begin_time_day = 0
+        self.remain_day = 14
 
     #设置任务
     def enter_toolbox(self):
@@ -300,6 +301,8 @@ class Machine008(Machine):
                     self.frist_day = 1
                     dr.press_keycode(4)  # keypress back
                     time.sleep(1)
+                    dr.press_keycode(4)  # keypress back
+                    time.sleep(1)
                     return self.modify_data
                 else:
                     self.frist_day = 2
@@ -381,6 +384,8 @@ class Machine008(Machine):
                     self.frist_day = 1
                     dr.press_keycode(4)  # keypress back
                     time.sleep(1)
+                    dr.press_keycode(4)  # keypress back
+                    time.sleep(1)
                     return self.modify_data_location
                 else:
                     self.frist_day = 2
@@ -440,10 +445,20 @@ class Machine008(Machine):
                 dr.press_keycode(4)
                 time.sleep(1)
             except Exception as e:
-                self.frist_day = 1
-                dr.press_keycode(4)  # keypress back
-                time.sleep(1)
-                return self.modify_data_suiji
+                if self.change:
+                    self.frist_day = 1
+                    dr.press_keycode(4)  # keypress back
+                    time.sleep(1)
+                    dr.press_keycode(4)  # keypress back
+                    time.sleep(1)
+                    return self.modify_data_suiji
+                else:
+                    self.frist_day = 2
+                    dr.press_keycode(4)  # keypress back
+                    time.sleep(1)
+                    dr.press_keycode(4)  # keypress back
+                    time.sleep(1)
+                    return self.exit_008()
         return self.exit
 
     #添加留存记录
@@ -455,7 +470,7 @@ class Machine008(Machine):
         for x in range(60):
             try:
                 dr.find_element_by_id("com.soft.apk008v:id/remain_item_title")
-                dr.swipe(400, 200, 410, 200, 50)
+                dr.swipe(400, 250, 410, 250, 50)
                 WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("确定")).click()
                 time.sleep(0.5)
             except NoSuchElementException:
@@ -463,7 +478,7 @@ class Machine008(Machine):
         #添加留存记录
         add_end = False
         find_day = self.NO_NEW_DAY
-        for x in range(60):
+        for x in range(self.remain_day):
             if add_end:
                 break
             WebDriverWait(dr, 10).until(lambda d: d.find_element_by_id("com.soft.apk008v:id/menu_remain_addRecord")).click()        #添加记录按钮
@@ -531,19 +546,22 @@ class Machine008(Machine):
         dr = self.driver
         dr.find_element_by_name("工具箱").click()
         time.sleep(1)
-        #提取备份文件
-        copyfile("/sdcard/008backUp2/*__%s" % self.imei, "/sdcard/008backUp/")
-        time.sleep(5)
-        removefile("/sdcard/008backUp2/*__%s" % self.imei)
-        time.sleep(5)
-        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("备份程序数据")).click()
-        time.sleep(1)
-        dr.find_element_by_name(self.imei).click()
-        time.sleep(1)
-        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("还原")).click()
-        time.sleep(1)
-        #检测还原成功
-        WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.imei))
+        try:
+            #提取备份文件
+            copyfile("/sdcard/008backUp2/*__%s" % self.imei, "/sdcard/008backUp/")
+            time.sleep(5)
+            removefile("/sdcard/008backUp2/*__%s" % self.imei)
+            time.sleep(5)
+            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("备份程序数据")).click()
+            time.sleep(1)
+            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name(self.imei)).click()
+            time.sleep(1)
+            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("还原")).click()
+            time.sleep(1)
+            #检测还原成功
+            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name(self.imei))
+        except TimeoutException:
+            pass
         dr.press_keycode(4)
         time.sleep(1)
         dr.press_keycode(4)

@@ -13,6 +13,7 @@ import random
 from datetime import datetime
 from multiprocessing import Process
 from machines.machineVPN import MachineVPN
+# from machines.machineVPN_4c import MachineVPN
 # from machines.machineWujiVPN import MachineVPN
 # from machines.machine008 import Machine008
 from machines.machineXposeHook import MachineXHook as Machine008
@@ -25,7 +26,10 @@ from machines.StateMachine import Machine
 from sock.socksend import send_file
 from random import choice
 # from machines.machineLocation import MachineLocation
-
+import datetime
+from email.mime.text import MIMEText
+from email.header import Header
+from smtplib import SMTP_SSL
 try:
     from util import replace_wifi
 except ImportError:
@@ -50,6 +54,7 @@ class TotalMachine(WorkMachine):
         m008 = self.machine008
         m1 = self.machine1
         m2 = self.machine2
+        self.is_send = False
         # mlocation = self.machinelocation
         #切换脚本输入法
         dr.press_keycode(63)
@@ -77,6 +82,12 @@ class TotalMachine(WorkMachine):
                 #     self.upload_file(choice(['192.168.2.108', '10.0.0.22']), ["userhuajiao.log", "timehuajiao.log", "timehuajiao2.log"])
                 # except:
                 #     pass
+                #发邮件
+                # if time.localtime().tm_hour == 8 and not self.is_send:
+                #     self.sms()
+                #     self.is_send = True
+                # if time.localtime().tm_hour == 11:
+                #     self.is_send = False
                 #计数器清0
                 if time.localtime().tm_hour == 0 and self.runnum > 12:
                     self.runnum = 0
@@ -147,6 +158,73 @@ class TotalMachine(WorkMachine):
             return True
         else:
             return False
+
+    def sms(self):
+        dr = self.driver
+        yes_time = datetime.datetime.now() + datetime.timedelta(days=-1)
+        # date = yes_time.strftime('20%y-%m-%d')
+        WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("XposeHook")).click()
+        time.sleep(1)
+        WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("修改数据")).click()
+        time.sleep(1)
+        WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("本地数据")).click()
+        time.sleep(1)
+        local_text = "0条"
+        for i in range(15):
+            dr.swipe(300, 1000, 300, 400)
+            time.sleep(1)
+            try:
+                dr.find_element_by_name(datetime.datetime.now().strftime('20%y-%m-%d'))
+                local_num = dr.find_elements_by_id("com.meiriq.xposehook:id/actv_count")
+                local_text = local_num[local_num.__len__()-2].text
+                time.sleep(1)
+                dr.press_keycode(4)
+                time.sleep(1)
+                dr.press_keycode(4)
+                time.sleep(1)
+                dr.press_keycode(4)
+                time.sleep(1)
+                break
+            except:
+                pass
+        with open("/sdcard/1/timeshanghai.log", 'r', encoding='utf-8') as f:
+            data_run = f.read()
+        with open("/sdcard/1/timeshanghai2.log", 'r', encoding='utf-8') as f:
+            data_run2 = f.read()
+        with open("/sdcard/1/usershanghai.log", 'r', encoding='utf-8') as f:
+            data_sign = f.read()
+        with open("/sdcard/device.txt", 'r', encoding='utf-8') as f:
+            selectuser = f.read()
+        match_local = re.search(r'(\d+)', local_text)
+        match_run = re.findall(r'%s.%s' % (str(int(yes_time.strftime('%m'))), str(int(yes_time.strftime('%d')))), data_run)
+        match_run2 = re.findall(r'%s.%s' % (str(int(yes_time.strftime('%m'))), str(int(yes_time.strftime('%d')))), data_run2)
+        match_sign = re.findall(r'%s.%s' % (str(int(yes_time.strftime('%m'))), str(int(yes_time.strftime('%d')))), data_sign)
+        device_num = re.search(r'(\d+)', selectuser).group(1)
+        biaoti = "上海观察" + str(device_num)
+        neirong = yes_time.strftime('%m/%d,') + "本地:" + match_local.group(1) + "注册:" + str(len(match_sign)) + "体验激活:" + str(len(match_run)) +"体验留存:" + str(len(match_run2))
+        mail_Info = {
+                    "from": "493831130@qq.com",
+                    "to": "825433138@qq.com",
+                    "hostName": "smtp.qq.com",
+                    "userName": "493831130@qq.com",
+                    "password": "qvoaqcjoxucwbghi",
+                    "mailSubject": "%s" % biaoti,
+                    "mailText": "%s" % neirong,
+                    "mailEncoding": "utf-8"
+                    }
+        smtp = SMTP_SSL(mail_Info["hostName"])
+        #ssl登录
+        smtp.set_debuglevel(1)
+        smtp.ehlo(mail_Info["hostName"])
+        smtp.login(mail_Info["userName"], mail_Info["password"])
+
+        msg = MIMEText(mail_Info["mailText"], "html", mail_Info["mailEncoding"])
+        msg["Subject"] = Header(mail_Info["mailSubject"], mail_Info["mailEncoding"])
+        msg["From"] = mail_Info["from"]
+        msg["To"] = mail_Info["to"]
+        smtp.sendmail(mail_Info["from"], mail_Info["to"], msg.as_string())
+        smtp.quit()
+
 
 
 

@@ -1,6 +1,158 @@
 #! -*- coding=utf-8 -*-
 
 
+
+############################爬图#########################################################################################################
+import requests
+import re
+
+def log_ip(notlotation):
+    WEB_URL = 'http://ip.chinaz.com/getip.aspx'
+    r = requests.get(WEB_URL)
+    print(r.text)
+    match = re.search(r'ip:\'(.+)\'\,address:\'(.+)\'', r.text)
+    if match:
+        print(match.group(1))
+        print(match.group(2))
+        ip = match.group(1)
+        addr = match.group(2)
+        match_addr = re.findall(notlotation, addr)
+        if match_addr:
+            return True
+if log_ip("浙江"):
+    print(1)
+
+
+############################爬图#########################################################################################################
+
+# import urllib
+# import urllib.request
+# import re
+#
+# def download_page(url):
+#     request = urllib.request.Request(url)
+#     response = urllib.request.urlopen(request)
+#     data = response.read()
+#     return data
+#
+# def get_image(html, name):
+#     regx = r'http://[\S]*\.jpg'
+#     pattern = re.compile(regx)
+#     get_img = re.findall(pattern, repr(html))
+#     # print(repr(html))
+#     num = 50
+#     for img in get_img:
+#         image = download_page(img)
+#         if num == 50:
+#             num += 1
+#             continue
+#         with open('D:/brush/slave/scripts/pic/%s.jpg' % (str(name)+str(num)), 'wb') as fp:
+#             fp.write(image)
+#             num += 1
+#             print("正在下载第%s张图片" % (str(name)+str(num)))
+#
+#     return
+#
+# num = 100
+# for i in range(num):
+#     url = 'http://www.gexing.com/shaitu/%s' % i
+#     html = download_page(url)
+#     get_image(html, i)
+
+
+
+# def get_image(url, name):
+#     request = urllib.request.Request(url)
+#     response = urllib.request.urlopen(request)
+#     get_img = response.read()
+#     with open('D:/brush/slave/scripts/pic/%s.jpg' % name, 'wb') as fp:
+#         fp.write(get_img)
+#
+# num = 200
+# for i in range(num):
+#     url = 'http://i1.umei.cc/uploads/tu/201608/10/0806%s.jpg' % (100+i)
+#     get_image(url, i)
+#     print("正在下载第%s张图片" % i)
+
+
+############################切图#########################################################################################################
+
+# try:
+#     from util import run_qpy2_script
+# except ImportError:
+#     run_qpy2_script = lambda x: None
+#
+# try:
+#     run_qpy2_script("get_captchaimg_baofeng_4c.py")
+# except Exception as e:
+#     print(e)
+
+
+
+############################抓弹幕#########################################################################################################
+# import time
+# import random
+# try:
+#     from util import copyfile
+# except ImportError:
+#     copyfile = lambda: 1
+#
+# copyfile("/sdcard/1/\.1touxiang/PIC\ \(%s\).jpg" % random.randint(1, 1400), "/sdcard/")
+# time.sleep(0.5)
+# for _ in range(5):
+#     copyfile("/sdcard/1/\.1xiangce/PIC\ \(%s\).jpg" % random.randint(1, 1400), "/sdcard/2/")
+#     time.sleep(0.5)
+# time.sleep(1)
+# print("ok")
+
+
+############################统计次数发邮件#########################################################################################################
+
+# import re
+# import datetime
+# from email.mime.text import MIMEText
+# from email.header import Header
+# from smtplib import SMTP_SSL
+# import time
+#
+# yes_time = datetime.datetime.now() + datetime.timedelta(days=-1)
+# date = yes_time.strftime('20%y-%m-%d')
+# with open("kind/%s" % date, 'r', encoding='utf-8') as f:
+#     a = f.read()
+# match = re.findall(r'DEVICE', a)
+# with open("device.txt", 'r', encoding='utf-8') as f:
+#     selectuser = f.read()
+# device_num = re.search(r'([0-9a-zA-Z\.]+)', selectuser).group(1)
+# biaoti = "上海观察" + str(device_num)
+# neirong = yes_time.strftime('%m/%d,') + "本地数据:" + str(len(match))
+# mail_Info = {
+#             "from": "493831130@qq.com",
+#             "to": "554795378@qq.com",
+#             "hostName": "smtp.qq.com",
+#             "userName": "493831130@qq.com",
+#             "password": "qvoaqcjoxucwbghi",
+#             "mailSubject": "%s" % biaoti,
+#             "mailText": "%s" % neirong,
+#             "mailEncoding": "utf-8"
+#             }
+# if __name__ == '__main__':
+#     is_send = False
+#     if time.localtime().tm_hour == 9 and time.localtime().tm_min >= 0 and not is_send:
+#         smtp = SMTP_SSL(mail_Info["hostName"])
+#         #ssl登录
+#         smtp.set_debuglevel(1)
+#         smtp.ehlo(mail_Info["hostName"])
+#         smtp.login(mail_Info["userName"], mail_Info["password"])
+#
+#         msg = MIMEText(mail_Info["mailText"], "html", mail_Info["mailEncoding"])
+#         msg["Subject"] = Header(mail_Info["mailSubject"], mail_Info["mailEncoding"])
+#         msg["From"] = mail_Info["from"]
+#         msg["To"] = mail_Info["to"]
+#         smtp.sendmail(mail_Info["from"], mail_Info["to"], msg.as_string())
+#         smtp.quit()
+
+# qvoaqcjoxucwbghi
+
 ############################记录文件#########################################################################################################
 # import logging
 # import random
@@ -209,7 +361,7 @@
 
 
 #######获取IP#################################################################################################################################
-# -*- coding: utf-8 -*-
+# # -*- coding: utf-8 -*-
 # import re
 # import requests
 # def getPublicIp():
@@ -374,29 +526,6 @@
 # getPhoneInfo()
 
 
-#########################多部手机传文件##########################################################################
-# public static void setLockPattern(AppiumDriver driver) throws Exception{
-#     List<WebElement> view = Toolkit.waifForExistence("//android.view.View[contains(@resource-id,'view_lock_pattern')]",driver);
-#     WebElement welem = view.get(0);
-#     int startX = welem.getLocation().getX();
-#     int startY = welem.getLocation().getY();
-#     int height = welem.getSize().getHeight();
-#     int width = welem.getSize().getWidth();
-#     int yStep = height / 4;
-#     int beginX = (2 * startX + width) / 2;
-#     int beginY = startY + yStep;
-#
-#     //手势密码设置
-#     logger.info("开始设置手势密码，中间垂直直线 上->下");
-#     TouchAction touchAction1 = new TouchAction(driver);
-#     touchAction1.press(beginX,beginY).moveTo(0,yStep).moveTo(0,yStep).release().perform();
-#     Toolkit.wait(1);
-#     logger.info("再次设置手势密码，中间垂直直线 上->下");
-#     touchAction1.press(beginX,beginY).moveTo(0,yStep).moveTo(0,yStep).release().perform();
-#     logger.info("手势密码设置完毕");
-# }
-
-
 #########################日期##########################################################################
 # import time
 # time.strftime('%Y%m%d')
@@ -414,24 +543,6 @@
 # end_time2 = begin_time + datetime.timedelta(hours=8, minutes=45)
 # end_time3 = begin_time + datetime.timedelta(hours=8, minutes=46)
 # a = (end_time - begin_time).seconds
-
-
-#########################图片验证码##########################################################################
-# from PIL import Image
-# import pytesseract
-# image = Image.open('caca.png')
-# print(image)
-# print(pytesseract.image_to_string('caca1.png'))
-# print(pytesseract.image_to_string(image))
-
-# import pytesseract
-# from PIL import Image
-
-# image = Image.open('caca.png')
-#
-# vcode = pytesseract.image_to_string(image)
-#
-# print(vcode)
 
 
 #########################文件移动##########################################################################
@@ -465,7 +576,6 @@
 
 #########################服务器##########################################################################
 
-# from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 # import requests
 # r = requests.get('http://m008.meiriq.com/phone')
 # r.json()
@@ -564,20 +674,31 @@
 
 #########################文本去重##########################################################################
 # obuff = []
-# for ln in open('D:/brush/slave/scripts/doc/gongsi.txt', encoding='utf-8'):
+# for ln in open('C:/Users/xidada/Desktop/秒拍yunfeng3_imei数据/85.txt', encoding='utf-8'):
 #     if ln in obuff:
+#         print(ln)
 #         continue
 #     obuff.append(ln)
-# with open('D:/brush/slave/scripts/doc/gongsi2.txt', 'w', encoding='utf-8') as handle:
+# with open('C:/Users/xidada/Desktop/秒拍yunfeng3_imei数据/8551.txt', 'w', encoding='utf-8') as handle:
 #     handle.writelines(obuff)
 
 #########################xpath##########################################################################
 
 # from appium4droid import webdriver
+from bootstrap import setup_boostrap
+# import time
+
 # dr = webdriver.Remote()
 # imei = dr.find_element_by_xpath("//android.widget.LinearLayout[@resource-id='com.meiriq.xposehook:id/til_device_id']/android.widget.EditText")
-# print("imei:" + imei.text)
+# print("imei:")
+# try:
+#     from util import screenshot
+# except ImportError:
+#     screenshot = lambda: 1
 
+# dr = webdriver.Remote()
+# screenshot("/sdcard/error/%s.png" % (str(time.localtime().tm_mon) + str(time.localtime().tm_mday) + str(time.localtime().tm_hour) + str(time.localtime().tm_min) + str(time.localtime().tm_sec)))
+# time.sleep(5)
 #########################修改QQ##########################################################################
 # import time
 # import re
@@ -600,15 +721,18 @@
 
 #########################提取文档内容##########################################################################
 # import re
-# with open("D:/brush/slave/scripts/doc/ailezan.txt", 'r', encoding='utf-8') as f:
-#     a = f.read()
-# regrex = r'山东24小时----([0-9]+)'
-# match = re.findall(regrex, a)
-# if match:
-#     print(match)
-#     with open("D:/brush/slave/scripts/doc/211.txt", 'a', encoding='utf-8') as f:
-#         for x in match:
-#             f.write(x+'\n')
+# num41 = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"]
+# num85 = ["07", "08", "09", "10", "11", "12", "13", "14"]
+# for i in num85:
+#     with open("C:/Users/xidada/Desktop/秒拍yunfeng3_imei数据/kind85/2016-12-%s" % i, 'r', encoding='utf-8') as f:
+#         a = f.read()
+#     regrex = r'getSubscriberId":"([0-9A-Z]+)\"'
+#     match = re.findall(regrex, a)
+#     if match:
+#         print(match)
+#         with open("C:/Users/xidada/Desktop/秒拍yunfeng3_imei数据/85.txt", 'a', encoding='utf-8') as f:
+#             for x in match:
+#                 f.write(x+'\n')
 
 #########################手机号码归属地##########################################################################
 # import re
@@ -633,15 +757,16 @@
     #             f.write(x+'\n')
 
 
+#########################手机号码归属地##########################################################################
+# from util import killapp
+# killapp("com.example.tian.myapplication")
+#
+# import re
+# regrex = r'手机卡序列号:(\d+)'
+# match = re.search(regrex, a.text)
+# imei = match.group(1)
 
-
-
-
-
-
-
-
-
+#########################查看网络连接状态##########################################################################
 
 
 

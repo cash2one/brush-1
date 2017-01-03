@@ -123,38 +123,39 @@ class Machinex(Machine):
         WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("登 录")).click()
         time.sleep(5)
         try:
-            WebDriverWait(dr, 60).until(lambda d: d.find_element_by_name("看不清？换一张"))
-            time.sleep(5)
-            screenshot("/sdcard/screenshot.png")
-            run_qpy2_script("get_captchaimg_qqdongman.py")
-            imgcaptcha = self.uuwise()
-            if imgcaptcha is None:
-                print("getimgcaptcha failed")
-                self.try_count += 1
-                if self.try_count > 5:
-                    self.try_count = 0
-                    return self.exit
+            for _ in range(5):
+                WebDriverWait(dr, 60).until(lambda d: d.find_element_by_name("看不清？换一张"))
+                time.sleep(5)
+                screenshot("/sdcard/screenshot.png")
+                run_qpy2_script("get_captchaimg_qqdongman.py")
+                imgcaptcha = self.uuwise()
+                if imgcaptcha is None:
+                    print("getimgcaptcha failed")
+                    self.try_count += 1
+                    if self.try_count > 5:
+                        self.try_count = 0
+                        return self.exit
+                    dr.press_keycode(4)
+                    time.sleep(1)
+                    dr.press_keycode(4)
+                    time.sleep(1)
+                    return self.signup
                 dr.press_keycode(4)
+                time.sleep(5)
+                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("登 录")).click()
                 time.sleep(1)
-                dr.press_keycode(4)
+                WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("看不清？换一张"))
                 time.sleep(1)
-                return self.signup
-            dr.press_keycode(4)
-            time.sleep(5)
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("登 录")).click()
-            time.sleep(1)
-            WebDriverWait(dr, 30).until(lambda d: d.find_element_by_name("看不清？换一张"))
-            time.sleep(1)
-            edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
-            edts.send_keys(imgcaptcha)
-            WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.tencent.mobileqq:id/ivTitleBtnRightText")).click()
-            time.sleep(5)
-            #允许登录
-            # try:
-            #     WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.tencent.mobileqq:id/name")).click()
-            #     time.sleep(1)
-            # except TimeoutException:
-            #     pass
+                edts = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_class_name("android.widget.EditText"))
+                edts.send_keys(imgcaptcha)
+                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.tencent.mobileqq:id/ivTitleBtnRightText")).click()
+                time.sleep(5)
+                try:
+                    #图片验证码是否正确
+                    WebDriverWait(dr, 10).until(lambda d: d.find_element_by_name("看不清？换一张"))
+                    time.sleep(1)
+                except TimeoutException:
+                    break
             #注册成功页面检测
             WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tab_icon_recommend"))
             time.sleep(1)
@@ -167,6 +168,12 @@ class Machinex(Machine):
                     f.write('\nimei:%s,%s,%s (time %s.%s  %s:%s:%s)' % (self.imei, self.phone, self.pwd, time.localtime().tm_mon, time.localtime().tm_mday, time.localtime().tm_hour, time.localtime().tm_min, time.localtime().tm_sec))
             time.sleep(1)
         except TimeoutException:
+            try:
+                WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tab_icon_center"))
+                time.sleep(1)
+                return self.do
+            except TimeoutException:
+                pass
             #修改标志QQ使用失败
             try:
                 lines = open(tfile, 'r').readlines()
@@ -178,6 +185,8 @@ class Machinex(Machine):
                 open(tfile, 'w').writelines(lines)
             except Exception as e:
                 print(e)
+            screenshot("/sdcard/error/%s.png" % (str(time.localtime().tm_mon) + str(time.localtime().tm_mday) + str(time.localtime().tm_hour) + str(time.localtime().tm_min) + str(time.localtime().tm_sec)))
+            time.sleep(5)
             self.try_count += 1
             if self.try_count > 5:
                 self.try_count = 0
@@ -227,6 +236,12 @@ class Machinex(Machine):
             print("查找菜单出错")
             return self.exception_returnapp()
         print("阅览完毕")
+        dr.press_keycode(4)
+        time.sleep(1)
+        dr.press_keycode(4)
+        time.sleep(1)
+        dr.press_keycode(4)
+        time.sleep(1)
         return self.ends
 
     def menu1(self):
@@ -236,13 +251,14 @@ class Machinex(Machine):
             time.sleep(1)
             #选择分类
             self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 1), 2, 5)
-            self.select_one_by_id(choice(["com.qq.ac.android:id/class_img_left", "com.qq.ac.android:id/class_img_right"]))
+            selectone = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id(choice(["com.qq.ac.android:id/class_img_left", "com.qq.ac.android:id/class_img_right"])))
+            selectone[random.randint(0, selectone.__len__()-2)].click()
             time.sleep(5)
             #选择动漫
-            for i in range(random.randint(2, 4)):
+            for i in range(random.randint(2, 3)):
                 self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
                 try:
-                    self.select_one_by_id("com.qq.ac.android:id/top_title", find_time=5)
+                    self.select_one_by_id("com.qq.ac.android:id/top_title")
                     time.sleep(5)
                     #开始阅读
                     WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tv_start_read")).click()
@@ -261,7 +277,7 @@ class Machinex(Machine):
                         pass
                     for x in range(random.randint(10, 15)):
                         dr.swipe(300, random.randint(800, 1000), 300, random.randint(400, 600))
-                        time.sleep(random.randint(2, 5))
+                        time.sleep(random.randint(2, 10))
                     dr.press_keycode(4)
                     time.sleep(1)
                     try:
@@ -277,9 +293,18 @@ class Machinex(Machine):
                         except TimeoutException:
                             pass
                 except TimeoutException:
-                    self.select_one_by_id("com.qq.ac.android:id/animation_cover", find_time=5)
-                    time.sleep(random.randint(120, 180))
-                    break
+                    try:
+                        #进入条漫返回
+                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_class_name("android.webkit.WebView"))
+                        time.sleep(1)
+                        dr.press_keycode(4)
+                        time.sleep(1)
+                        return self.menu1()
+                    except TimeoutException:
+                        self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
+                        self.select_one_by_id("com.qq.ac.android:id/animation_cover")
+                        time.sleep(random.randint(120, 180))
+                        break
                 dr.press_keycode(4)
                 time.sleep(1)
             dr.press_keycode(4)
@@ -296,33 +321,33 @@ class Machinex(Machine):
     def menu2(self):
         dr = self.driver
         try:
-            try:
-                self.select_one_by_id("com.qq.ac.android:id/grid_bookshelf_bookcover", find_time=5)
-                time.sleep(5)
-                #开始阅读
-                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tv_start_read")).click()
-                time.sleep(5)
-                #初次阅读教程
-                try:
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_comment")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more_list")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_download")).click()
-                    time.sleep(1)
-                except TimeoutException:
-                    pass
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 5, 10)
-                dr.press_keycode(4)
-                time.sleep(1)
-                dr.press_keycode(4)
-                time.sleep(1)
-                dr.press_keycode(4)
-                time.sleep(1)
-            except TimeoutException:
-                pass
+            # try:
+            #     self.select_one_by_id("com.qq.ac.android:id/grid_bookshelf_bookcover", find_time=5)
+            #     time.sleep(5)
+            #     #开始阅读
+            #     WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tv_start_read")).click()
+            #     time.sleep(5)
+            #     #初次阅读教程
+            #     try:
+            #         WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_comment")).click()
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more")).click()
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more_list")).click()
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_download")).click()
+            #         time.sleep(1)
+            #     except TimeoutException:
+            #         pass
+            #     self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 5, 10)
+            #     dr.press_keycode(4)
+            #     time.sleep(1)
+            #     dr.press_keycode(4)
+            #     time.sleep(1)
+            #     dr.press_keycode(4)
+            #     time.sleep(1)
+            # except TimeoutException:
+            #     pass
             self.ismenu2 = False
         except Exception as e:
             print("error in menu2")
@@ -332,10 +357,9 @@ class Machinex(Machine):
     def menu3(self):
         dr = self.driver
         try:
-            dr = self.driver
             for x in range(random.randint(5, 10)):
                 dr.swipe(300, random.randint(800, 1000), 300, random.randint(400, 600))
-                time.sleep(random.randint(5, 10))
+                time.sleep(random.randint(2, 5))
                 #点赞
                 if random.randint(0, 9) == 0:
                     try:
@@ -350,12 +374,15 @@ class Machinex(Machine):
                         pass
                 #进入查看
                 if random.randint(0, 9) == 0:
-                    self.select_one_by_id("com.qq.ac.android:id/title")
-                    time.sleep(random.randint(5, 10))
-                    self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 5, 10)
-                    dr.press_keycode(4)
-                    time.sleep(1)
-                    break
+                    try:
+                        self.select_one_by_id("com.qq.ac.android:id/title")
+                        time.sleep(random.randint(5, 10))
+                        self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 5, 10)
+                        dr.press_keycode(4)
+                        time.sleep(1)
+                        break
+                    except TimeoutException:
+                        pass
             self.readnum -= 1
             self.ismenu3 = False
         except Exception as e:
@@ -369,11 +396,13 @@ class Machinex(Machine):
             try:
                 WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_setting")).click()
                 time.sleep(1)
+                dr.press_keycode(4)
+                time.sleep(1)
             except TimeoutException:
                 pass
             if random.randint(0, 1):
                 try:
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("签到")).click()
+                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("签到")).click()
                     time.sleep(5)
                     dr.tap(360, 1000)
                     time.sleep(5)
@@ -519,6 +548,11 @@ class Machinex(Machine):
         except TimeoutException:
             dr.press_keycode(4)
         time.sleep(5)
+        try:
+            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("残忍拒绝")).click()
+            time.sleep(1)
+        except TimeoutException:
+            pass
         return self.do
 
 
@@ -535,7 +569,7 @@ class Machinex2(Machine):
         self.begintime = None
         self.endstime = None
         self.try_count = 0      #初始化出错尝试次数
-        self.readnum = random.randint(1, 2)     #初始化阅读次数
+        self.readnum = random.randint(1, 1)     #初始化阅读次数
         #初始化阅读菜单
         self.ismenu1 = True
         self.ismenu2 = True
@@ -557,6 +591,7 @@ class Machinex2(Machine):
         #检测更新
         try:
             WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/btn_cancel")).click()
+            time.sleep(5)
         except TimeoutException:
             pass
         return self.do
@@ -599,6 +634,12 @@ class Machinex2(Machine):
             print("查找菜单出错")
             return self.exception_returnapp()
         print("阅览完毕")
+        dr.press_keycode(4)
+        time.sleep(1)
+        dr.press_keycode(4)
+        time.sleep(1)
+        dr.press_keycode(4)
+        time.sleep(1)
         return self.ends
 
     def menu1(self):
@@ -608,7 +649,8 @@ class Machinex2(Machine):
             time.sleep(1)
             #选择分类
             self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
-            self.select_one_by_id(choice(["com.qq.ac.android:id/class_img_left", "com.qq.ac.android:id/class_img_right"]))
+            selectone = WebDriverWait(dr, 15).until(lambda d: d.find_elements_by_id(choice(["com.qq.ac.android:id/class_img_left", "com.qq.ac.android:id/class_img_right"])))
+            selectone[random.randint(0, selectone.__len__()-1)].click()
             time.sleep(5)
             #选择动漫
             for i in range(random.randint(1, 2)):
@@ -633,7 +675,7 @@ class Machinex2(Machine):
                         pass
                     for x in range(random.randint(10, 15)):
                         dr.swipe(300, random.randint(800, 1000), 300, random.randint(400, 600))
-                        time.sleep(random.randint(5, 10))
+                        time.sleep(random.randint(2, 5))
                     dr.press_keycode(4)
                     time.sleep(1)
                     try:
@@ -649,9 +691,18 @@ class Machinex2(Machine):
                         except TimeoutException:
                             pass
                 except TimeoutException:
-                    self.select_one_by_id("com.qq.ac.android:id/animation_cover", find_time=5)
-                    time.sleep(random.randint(60, 120))
-                    break
+                    try:
+                        #进入条漫返回
+                        WebDriverWait(dr, 5).until(lambda d: d.find_element_by_class_name("android.webkit.WebView"))
+                        time.sleep(1)
+                        dr.press_keycode(4)
+                        time.sleep(1)
+                        return self.menu1()
+                    except TimeoutException:
+                        self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(0, 2), 2, 5)
+                        self.select_one_by_id("com.qq.ac.android:id/animation_cover")
+                        time.sleep(random.randint(180, 240))
+                        break
                 dr.press_keycode(4)
                 time.sleep(1)
             dr.press_keycode(4)
@@ -668,33 +719,33 @@ class Machinex2(Machine):
     def menu2(self):
         dr = self.driver
         try:
-            try:
-                self.select_one_by_id("com.qq.ac.android:id/grid_bookshelf_bookcover", find_time=5)
-                time.sleep(5)
-                #开始阅读
-                WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tv_start_read")).click()
-                time.sleep(5)
-                #初次阅读教程
-                try:
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_comment")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more_list")).click()
-                    time.sleep(1)
-                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_download")).click()
-                    time.sleep(1)
-                except TimeoutException:
-                    pass
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 5, 10)
-                dr.press_keycode(4)
-                time.sleep(1)
-                dr.press_keycode(4)
-                time.sleep(1)
-                dr.press_keycode(4)
-                time.sleep(1)
-            except TimeoutException:
-                pass
+            # try:
+            #     self.select_one_by_id("com.qq.ac.android:id/grid_bookshelf_bookcover", find_time=5)
+            #     time.sleep(5)
+            #     #开始阅读
+            #     WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/tv_start_read")).click()
+            #     time.sleep(5)
+            #     #初次阅读教程
+            #     try:
+            #         WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_comment")).click()
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more")).click()
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_more_list")).click()
+            #         time.sleep(1)
+            #         WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_download")).click()
+            #         time.sleep(1)
+            #     except TimeoutException:
+            #         pass
+            #     self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 5, 10)
+            #     dr.press_keycode(4)
+            #     time.sleep(1)
+            #     dr.press_keycode(4)
+            #     time.sleep(1)
+            #     dr.press_keycode(4)
+            #     time.sleep(1)
+            # except TimeoutException:
+            #     pass
             self.ismenu2 = False
         except Exception as e:
             print("error in menu2")
@@ -704,10 +755,9 @@ class Machinex2(Machine):
     def menu3(self):
         dr = self.driver
         try:
-            dr = self.driver
-            for x in range(random.randint(5, 10)):
+            for x in range(random.randint(2, 5)):
                 dr.swipe(300, random.randint(800, 1000), 300, random.randint(400, 600))
-                time.sleep(random.randint(5, 10))
+                time.sleep(random.randint(2, 5))
                 #点赞
                 if random.randint(0, 9) == 0:
                     try:
@@ -722,13 +772,15 @@ class Machinex2(Machine):
                         pass
                 #进入查看
                 if random.randint(0, 9) == 0:
-                    self.select_one_by_id("com.qq.ac.android:id/title")
-                    time.sleep(random.randint(5, 10))
-                    self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 5, 10)
-                    dr.press_keycode(4)
-                    time.sleep(1)
-                    break
-            self.readnum -= 1
+                    try:
+                        self.select_one_by_id("com.qq.ac.android:id/title")
+                        time.sleep(random.randint(5, 10))
+                        self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(2, 5), 5, 10)
+                        dr.press_keycode(4)
+                        time.sleep(1)
+                        break
+                    except TimeoutException:
+                        pass
             self.ismenu3 = False
         except Exception as e:
             print("error in menu3")
@@ -741,11 +793,13 @@ class Machinex2(Machine):
             try:
                 WebDriverWait(dr, 5).until(lambda d: d.find_element_by_id("com.qq.ac.android:id/iv_guide_setting")).click()
                 time.sleep(1)
+                dr.press_keycode(4)
+                time.sleep(1)
             except TimeoutException:
                 pass
             if random.randint(0, 1):
                 try:
-                    WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("签到")).click()
+                    WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("签到")).click()
                     time.sleep(5)
                     dr.tap(360, 1000)
                     time.sleep(5)
@@ -781,64 +835,6 @@ class Machinex2(Machine):
             pass
         time.sleep(3)
         return self.exit
-
-    def uuwise(self):
-        dr = self.driver
-        dr.press_keycode(3)
-        time.sleep(1)
-        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name("UUWiseDemo")).click()
-        time.sleep(1)
-        try:
-            btlogin = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/btn_login"))
-        except TimeoutException:
-            self.try_count += 1
-            if self.try_count > 5:
-                return self.exit
-            dr.press_keycode(4)
-            time.sleep(1)
-            return self.uuwise
-        edtsuser = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/et_loginname"))
-        edtspwd = WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/et_loginpwd"))
-        uuuser = 'xiaoxiaozhuan'
-        uupwd = 'meiriq2014'
-        if edtsuser.text == uuuser and edtspwd.text == uupwd:
-            pass
-        else:
-            edtsuser.send_keys(uuuser)
-            time.sleep(1)
-            edtspwd.send_keys(uupwd)
-            time.sleep(1)
-        btlogin.click()
-        screenshotpath = dr.find_element_by_id("com.example.uuwisedemo:id/et_path")
-        for x in range(10):
-            screenshotpath.click()
-            time.sleep(0.5)
-            dr.press_keycode(123)
-            time.sleep(0.5)
-            for i in range(40):
-                dr.press_keycode(67)
-            if screenshotpath.text == "路径":
-                break
-        screenshotpath.send_keys('/sdcard/captcha.png')
-        time.sleep(1)
-        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/btn_recognize")).click()
-        time.sleep(1)
-        captcha = None
-        try:
-            msg = WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.example.uuwisedemo:id/txt_code"))
-            match = re.search(r'验证码：\d+\|([0-9a-zA-Z]+)', msg.text)
-            if match:
-                captcha = match.group(1)
-            else:
-                captcha = None
-        except:
-            pass
-        dr.press_keycode(4)
-        time.sleep(1)
-        dr.press_keycode(82)
-        time.sleep(2)
-        WebDriverWait(dr, 15).until(lambda d: d.find_element_by_name(self.appname)).click()
-        return captcha
 
     #指定文档中随机获取数据
     def get_filemessage(self, filename):
@@ -886,6 +882,11 @@ class Machinex2(Machine):
         except TimeoutException:
             dr.press_keycode(4)
         time.sleep(5)
+        try:
+            WebDriverWait(dr, 5).until(lambda d: d.find_element_by_name("残忍拒绝")).click()
+            time.sleep(1)
+        except TimeoutException:
+            pass
         return self.do
 
 

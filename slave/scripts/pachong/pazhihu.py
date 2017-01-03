@@ -36,7 +36,7 @@ client = ZhihuClient(Cookies_File)
 #               act.answer.upvote_num))
 
 
-url = 'http://www.zhihu.com/question/%s' % 31969621
+url = 'http://www.zhihu.com/question/%s' % 52159063
 question = client.question(url)
 
 print(question.title)

@@ -163,7 +163,10 @@ class Machinex(Machine):
             time.sleep(1)
             WebDriverWait(dr, 60).until(lambda d: d.find_element_by_id("com.shwatch.news:id/homepage_user_headimg"))
             time.sleep(1)
-            dr.tap(random.randint(550, 700), random.randint(100, 1000))
+            try:
+                dr.tap(random.randint(800, 1000), random.randint(100, 1600))
+            except:
+                dr.tap(random.randint(550, 700), random.randint(100, 1000))
             time.sleep(5)
             self.issign = True
             return self.after_signup
@@ -219,7 +222,10 @@ class Machinex(Machine):
                 try:
                     WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name("取消")).click()
                     time.sleep(1)
-                    dr.tap(random.randint(550, 700), random.randint(100, 1000))
+                    try:
+                        dr.tap(random.randint(800, 1000), random.randint(100, 1600))
+                    except:
+                        dr.tap(random.randint(550, 700), random.randint(100, 1000))
                     time.sleep(5)
                     break
                 except TimeoutException:
@@ -231,7 +237,10 @@ class Machinex(Machine):
                 try:
                     WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name("取消")).click()
                     time.sleep(1)
-                    dr.tap(random.randint(550, 700), random.randint(100, 1000))
+                    try:
+                        dr.tap(random.randint(800, 1000), random.randint(100, 1600))
+                    except:
+                        dr.tap(random.randint(550, 700), random.randint(100, 1000))
                     time.sleep(5)
                     break
                 except TimeoutException:
@@ -244,13 +253,15 @@ class Machinex(Machine):
             while self.readnum:
                 print("剩下阅读次数:%s" % self.readnum)
                 #随机滑动
-                self.swipes(300, random.randint(800, 1000), 300, random.randint(400, 600), random.randint(1, 3), 2, 5)
+                for x in range(random.randint(1, 3)):
+                    dr.swipe(300, random.randint(800, 1000), 300, random.randint(400, 600))
+                    time.sleep(random.randint(2, 5))
                 #随机选择新闻查看
                 selectone = WebDriverWait(dr, 10).until(lambda d: d.find_elements_by_id(choice(["com.shwatch.news:id/homepage_smallText1", "com.shwatch.news:id/homepage_smallText2", "com.shwatch.news:id/homepage_bigText"])))
                 selectone[random.randint(0, selectone.__len__()-1)].click()
                 time.sleep(random.randint(5, 10))
                 #随机滑动
-                for x in range(random.randint(1, 4)):
+                for x in range(random.randint(2, 4)):
                     dr.swipe(300, random.randint(800, 1000), 300, random.randint(400, 600))
                     time.sleep(random.randint(2, 10))
                 #收藏
@@ -433,7 +444,10 @@ class Machinex2(Machine):
                 try:
                     WebDriverWait(dr, 2).until(lambda d: d.find_element_by_name("取消")).click()
                     time.sleep(1)
-                    dr.tap(random.randint(550, 700), random.randint(100, 1000))
+                    try:
+                        dr.tap(random.randint(800, 1000), random.randint(100, 1600))
+                    except:
+                        dr.tap(random.randint(550, 700), random.randint(100, 1000))
                     time.sleep(5)
                     break
                 except TimeoutException:
